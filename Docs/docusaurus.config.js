@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'The Last of Us',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'Jogo MUD inspirado em The Last of Us',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -20,7 +20,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'ailujana', // Usually your GitHub org/user name.
+  organizationName: 'SBD1', // Usually your GitHub org/user name.
   projectName: '2024.1-TLOU', // Usually your repo name.
   deploymentBranch: 'gh-pages',
 
