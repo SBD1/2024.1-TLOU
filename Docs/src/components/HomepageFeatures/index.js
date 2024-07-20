@@ -4,32 +4,29 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Sobre o Jogo',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        The Last of Us é um jogo de ação-aventura e survival horror desenvolvido pela Naughty Dog. O jogo é ambientado em um mundo pós-apocalíptico devastado por uma pandemia causada por um fungo que transforma os humanos em criaturas agressivas.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Jogabilidade',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        A história segue Joel, um sobrevivente endurecido, e Ellie, uma jovem imune ao fungo, enquanto viajam pelos Estados Unidos em busca de uma possível cura.<code>docs</code> directory.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'MUD',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        MUD (Multi-User Dungeon) é um tipo de jogo online de role-playing que surgiu nos anos 1970. Esses jogos são baseados em texto e permitem que múltiplos jogadores interajam uns com os outros em um mundo virtual descrito por texto.
       </>
     ),
   },

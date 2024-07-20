@@ -1,0 +1,8 @@
+{
+  "label": "Sobre o Projeto",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Detalha o projeto, a equipe e a proposta do jogo."
+  }
+}
