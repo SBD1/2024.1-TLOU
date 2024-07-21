@@ -25,17 +25,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: cd Docs/ && npm ci
       - name: Build website
-        run: yarn build
-
+        run: cd Docs/ && npm run build
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: "/home/runner/work/2024.1-TLOU/2024.1-TLOU/Docs/Docs/build"
 
   deploy:
     name: Deploy to GitHub Pages
@@ -56,5 +56,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          path: build
