@@ -44,7 +44,7 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - **Região**: <ins>idRegiao</ins>, descricaoRegiao, coordenadaX, coordenadaY, nomeRegiao, tipoRegiao, capacidade, itens?
 - **Zona de Quarentena**: <ins>idZona</ins>, seguranca
 - **Acampamento**: <ins>idAcamp</ins>, faccaoHumana
-- **Locais Abandonados**: <ins>idLocal<ins>, periculosidade
+- **Locais Abandonados**: <ins>idLocal</ins>, periculosidade
 - **Áreas Abertas**: <ins>idArea</ins>, recursoNaturais
 - **Personagem**: <ins>idPersonagem</ins>, xp,  tipoPersonagem, locAtual, saude, vidaAtual, vidaMax, nomePersonagem
 - **PC (Playable Character)**: <ins>idPC</ins>, missaoAtual
