@@ -28,7 +28,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Mundo`.
 | nomeRegiao       | string [50] | Nome da região em questão, no caso, uma zona de quarentena                                       | A-Z <br></br> a-z             | Não                    | Não                  | -                 |
 | capacidade       | int    | Número de PCs e NPCs que pode ter em uma região                                                       | 0 - 5000            | Sim                    | Não                  | -                 |
 | idMundo          | int    | Identificador único para o mundo em que a região se encontra                                          | 1                   | Não                    | Sim. Chave estrangeira                 | -                 |
-| tipoRegiao       | int    | Atributo que define qual o tipo de região (Locais abandonados, acampamento, zona de quarentena ou nenhum desses) por meio de uma enumeração. | 1 - 3               | Sim                    | Não                  | Pode não possuir nenhum tipo |
+| tipoRegiao       | int    | Atributo que define qual o tipo de região (Locais abandonados, acampamento, zona de quarentena ou nenhum desses) por meio de uma enumeração. | 1 - 3               | Sim                    | Não                  | Pode possuir nenhum tipo |
 
 # Entidade: Zona_Quarentena
 A tabela a seguir descreve a entidade `Zona_Quarentena`, que representa zonas de quarentena dentro de uma região, incluindo detalhes sobre a segurança, população e identificadores.
