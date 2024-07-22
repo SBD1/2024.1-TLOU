@@ -11,6 +11,8 @@ const config = {
   title: 'The Last of Us',
   tagline: 'Jogo MUD inspirado em The Last of Us',
   favicon: 'img/favicon.ico',
+  deploymentBranch: "gh-pages",
+  trailingSlash: false,
 
   // Set the production url of your site here
   url: 'https://SBD1.github.io',
@@ -22,7 +24,6 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'SBD1', // Usually your GitHub org/user name.
   projectName: '2024.1-TLOU', // Usually your repo name.
-  deploymentBranch: 'gh-pages',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -69,7 +70,6 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',

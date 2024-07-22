@@ -14,61 +14,70 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - **Zona de Quarentena**
 - **Acampamento**
 - **Locais Abandonados**
-- **Áreas Abertas**
 - **Personagem**
 - **PC (Playable Character)**
 - **NPC (Non-Playable Character)**
 - **Inst_NPC**
-- **Grupo**
+  - **Infectados**
+  - **Facções Humanas**
+  - **Animais**
 - **Habilidade**
 - **Inventário**
 - **Inst_Item**
- - **Armas**
- - **Vestimenta**
- - **Alimento**
+  - **Armas**
+  - **Vestimenta**
+  - **Alimento**
 - **Receita**
-- **Ingredientes**
+- **Ingrediente**
 - **Missão**
-- **Missão de Patrulha**
-- **Missão de Expedição/obter Item**
+  - **Missão Patrulha**
+  - **Missão de Exploração/Obter Item**
 - **Evento**
 - **Itinerário**
-- **Infectados**
-- **Facções Humanas**
-- **Animais**
 - **Evolução**
 
-## 2. Atributos
+
+## 2. Relacionamentos que possuem atributos
+
+- **Concede**
+- **Dialoga**
+- **Participação**
+
+## 3. Atributos
 
 - **Mundo**: <ins>idMundo</ins>, descricaoMundo, nomeMundo
-- **Região**: <ins>idRegiao</ins>, descricaoRegiao, coordenadaX, coordenadaY, nomeRegiao, tipoRegiao, capacidade, itens?
-- **Zona de Quarentena**: <ins>idZona</ins>, seguranca
-- **Acampamento**: <ins>idAcamp</ins>, faccaoHumana
-- **Locais Abandonados**: <ins>idLocal</ins>, periculosidade
-- **Áreas Abertas**: <ins>idArea</ins>, recursoNaturais
-- **Personagem**: <ins>idPersonagem</ins>, xp,  tipoPersonagem, locAtual, saude, vidaAtual, vidaMax, nomePersonagem
-- **PC (Playable Character)**: <ins>idPC</ins>, missaoAtual
-- **NPC (Non-Playable Character)**: <ins>idNPC</ins>, loot, eAliado
-- **Inst_NPC**: <ins>tipoNPC</ins>
-- **Grupo**: <ins>idGrupo</ins>, descricao, nomeGrupo
-- **Habilidade**: <ins>idHabilidade</ins>, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade
-- **Inventário**: <ins>idInventario</ins>, descricao, receita, capacidadeInvent, duracao
-- **Inst_Item**: <ins>idItem</ins>, tipoItem, eAtaque
- - **Armas**: <ins>idArma</ins>, nomeArma, dano, tipoArma, municaoAtual, municaoMax
- - **Vestimenta**: <ins>idVestimenta</ins>, nomeVestimenta, descricaoVest
- - **Alimento**: <ins>idAl</ins>, nomeAli, aumentoVida, tipoAl
-- **Receita**: <ins>idReceita</ins>, nomeReceita, descricaoReceita, tempoCraft
-- **Missão**: <ins>idMissao</ins>, descricaoMissao, recompensas, tipoMissao
- - **Missão de Patrulha**:<ins> idPatrulha</ins>,vidaAtualNPCs, qntdNPCs
- - **Missão de Expedição/Encontrar Item**:<ins> idExploracao</ins>, itensAdquiridos
-- **Evento**: <ins>idEvento</ins>, nomeEvento, descricao, localizacao
-- **Itinerário**: <ins>idItinerario</ins>, horario, data
-- **Infectados**: <ins>idInfectado</ins>, comportamento
-- **Facções Humanas**: <ins>idFac</ins>, nomeFacao, alianca
-- **Animais**: <ins>idAnimal</ins>, nomeAnimal, eAmeaca
-- **Evolução**: <ins>idEvolucao</ins>, requisitos, xpEvol
+- **Região**: <ins>idRegiao</ins>, descricaoRegiao, coordenadaX, coordenadaY, nomeRegiao, tipoRegiao, capacidade, idMundo
+- **Zona de Quarentena**: <ins>idZona</ins>, idRegiao, seguranca, populacaoAtual
+- **Acampamento**: <ins>idAcampamento</ins>, idRegiao, defesa
+- **Locais Abandonados**: <ins>idLocal</ins>, idRegiao, periculosidade, nivelInfestacao
+- **Personagem**: <ins>idPersonagem</ins>, tipoPersonagem
+- **PC (Playable Character)**: <ins>idPC</ins>, idPersonagem, locEmX, locEmY, xp, saude, vidaMax, vidaAtual, nomePersonagem, status, Evolucao, Mundo, id_Invetario
+- **NPC (Non-Playable Character)**: <ins>idNPC</ins>, idPersonagem, locEmX, locEmY, xp, saude, vidaMax, vidaAtual, nomePersonagem, Loot, eAliado, Mundo, id_Inventario
+- **Inst_NPC**: <ins>idNP</ins>, tipoNPC,
+  - **Infectados**: <ins>idInfectado</ins>, comportamentoInfec, idInfectado,
+  - **Facção Humanas**: <ins>idFacção</ins>, idNPC, nomeFacção
+  - **Animais**: <ins>idAnimal</ins>, idNPC, nomeAnimal, nomeAnimal, ameaca
+- **Habilidade**: <ins>idHabilidade</ins>, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, idPC
+- **Inventário**: <ins>idInventario</ins>, descricao, capacidadeInvent
+- **Inst_Item**: <ins>idItem</ins>, tipoItem
+  - **Armas**: <ins>idArma</ins>, idItem, nomeArma, dano, municaoAtual, municaoMax, idInvetario, eAtaque
+  - **Vestimenta**: <ins>idVestimenta</ins>, idItem, nomeVestimenta, descricaoVestimenta, idInventario, eAtaque
+  - **Alimento**: <ins>idAlimento</ins>, idItem, nomeAlimento, tipoAlimento, aumentoVida, idIventario, eAtaque
+- **Receita**: <ins>idReceita</ins>, nomeReceita, descricaoReceita, tempoCraft, idItem
+- **Ingredientes**: <ins>idIngrediente</ins>, idReceita, idItem, quantidadeIngre
+- **Missão**: <ins>idMissao</ins>, tipoMis
+  - **Missão de Patrulha**:<ins>idPatrulha</ins>, idMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, idPC, xpMis 
+  - **Missão de Expedição/Encontrar Item**:<ins>idExploracao</ins>, idMissao, idMissaoPre, objetivo, nomeMis, ItensAdquiridos, idPc, xpMis
+- **Evento**: <ins>idEvento</ins>, nomeEvento, descricao, locEmX, locEmY, idPC
+- **Itinerário**: <ins>idItinerario</ins>, horario, data, idEvento
+- **Evolução**: <ins>idEvolucao</ins>, requisitosNivel, xpEvol
 
-## 3. Relacionamentos
+#### Atributos de relacionamentos
+- **concede**: <ins>idEvolucao, idAlimento</ins>,
+- **dialoga**: <ins>idDialogo</ins>, idFalante, idOuvinte, conteudo,  duracaoDialogo,
+- **participação**: <ins>idNPC, Evento, Missao</ins>
+
+## 4. Relacionamentos
 
 **Mundo _possui_ Região**
 
@@ -90,11 +99,6 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - Uma região pode ser classificado como um local abandonado (0,1)
 - O local abandonado pertence a uma única região (1,1)
 
-**Região _classificado como_ Áreas Abertas**
-
-- Uma região pode ser classificado como uma área aberta (0,1)
-- A área aberta pertence a uma única região (1,1)
-
 **Personagem _se situa_ no Mundo**
 
 - O personagem está em um único mundo (1,1)
@@ -110,60 +114,61 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - O PC tem um único inventário (1,1)
 - Cada inventário pertence a um único PC (1,1)
 
+**PC _tem_ Evolucao**
+
+- O PC tem uma Evolução no decorrer do jogo (1,1)
+- Cada Evolução pertence a um único PC (1,1)
+
 **Inventário _contém_ Inst_Item**
 
-- O inventário contém nenhum ou vários itens (0,N)
+- O inventário contém um ou vários itens (1,N)
 - Cada item pertence a um único inventário (1,1)
 
 **Inst_Item _classificado como_ Armas**
 
-- Uma instância de item pode ser classificado como uma arma (0,1)
+- Uma instância de item pode ser classificado como uma arma (1,1)
 - A arma pertence a uma instância de item(1,1)
 
 **Inst_Item _classificado como_ Vestimenta**
 
-- Uma instância de item pode ser classificado como uma vestimenta (0,1)
+- Uma instância de item pode ser classificado como uma vestimenta (1,1)
 - A vestimenta pertence a uma instância de item (1,1)
 
 **Inst_Item _classificado como_ Alimento**
 
-- Uma instância de item pode ser classificado como um alimento (0,1)
+- Uma instância de item pode ser classificado como um alimento (1,1)
 - O alimento pertence a uma instância de item (1,1)
 
-**Personagem _participa de_ Grupo**
+**Inst_Item _possui_ Receita**
 
-- Um personagem pode participar de nenhum ou vários grupos (0,N)
-- Cada grupo contém um ou vários personagens (1,N)
+- Uma instância de item possui uma receita de fabricação (1,1)
+- Cada Receita pertence a uma instância de item (1,1)
 
-**PC _realiza_ Missão**
+**Receita _possui_ Ingrediente**
 
-- Um PC realiza nenhuma ou várias missões (0,N)
-- Cada missão é realizada por um ou vários PCs (1,N)
+- Cada Receita de item possui vários ingredientes (1,N)
+- Cada Ingrediente pertence a uma receita (1,1)
+
+**PC e NPC _realiza_ Missão**
+
+- Um PC e NPC realiza várias missões (1,N)
+- Cada missão é realizada por um PCs (1,1)
+- Cada missão é realizada por vários NPCs (1,N)
 
 **Missão _classificado em_ Missão Patrulha**
 
-- Uma missão pode ser classificado em Missão de Patrulha (0,1)
+- Uma missão pode ser classificado em Missão de Patrulha (1,1)
 - A Missão de Patrulha pertence a uma única Missão (1,1)
 
 **Missão _classificado em_ Missão de Exploração/obter item**
 
-- Uma missão pode ser classificado em Missão de Exploração/obter item (0,1)
+- Uma missão pode ser classificado em Missão de Exploração/obter item (1,1)
 - A Missão de Exploração/obter item pertence a uma única Missão (1,1)
 
 **Personagem _fala_ Dialogo**
 
 - Um Personagem fala nenhum ou vários diálogos (0,N)
 - Cada diálogo pertence a um único Personagem (1,1)
-
-**Inst_Item _tem_ Receita**
-
-- Um Item pode ter nenhuma ou várias receitas (0,N)
-- Cada receita pertence a um único item (1,1)
-
-**Receita _possui_ Ingredientes**
-
-- Uma Receita pode ter um ou vários ingredientes (1,N)
-- Cada ingrediente pertence a um única receita (1,1)
 
 **Personagem _participa_ em Evento**
 
@@ -189,9 +194,4 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 
 - Uma instância de NPC pode ser classificado em Animal (0,1)
 - O Animal pertence a uma única instância de NPC(1,1)
-
-**Personagem _possui_ Evolução**
-
-- Um personagem possui uma ou várias evoluções (1,N)
-- Cada evolução pertence a um único personagem (1,1)
 
