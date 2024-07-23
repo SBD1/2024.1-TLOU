@@ -26,16 +26,15 @@ Em suma, The Last of Us combina ação envolvente, elementos de sobrevivência e
 
 | Módulo | Link da gravação                                                                                    | Data       |
 | ------ | --------------------------------------------------------------------------------------------------- | ---------- |
-| 1      | [Apresentação Módulo 1](./docs/apresentacoes/apresentacao_m01.mp4)                                  | 22/07/2024 |
+| 1      | [Apresentação do Módulo 1](https://www.youtube.com/watch?v=qEP-Pjk8k78)                                  | 22/07/2024 |
 
 ## Entregas
 
 - Módulo 1
-
-  - [Diagrama Entidade-Relacionamento](\Docs\docs\primeira-entrega\DD.md)
-  - [Dicionário de Dados](\Docs\docs\primeira-entrega\DER.md)
-  - [Modelo Entidade-Relacionamento](Docs\docs\primeira-entrega\MER.md)
-  - [Modelo Relacional](Docs\docs\primeira-entrega\MRel.md)
+  - [Diagrama Entidade-Relacionamento](./Docs/docs/primeira-entrega/DER.md)
+  - [Dicionário de Dados](./Docs/docs/primeira-entrega/DD.md)
+  - [Modelo Entidade-Relacionamento](./Docs/docs/primeira-entrega/MER.md)
+  - [Modelo Relacional](./Docs/docs/primeira-entrega/MRel.md)
 
 ## Histórico de versões
 
