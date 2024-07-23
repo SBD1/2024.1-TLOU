@@ -22,10 +22,10 @@ Observação: essa tabela possui chave estrangeira para a tabela `Mundo`.
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
 | idRegiao         | int    | Identificador único para a região                                                                     | 1 - 100             | Não                    | Sim. Chave primária | -                 |
-| descricaoRegiao  | string [400]| Breve descrição textual imersiva da região em que o jogador está, contando com ambiente e atmosfera, interatividade e estilo.     | A-Z <b/r a-z             | Não                    | Não                  | -                 |
+| descricaoRegiao  | string [400]| Breve descrição textual imersiva da região em que o jogador está, contando com ambiente e atmosfera, interatividade e estilo.     | A-Z <br /> a-z             | Não                    | Não                  | -                 |
 | coordenadaX      | int    | Coordenada para localização da região dentro do mundo no eixo X.                                      | 1 - 5000            | Não                    | Não                  | -                 |
 | coordenadaY      | int    | Coordenada para localização da região dentro do mundo no eixo Y.                                      | 1 - 5000            | Não                    | Não                  | -                 |
-| nomeRegiao       | string [50] | Nome da região em questão, no caso, uma zona de quarentena                                       | A-Z <b/r a-z             | Não                    | Não                  | -                 |
+| nomeRegiao       | string [50] | Nome da região em questão, no caso, uma zona de quarentena                                       | A-Z <br /> a-z             | Não                    | Não                  | -                 |
 | capacidade       | int    | Número de PCs e NPCs que pode ter em uma região                                                       | 0 - 5000            | Sim                    | Não                  | -                 |
 | idMundo          | int    | Identificador único para o mundo em que a região se encontra                                          | 1                   | Não                    | Sim. Chave estrangeira                 | -                 |
 | tipoRegiao       | int    | Atributo que define qual o tipo de região (Locais abandonados, acampamento, zona de quarentena ou nenhum desses) por meio de uma enumeração. | 1 - 3               | Sim                    | Não                  | Pode não possuir nenhum tipo |
@@ -212,7 +212,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Evento`.
 | Variável     | Tipo       | Descrição                                             | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |--------------|------------|-------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idItinerario | int        | Identificador único para o itinerário                | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| horario      | int        | Horário em que um determinado evento ocorrerá        | A-Z, a-z           | Não                    | Não      | -                  |
+| horario      | int        | Horário em que um determinado evento ocorrerá        | A-Z <br />a-z           | Não                    | Não      | -                  |
 | data         | date       | Data em que um determinado evento ocorrerá           | -                  | Não                    | Não      | REGEX para validação: `/^(\d{2})([-\/.]?)(\d{2})\2(\d{4})$/` |
 | idEvento     | int        | Identificador único do evento que o itinerário está atrelado | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 
@@ -229,9 +229,9 @@ Observação: essa tabela possui chave estrangeira para a tabela `PC`.
 | Variável         | Tipo       | Descrição                                             | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |------------------|------------|-------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idHabilidade     | int        | Identificador único para a habilidade                | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| nomeHabilidade   | string[50] | Nome que identifica não unicamente uma habilidade    | A-Z, a-z           | Não                    | Não      | -                  |
-| tipoHabilidade   | string[50] | Descreve se a habilidade é passiva ou ativa          | A-Z, a-z           | Não                    | Não      | -                  |
-| efeito           | string[50] | Descreve qual efeito a habilidade aplica sobre o jogador ou entidades que ele interage | A-Z, a-z           | Não                    | Não      | -                  |
+| nomeHabilidade   | string[50] | Nome que identifica não unicamente uma habilidade    | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| tipoHabilidade   | string[50] | Descreve se a habilidade é passiva ou ativa          | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| efeito           | string[50] | Descreve qual efeito a habilidade aplica sobre o jogador ou entidades que ele interage | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | duracaoHabilidade| int        | Descreve o tempo que a habilidade dura no alvo       | 1 - 5000           | Não                    | Não      | -                  |
 | idPC             | int        | PC que possui a habilidade                            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 
@@ -245,7 +245,7 @@ A tabela a seguir descreve a entidade `Inventario`, que representa os inventári
 | Variável           | Tipo       | Descrição                                               | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |--------------------|------------|---------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idInventario       | int        | Identificador único para o inventário                  | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| descricao          | string[400]| Descrição detalhada dos itens contidos no inventário    | A-Z, a-z           | Não                    | Não      | -                  |
+| descricao          | string[400]| Descrição detalhada dos itens contidos no inventário    | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | capacidadeInvent   | int        | Capacidade máxima do inventário                        | 1 - 5000           | Não                    | Não      | -                  |
 
 
@@ -258,7 +258,7 @@ A tabela a seguir descreve a entidade `Inst_Item`, que representa os itens no in
 | Variável   | Tipo      | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |------------|-----------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idItem     | int       | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| tipoItem   | string[50]| Tipo do item (ex.: arma, vestimenta ou alimento)   | A-Z, a-z           | Não                    | Não      | -                  |
+| tipoItem   | string[50]| Tipo do item (ex.: arma, vestimenta ou alimento)   | A-Z <br /> a-z           | Não                    | Não      | -                  |
 
 
 
@@ -273,7 +273,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 |----------------|------------|------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idArma         | int        | Identificador único para o item do inventário       | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | idItem         | int        | Identificador único para o item do inventário       | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
-| nomeArma       | string[50] | Nome que não identifica unicamente a arma equipada ou encontrada | A-Z, a-z           | Não                    | Não      | -                  |
+| nomeArma       | string[50] | Nome que não identifica unicamente a arma equipada ou encontrada | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | dano           | int        | Quantidade de dano que a arma causa                 | 1 - 50             | Não                    | Não      | -                  |
 | municaoAtual   | int        | Quantidade atual de munição da arma                 | 0 - 10             | Sim                    | Não      | -                  |
 | municaoMax     | int        | Quantidade máxima de munição da arma                | 0 - 10             | Sim                    | Não      | -                  |
@@ -294,8 +294,8 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 |----------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idVestimenta   | int        | Identificador único para a vestimenta no inventário | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | idItem         | int        | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
-| nomeVestimenta | string[50] | Nome que não identifica unicamente a vestimenta    | A-Z, a-z           | Não                    | Não      | -                  |
-| descricaoVestimenta | string[400] | Descrição da vestimenta, incluindo informações como se fornece armadura ou é apenas decorativo | A-Z, a-z           | Não                    | Não      | -                  |
+| nomeVestimenta | string[50] | Nome que não identifica unicamente a vestimenta    | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| descricaoVestimenta | string[400] | Descrição da vestimenta, incluindo informações como se fornece armadura ou é apenas decorativo | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | idInventario   | int        | Identificador do inventário ao qual a vestimenta pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira      | -                  |
 | eAtaque        | boolean    | Indica se a vestimenta é de ataque (true) ou defesa (false) | true/false         | Não                    | Não      | -                  |
 
@@ -312,8 +312,8 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 |---------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idAlimento    | int        | Identificador único para o alimento no inventário  | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | idItem        | int        | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
-| nomeAlimento  | string[50] | Nome que não identifica unicamente o alimento      | A-Z, a-z           | Não                    | Não      | -                  |
-| tipoAlimento  | string[40] | Tipo de alimento (ex.: fruta, carne, bebida, barras, vitaminas) | A-Z, a-z           | Não                    | Não      | -                  |
+| nomeAlimento  | string[50] | Nome que não identifica unicamente o alimento      | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| tipoAlimento  | string[40] | Tipo de alimento (ex.: fruta, carne, bebida, barras, vitaminas) | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | aumentoVida   | int        | Quantidade de vida que o alimento aumenta          | 1 - 20             | Não                    | Não      | -                  |
 | idInventario  | int        | Identificador do inventário ao qual o alimento pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | eAtaque       | boolean    | Indica se o alimento é de ataque (true) ou defesa (false) | false              | Não                    | Não      | Como alimento não pode ser classificado como ataque ou defesa, seu valor será sempre falso |
@@ -331,8 +331,8 @@ Observação: essa tabela possui chave estrangeira para a tabela `Inst_Item`.
 | Variável       | Tipo      | Descrição                                         | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|-----------|---------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idReceita      | int       | Identificador único para a receita                | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| nomeReceita    | string[50]| Nome da receita a ser feita                       | A-Z, a-z           | Não                    | Não      | -                  |
-| descricaoReceita | string[400] | Breve descrição textual da receita, incluindo ingredientes e item a ser feito | A-Z, a-z           | Não                    | Não      | -                  |
+| nomeReceita    | string[50]| Nome da receita a ser feita                       | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| descricaoReceita | string[400] | Breve descrição textual da receita, incluindo ingredientes e item a ser feito | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | tempoCraft     | int       | Tempo, em minutos, necessário para que a receita fique pronta | 1 - 60             | Não                    | Não      | -                  |
 | idItem         | int       | Identificador único para o item resultante da receita | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 
