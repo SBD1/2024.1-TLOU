@@ -82,7 +82,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`,
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
 | idPersonagem     | int    | Identificador único para o personagem                                                                 | 1 - 5000            | Não                    | Sim. Chave estrangeira | -                 |
-| idPC             | int    | Identificador único para o PC                                                                         | 1 - 5000            | Não                    | Sim. Chave primária  | -                 |
+| idNPC             | int    | Identificador único para o PC                                                                         | 1 - 5000            | Não                    | Sim. Chave primária  | -                 |
 | locEmX           | int    | Coordenada para localização do PC dentro do mundo/região no eixo X                                    | 1 - 5000            | Não                    | Não                  | -                 |
 | locEmY           | int    | Coordenada para localização do PC dentro do mundo/região no eixo Y                                    | 1 - 5000            | Não                    | Não                  | -                 |
 | xp               | int    | Quantidade de experiência de um NPC                                                                    | 0 - 100             | Não                    | Não                  | -                 |
@@ -122,12 +122,8 @@ Observação: essa tabela possui chave estrangeira para a tabela `Personagem`.
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
 | idInventario     | int    | Identificador único para o inventário                                                                 | 1 - 5000            | Não                    | Sim. Chave primária  | -                 |
-| tipoInventario   | int    | Atributo que define qual o tipo de inventário (PC ou NPC) por meio de uma enumeração.                  | 1 - 2               | Não                    | Não                  | Permite apenas um atributo de tipo |
-| qtdSlots         | int    | Quantidade de espaços que um inventário possui para armazenar itens                                   | 0 - 30              | Não                    | Não                  | -                 |
-| slotsUsados      | int    | Quantidade de espaços que estão sendo usados no inventário                                            | 0 - 30              | Sim                    | Não                  | -                 |
-| PesoMaximo       | int    | Peso máximo que o inventário pode suportar                                                            | 0 - 100             | Não                    | Não                  | -                 |
-| pesoAtual        | int    | Peso atual dos itens que estão no inventário                                                          | 0 - 100             | Sim                    | Não                  | -                 |
-| idPersonagem     | int    | Identificador do personagem que possui o inventário                                                   | 1 - 5000            | Não                    | Sim. Chave estrangeira | -                 |
+| capacidadeInvent  | int    | Atributo que define a capacidade do inventário                | 1 - 30               | Não                  | Não                  | - |
+| descricao         | string [50]    | Campo destinado a fornecer uma descrição detalhada ou identificação do inventário.     | a-z <br> </br>  A-Z            | Não                    | Não                  | -                 |
 
 # Entidade: Itens
 
