@@ -158,9 +158,9 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item`, 
 |------------------|------------|-------------------------------------------------------------|--------------------|------------------------|----------|----------------------------------------|
 | IdMissao         | int        | Identificador único para a missão                          | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                                      |
 | idMissaoPre      | int        | Identificador único para a missão que é pré-requisito       | 1 - 5000           | Sim                    | Não      | -                                      |
-| objetivo         | string[400]| Breve descrição do objetivo da missão, incluindo motivos, envolvidos e local | a - z <br> A - Z       | Não                    | Não      | -                                      |
-| nomeMis          | string[50] | Nome da missão                                             | a - z <br> A - Z       | Não                    | Não      | -                                      |
-| ItensAdquiridos  | string[50] | Itens adquiridos durante a missão                          | a - z <br> A - Z       | Sim                    | Sim. Chave estrangeira | Permite mais de um item                |
+| objetivo         | string[400]| Breve descrição do objetivo da missão, incluindo motivos, envolvidos e local | a - z <br /> A - Z       | Não                    | Não      | -                                      |
+| nomeMis          | string[50] | Nome da missão                                             | a - z <br /> A - Z       | Não                    | Não      | -                                      |
+| ItensAdquiridos  | string[50] | Itens adquiridos durante a missão                          | a - z <br /> A - Z       | Sim                    | Sim. Chave estrangeira | Permite mais de um item                |
 | idExploracao     | int        | Identificador único para a exploração a ser realizada      | 1 - 5000           | Não                    | Sim. Chave primária | -                                      |
 | IdPC             | int        | Identificador para o PC que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                                      |
 | xpMis            | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                                      |
@@ -177,8 +177,8 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `P
 |---------------|------------|-------------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | IdMissao      | int        | Identificador único para a missão                          | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | idMissaoPre   | int        | Identificador único para a missão que é pré-requisito       | 1 - 5000           | Sim                    | Não      | -                  |
-| objetivo      | string[400]| Breve descrição do objetivo da missão, incluindo motivos, envolvidos e local | a - z <br> A - Z       | Não                    | Não      | -                  |
-| nomeMis       | string[50] | Nome da missão                                             | a - z <br> A - Z       | Não                    | Não      | -                  |
+| objetivo      | string[400]| Breve descrição do objetivo da missão, incluindo motivos, envolvidos e local | a - z <br /> A - Z       | Não                    | Não      | -                  |
+| nomeMis       | string[50] | Nome da missão                                             | a - z <br /> A - Z       | Não                    | Não      | -                  |
 | qtdNPCs       | int        | Número de NPCs inimigos a serem derrotados na missão        | 1 - 30             | Não                    | Não      | -                  |
 | IdPC          | int        | Identificador para o PC que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | xpMis         | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                  |
@@ -196,7 +196,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `PC`.
 |--------------|------------|-------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idEvento     | int        | Identificador único para o evento                    | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | nomeEvento   | int        | Nome do evento em questão                            | 1 - 5000           | Não                    | Não      | -                  |
-| descricao    | string[400]        | Breve descrição textual do evento, incluindo local, contexto e atividades | a - z <br> A - Z           | Não                    | Não      | -                  |
+| descricao    | string[400]        | Breve descrição textual do evento, incluindo local, contexto e atividades | a - z <br /> A - Z           | Não                    | Não      | -                  |
 | locEmX       | int        | Coordenada para localização do evento no eixo X       | 1 - 5000           | Não                    | Não      | -                  |
 | locEmY       | int        | Coordenada para localização do evento no eixo Y       | 1 - 5000           | Não                    | Não      | -                  |
 | IdPC         | int        | Identificador único para o PC participante do evento  | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
