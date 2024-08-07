@@ -76,7 +76,6 @@ CREATE TABLE NPC (
     Mundo INT NOT NULL,
     IdInventario INT NOT NULL, 
 
-
     CONSTRAINT npc_pk PRIMARY KEY (idNPC),
     CONSTRAINT npc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
     CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
@@ -97,7 +96,6 @@ CREATE TABLE PC (
     Evolucao INT NOT NULL,
     Mundo INT NOT NULL,
     IdInventario INT NOT NULL, 
-
 
     CONSTRAINT pc_pk PRIMARY KEY (idPC),
     CONSTRAINT pc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
@@ -345,6 +343,7 @@ CREATE TABLE Participacao (
     Missao INT NOT NULL,
 
     CONSTRAINT participacao_pk PRIMARY KEY (IdNPC, Evento, Missao),
+    CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC),
     CONSTRAINT evento_fk FOREIGN KEY (Evento) REFERENCES Evento (idNPC),
     CONSTRAINT missao_fk FOREIGN KEY (Missao) REFERENCES Missao (idMissao)
 );
