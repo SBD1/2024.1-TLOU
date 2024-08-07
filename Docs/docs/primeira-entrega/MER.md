@@ -51,7 +51,7 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - **Acampamento**: <ins>idAcampamento</ins>, idRegiao, defesa
 - **Locais Abandonados**: <ins>idLocal</ins>, idRegiao, periculosidade, nivelInfestacao
 - **Personagem**: <ins>idPersonagem</ins>, tipoPersonagem
-- **PC (Playable Character)**: <ins>idPC</ins>, idPersonagem, locEmX, locEmY, xp, saude, vidaMax, vidaAtual, nomePersonagem, status, Evolucao, Mundo, id_Invetario
+- **PC (Playable Character)**: <ins>idPC</ins>, idPersonagem, locEmX, locEmY, xp, saude, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, Mundo, id_Invetario
 - **NPC (Non-Playable Character)**: <ins>idNPC</ins>, idPersonagem, locEmX, locEmY, xp, saude, vidaMax, vidaAtual, nomePersonagem, Loot, eAliado, Mundo, id_Inventario
 - **Inst_NPC**: <ins>idNP</ins>, tipoNPC,
   - **Infectados**: <ins>idInfectado</ins>, comportamentoInfec, idInfectado,
@@ -69,7 +69,7 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
   - **Missão de Patrulha**:<ins>idPatrulha</ins>, idMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, idPC, xpMis 
   - **Missão de Expedição/Encontrar Item**:<ins>idExploracao</ins>, idMissao, idMissaoPre, objetivo, nomeMis, ItensAdquiridos, idPc, xpMis
 - **Evento**: <ins>idEvento</ins>, nomeEvento, descricao, locEmX, locEmY, idPC
-- **Itinerário**: <ins>idItinerario</ins>, horario, data, idEvento
+- **Itinerário**: <ins>idItinerario</ins>, horario, dia, idEvento
 - **Evolução**: <ins>idEvolucao</ins>, requisitosNivel, xpEvol
 
 #### Atributos de relacionamentos
