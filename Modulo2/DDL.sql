@@ -1,5 +1,3 @@
-/c tloupgdb 
-
 -- definição de tabelas
 
 CREATE TABLE Mundo (
@@ -18,7 +16,7 @@ CREATE TABLE Regiao (
     coordenadaY INT NOT NULL,
     nomeRegiao VARCHAR (50) NOT NULL,
     capacidade INT,
-    IdMundo NOT NULL,
+    IdMundo INT NOT NULL,
     tipoRegiao INT,
 
     CONSTRAINT regiao_pk PRIMARY KEY (idRegiao),
@@ -62,54 +60,27 @@ CREATE TABLE Personagem (
     CONSTRAINT personagem_pk PRIMARY KEY (idPersonagem)
 );
 
-CREATE TABLE NPC (
-    IdPersonagem SERIAL NOT NULL,
-    idNPC SERIAL NOT NULL,
-    locEmX INT NOT NULL,
-    locEmY INT NOT NULL,
-    xp INT NOT NULL,
-    vidaMax INT NOT NULL,
-    vidaAtual INT,
-    nomePersonagem VARCHAR (50) NOT NULL,
-    Loot VARCHAR (50), 
-    eALiado BOOLEAN NOT NULL, 
-    Mundo INT NOT NULL,
-    IdInventario INT NOT NULL, 
-
-    CONSTRAINT npc_pk PRIMARY KEY (idNPC),
-    CONSTRAINT npc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
-    CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
-    CONSTRAINT loot_fk FOREIGN KEY (Loot) REFERENCES InstItem (idItem),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
-);
-
-CREATE TABLE PC (
-    IdPersonagem SERIAL NOT NULL,
-    idPC SERIAL NOT NULL,
-    locEmX INT NOT NULL,
-    locEmY INT NOT NULL,
-    xp INT NOT NULL,
-    vidaMax INT NOT NULL,
-    vidaAtual INT,
-    nomePersonagem VARCHAR (50) NOT NULL,
-    estado VARCHAR (20) NOT NULL, 
-    Evolucao INT NOT NULL,
-    Mundo INT NOT NULL,
-    IdInventario INT NOT NULL, 
-
-    CONSTRAINT pc_pk PRIMARY KEY (idPC),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
-    CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
-    CONSTRAINT evolucao_fk FOREIGN KEY (Evolucao) REFERENCES Evolucao (idEvolucao),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
-);
-
 CREATE TABLE Inventario (
     idInventario SERIAL NOT NULL,
     capacidade INT NOT NULL,
     descricao VARCHAR (50) NOT NULL,
     
     CONSTRAINT inventario_pk PRIMARY KEY (idInventario)
+);
+
+
+CREATE TABLE Missao (
+    idMissao SERIAL NOT NULL,
+    tipoMis INT NOT NULL,
+
+    CONSTRAINT missao_pk PRIMARY KEY (idMissao)
+);
+
+CREATE TABLE InstItem (
+    idItem SERIAL NOT NULL,
+    tipoItem INT NOT NULL,
+
+    CONSTRAINT item_pk PRIMARY KEY (idItem)
 );
 
 CREATE TABLE Itens (
@@ -121,91 +92,25 @@ CREATE TABLE Itens (
     CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem)
 );
 
-CREATE TABLE Missao (
-    idMissao SERIAL NOT NULL,
-    tipoMis INT NOT NULL,
-
-    CONSTRAINT missao_pk PRIMARY KEY (idMissao)
-);
-
-CREATE TABLE MissaoExploracaoObterItem (
-    IdMissao INT NOT NULL,
-    idMissaoPre INT,
-    objetivo VARCHAR (400) NOT NULL,
-    nomeMis VARCHAR (50) NOT NULL,
-    ItensAdquiridos VARCHAR (50),
-    idExploracao SERIAL NOT NULL,
-    IdPC INT NOT NULL,
-    xpMis INT NOT NULL, 
-    
-    CONSTRAINT missaoExploracao_pk PRIMARY KEY (idExploracao),
-    CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT missaoItens_fk FOREIGN KEY (ItensAdquiridos) REFERENCES InstItem (idItem),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
-);
-
-CREATE TABLE MissaoPatrulha (
-    IdMissao INT NOT NULL,
-    idMissaoPre INT,
-    objetivo VARCHAR (400) NOT NULL,
-    nomeMis VARCHAR (50) NOT NULL,
-    qtdNPCs INT NOT NULL,
-    IdPC INT NOT NULL,
-    xpMis INT NOT NULL, 
-    idPatrulha SERIAL NOT NULL,
-    
-    CONSTRAINT missaoPatrulha_pk PRIMARY KEY (idPatrulha),
-    CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
-);
-
-CREATE TABLE Evento (
-    idEvento SERIAL NOT NULL,
-    nomeEvento INT NOT NULL,
-    descricao VARCHAR (400) NOT NULL,
+CREATE TABLE NPC (
+    IdPersonagem SERIAL NOT NULL,
+    idNPC SERIAL NOT NULL,
     locEmX INT NOT NULL,
     locEmY INT NOT NULL,
-    IdPC INT NOT NULL,
+    xp INT NOT NULL,
+    vidaMax INT NOT NULL,
+    vidaAtual INT,
+    nomePersonagem VARCHAR (50) NOT NULL,
+    Loot INT, 
+    eALiado BOOLEAN NOT NULL, 
+    Mundo INT NOT NULL,
+    IdInventario INT NOT NULL, 
 
-    CONSTRAINT evento_pk PRIMARY KEY (idEvento),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
-);
-
-CREATE TABLE Itinerario (
-    idItinerario SERIAL NOT NULL,
-    horario INT NOT NULL,
-    dia DATE NOT NULL, 
-    IdEvento INT NOT NULL,
-
-    CONSTRAINT itinerario_pk PRIMARY KEY (idItinerario),
-    CONSTRAINT evento_fk FOREIGN KEY (IdEvento) REFERENCES Evento (idEvento)
-);
-
-CREATE TABLE Habilidade (
-    idHabilidade SERIAL NOT NULL,
-    nomeHabilidade VARCHAR (50) NOT NULL,
-    tipoHabilidade VARCHAR (50) NOT NULL, 
-    efeito VARCHAR (50) NOT NULL,
-    duracaoHabilidade INT NOT NULL,
-    IdPC INT NOT NULL,
-
-    CONSTRAINT habilidade_pk PRIMARY KEY (idHabilidade),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
-);
-
-CREATE TABLE Inventario (
-    idInventario SERIAL NOT NULL,
-    descricao VARCHAR (400) NOT NULL,
-    capacidadeInvent INT NOT NULL, 
-
-    CONSTRAINT inventario_pk PRIMARY KEY (idInventario)
-);
-
-CREATE TABLE InstItem (
-    idItem SERIAL NOT NULL,
-    tipoItem INT NOT NULL,
-
-    CONSTRAINT item_pk PRIMARY KEY (idItem)
+    CONSTRAINT npc_pk PRIMARY KEY (idNPC),
+    CONSTRAINT npc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
+    CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
+    CONSTRAINT loot_fk FOREIGN KEY (Loot) REFERENCES InstItem (idItem),
+    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Arma (
@@ -280,6 +185,92 @@ CREATE TABLE Evolucao (
     CONSTRAINT evolucao_pk PRIMARY KEY (idEvolucao)
 );
 
+CREATE TABLE PC (
+    IdPersonagem SERIAL NOT NULL,
+    idPC SERIAL NOT NULL,
+    locEmX INT NOT NULL,
+    locEmY INT NOT NULL,
+    xp INT NOT NULL,
+    vidaMax INT NOT NULL,
+    vidaAtual INT,
+    nomePersonagem VARCHAR (50) NOT NULL,
+    estado VARCHAR (20) NOT NULL, 
+    Evolucao INT NOT NULL,
+    Mundo INT NOT NULL,
+    IdInventario INT NOT NULL, 
+
+    CONSTRAINT pc_pk PRIMARY KEY (idPC),
+    CONSTRAINT pc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
+    CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
+    CONSTRAINT evolucao_fk FOREIGN KEY (Evolucao) REFERENCES Evolucao (idEvolucao),
+    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+);
+
+CREATE TABLE Evento (
+    idEvento SERIAL NOT NULL,
+    nomeEvento INT NOT NULL,
+    descricao VARCHAR (400) NOT NULL,
+    locEmX INT NOT NULL,
+    locEmY INT NOT NULL,
+    IdPC INT NOT NULL,
+
+    CONSTRAINT evento_pk PRIMARY KEY (idEvento),
+    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+);
+
+CREATE TABLE Itinerario (
+    idItinerario SERIAL NOT NULL,
+    horario INT NOT NULL,
+    dia DATE NOT NULL, 
+    IdEvento INT NOT NULL,
+
+    CONSTRAINT itinerario_pk PRIMARY KEY (idItinerario),
+    CONSTRAINT evento_fk FOREIGN KEY (IdEvento) REFERENCES Evento (idEvento)
+);
+
+CREATE TABLE Habilidade (
+    idHabilidade SERIAL NOT NULL,
+    nomeHabilidade VARCHAR (50) NOT NULL,
+    tipoHabilidade VARCHAR (50) NOT NULL, 
+    efeito VARCHAR (50) NOT NULL,
+    duracaoHabilidade INT NOT NULL,
+    IdPC INT NOT NULL,
+
+    CONSTRAINT habilidade_pk PRIMARY KEY (idHabilidade),
+    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+);
+
+CREATE TABLE MissaoPatrulha (
+    IdMissao INT NOT NULL,
+    idMissaoPre INT,
+    objetivo VARCHAR (400) NOT NULL,
+    nomeMis VARCHAR (50) NOT NULL,
+    qtdNPCs INT NOT NULL,
+    IdPC INT NOT NULL,
+    xpMis INT NOT NULL, 
+    idPatrulha SERIAL NOT NULL,
+    
+    CONSTRAINT missaoPatrulha_pk PRIMARY KEY (idPatrulha),
+    CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
+    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+);
+
+CREATE TABLE MissaoExploracaoObterItem (
+    IdMissao INT NOT NULL,
+    idMissaoPre INT,
+    objetivo VARCHAR (400) NOT NULL,
+    nomeMis VARCHAR (50) NOT NULL,
+    ItensAdquiridos INT,
+    idExploracao SERIAL NOT NULL,
+    IdPC INT NOT NULL,
+    xpMis INT NOT NULL, 
+    
+    CONSTRAINT missaoExploracao_pk PRIMARY KEY (idExploracao),
+    CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
+    CONSTRAINT missaoItens_fk FOREIGN KEY (ItensAdquiridos) REFERENCES InstItem (idItem),
+    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+);
+
 CREATE TABLE Concede (
     IdEvolucao INT NOT NULL,
     IdAlimento INT NOT NULL,
@@ -344,6 +335,6 @@ CREATE TABLE Participacao (
 
     CONSTRAINT participacao_pk PRIMARY KEY (IdNPC, Evento, Missao),
     CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC),
-    CONSTRAINT evento_fk FOREIGN KEY (Evento) REFERENCES Evento (idNPC),
+    CONSTRAINT evento_fk FOREIGN KEY (Evento) REFERENCES Evento (idEvento),
     CONSTRAINT missao_fk FOREIGN KEY (Missao) REFERENCES Missao (idMissao)
 );
