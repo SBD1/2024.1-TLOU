@@ -9,24 +9,25 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 
 ## 1. Entidades
 
-- **Mundo**
+- **Sala**
 - **Região**
-- **Zona de Quarentena**
-- **Acampamento**
-- **Locais Abandonados**
+  - **Zona de Quarentena** 
+  - **Acampamento**
+  - **Locais Abandonados**
 - **Personagem**
 - **PC (Playable Character)**
-- **NPC (Non-Playable Character)**
-- **Inst_NPC**
+- **NPC**
   - **Infectados**
   - **Facções Humanas**
   - **Animais**
+- **InstNPC**
 - **Habilidade**
 - **Inventário**
-- **Inst_Item**
+- **Item**
   - **Armas**
   - **Vestimenta**
   - **Alimento**
+- **InstItem**
 - **Receita**
 - **Ingrediente**
 - **Missão**

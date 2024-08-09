@@ -41,7 +41,8 @@ Em suma, The Last of Us combina ação envolvente, elementos de sobrevivência e
 | Versão |    Data    | Descrição                                      | Autor                                               | Revisão                                                      |
 | :----: | :--------: | ---------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
 | `1.0`  | 22/07/2024 | Inclusão das considerações feitas na modelagem | Ana Júlia e Júlia |       Arthur e Maria Clara |
-| `1.0`  | 22/07/2024 | Estruturação do README do projeto              | Arthur e Maria Clara |               Ana Júlia e Júlia                                               |
+| `1.0`  | 22/07/2024 | Estruturação do README do projeto              | Arthur e Maria Clara |               Ana Júlia e Júlia                                               
+| `2.0`  | 09/08/2024 | Correção da primeira entrega do projeto de acordo com *feedback* do professor              | Todos | Todos                       |
 
 ## Autores
 
