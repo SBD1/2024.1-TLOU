@@ -5,6 +5,17 @@ sidebar_label: "Dicionário de Dados"
 
 # TLOU - Dicionário de Dados
 
+# Entidade: Sala
+
+A tabela a seguir descreve a entidade "Sala", que indica uma sala no MUD. Também indica em qual região aquela sala está.
+
+Observação: essa tabela possui chave estrangeira para a tabela `Regiao`.
+
+| **Variável**   | **Tipo**     | **Descrição**                                                    | **Valores permitidos** | **Permite valores nulos?** | **É chave?** | **Outras restrições**                |
+| -------------- | ------------ | ---------------------------------------------------------------- | ---------------------- | ------------------------- | ------------ | ------------------------------------ |
+| idSala          | int          | Identificador único para a sala                               | 1 - 5000               | Não                       | Sim. Chave primária       |          -                |
+| IdRegiao         | int          | Identificador para a região em que o mundo está          | 1 - 5000               | Não                       | Sim. Chave estrangeira         |            -              |
+
 # Entidade: Regiao
 A tabela a seguir descreve a entidade `Regiao`, que representa regiões dentro do mundo, incluindo identificadores, descrições, coordenadas, e características específicas da região.
 
@@ -247,8 +258,7 @@ A tabela a seguir descreve a entidade `Inst_Item`, que representa os itens no in
 
 | Variável   | Tipo      | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |------------|-----------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
-| idItem     | int       | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| tipoItem   | int | Tipo do item (ex.: arma, vestimenta ou alimento)   | 1 - 3          | Não                    | Não      | -                  |
+| idInstItem     | int       | Identificador único para a instância do item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 
 
 
@@ -269,6 +279,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 | municaoMax     | int        | Quantidade máxima de munição da arma                | 0 - 10             | Não                    | Não      | -                  |
 | IdInventario   | int        | Identificador do inventário ao qual a arma pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | eAtaque        | boolean    | Indica se a arma é de ataque (true) ou defesa (false)| true/false         | Não                    | Não      | -                  |
+| descricaoItem       | string[50]    | Descrição da arma, incluindo informações como cor, tamanho e formato        | Não                    | Não      | -                  |
 
 
 
@@ -307,7 +318,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 | aumentoVida   | int        | Quantidade de vida que o alimento aumenta          | 1 - 20             | Não                    | Não      | -                  |
 | IdInventario  | int        | Identificador do inventário ao qual o alimento pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | eAtaque       | boolean    | Indica se o alimento é de ataque (true) ou defesa (false) | false              | Não                    | Não      | Como alimento não pode ser classificado como ataque ou defesa, seu valor será sempre falso |
-
+| descricaoItem       | string[50]    | Descrição do alimento, incluindo informações como classificação, cor, tamanho etc        | Não                    | Não      | -                  |
 
 
 
@@ -396,12 +407,10 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 | Variável | Tipo | Descrição | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------|------|-----------|--------------------|------------------------|----------|--------------------|
-| IdNPC    | int  | Identificador único para o NPC | 1 - 5000 | Não | Sim. Chave estrangeira | - |
-| tipoNPC  | int  | Atributo que define o tipo de NPC (infectados, facção humana ou animal) por meio de uma enumeração. | 1 - 3 | Não | Não | Permite apenas um atributo de tipo |
+| IdInstNPPC    | int  | Identificador único para a instância do NPC | 1 - 5000 | Não | Sim. Chave estrangeira | - |
 
 
-
-# Entidade: Infectado
+# Entidade: Infectado 
 
 A tabela a seguir descreve a entidade "Infectado" que contém informações sobre os infectados, incluindo identificadores únicos, comportamentos e características principais.
 
@@ -412,6 +421,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 | IdNPC                | int          | Identificador único para o NPC                                                | 1 - 5000               | Não                       | Sim. Chave estrangeira            | -|
 | idInfectado          | int          | Identificador único para o infectado                                          | 1 - 5000               | Não                       | Sim    Chave primária               | -|
 | comportamentoInfec   | string [400] | Breve descrição do comportamento do infectado, com principais características | a - z, A - Z           | Não                       | Não          | -                            |
+| velocidade   | int | Medidor da rapidez que um infectado corre | 0 - 10           | Não                       | Não          | -                            |
 
 
 # Entidade: FaccaoHumana
@@ -453,13 +463,3 @@ Observação: essa tabela possui chave estrangeira para as tabelas `NPC`, `Event
 | Evento         | int          | Identificador único para o evento que o NPC participa            | 1 - 5000               | Não                       | Sim. Chave primária e estrangeira    |   -  |
 | Missao         | int          | Identificador único para a missão que o NPC participa            | 1 - 5000               | Não                       | Sim. Chave primária e estrangeira     | -   |
 
-# Entidade: Sala
-
-A tabela a seguir descreve a entidade "Sala", que indica uma sala no MUD. Também indica em qual região aquela sala está.
-
-Observação: essa tabela possui chave estrangeira para a tabela `Regiao`.
-
-| **Variável**   | **Tipo**     | **Descrição**                                                    | **Valores permitidos** | **Permite valores nulos?** | **É chave?** | **Outras restrições**                |
-| -------------- | ------------ | ---------------------------------------------------------------- | ---------------------- | ------------------------- | ------------ | ------------------------------------ |
-| idSala          | int          | Identificador único para a sala                               | 1 - 5000               | Não                       | Sim. Chave primária       |          -                |
-| IdRegiao         | int          | Identificador para a região em que o mundo está          | 1 - 5000               | Não                       | Sim. Chave estrangeira         |            -              |

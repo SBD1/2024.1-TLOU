@@ -9,8 +9,12 @@ O Diagrama Entidade Relacionamento (DER) é composto por um conjunto de objetos 
 
 O diagrama fornece uma visão lógica do banco de dados, fornecendo um conceito mais generalizado de como estão estruturados os dados de um sistema.
 
-![Diagrama Entidade Relacional](../../static/img/TLOU-DER.drawio.png)
+![Diagrama Entidade Relacional](../../static/img/tlou.drawio.png)
+Figura 2: DER 2.0 TLOU
 
-Figura 1: DER TLOU
+![Diagrama Entidade Relacional](../../static/img/TLOU-DER.drawio.png)
+Figura 1: DER 1.0 TLOU
+
+
 
 Fonte: Autores
