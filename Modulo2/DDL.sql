@@ -141,18 +141,18 @@ CREATE TABLE Vestimenta (
     CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
-CREATE TABLE Alimento (
-    idAlimento SERIAL NOT NULL,
+CREATE TABLE Consumivel (
+    idConsumivel SERIAL NOT NULL,
     IdItem INT NOT NULL,
-    nomeAlimento VARCHAR (50) NOT NULL,
-    tipoAlimento VARCHAR (40) NOT NULL,
+    nomeConsumivel VARCHAR (50) NOT NULL,
+    tipoConsumivel VARCHAR (40) NOT NULL,
     aumentoVida INT NOT NULL,  
     IdInventario  INT NOT NULL,
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
 
-    CONSTRAINT alimento_pk PRIMARY KEY (idAlimento),
-    CONSTRAINT item_alimento_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
+    CONSTRAINT consumivel_pk PRIMARY KEY (idConsumivel),
+    CONSTRAINT item_Consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
     CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
@@ -272,11 +272,11 @@ CREATE TABLE MissaoExploracaoObterItem (
 
 CREATE TABLE Concede (
     IdEvolucao INT NOT NULL,
-    IdAlimento INT NOT NULL,
+    IdConsumivel INT NOT NULL,
 
-    CONSTRAINT concede_pk PRIMARY KEY (IdEvolucao, IdAlimento),
+    CONSTRAINT concede_pk PRIMARY KEY (IdEvolucao, IdConsumivel),
     CONSTRAINT evolucao_fk FOREIGN KEY (IdEvolucao) REFERENCES Evolucao (idEvolucao),
-    CONSTRAINT alimento_fk FOREIGN KEY (IdAlimento) REFERENCES Alimento (idAlimento)
+    CONSTRAINT Consumivel_fk FOREIGN KEY (IdConsumivel) REFERENCES Consumivel (idConsumivel)
 );
 
 CREATE TABLE Dialoga (
