@@ -75,7 +75,7 @@ A tabela a seguir descreve a entidade `Personagem`, que representa os personagen
 # Entidade: NPC
 A tabela a seguir descreve a entidade `NPC`, que representa os personagens não jogáveis no jogo. Ela detalha os atributos que definem um NPC, incluindo sua localização, experiência, vida, e inventário.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`, `Sala` e `Inventario` e `Inst_Item`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`, `Sala` e `Inventario` e `InstItem`.
 
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
@@ -115,7 +115,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Personagem`.
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
 | idInventario     | int    | Identificador único para o inventário                                                                 | 1 - 5000            | Não                    | Sim. Chave primária  | -                 |
-| capacidadeInvent  | int    | Atributo que define a capacidade do inventário                | 1 - 30               | Não                  | Não                  | - |
+| capacidade  | int    | Atributo que define a capacidade do inventário                | 1 - 30               | Não                  | Não                  | - |
 | descricao         | string [50]    | Campo destinado a fornecer uma descrição detalhada ou identificação do inventário.     | a-z <br />  A-Z            | Não            | Não  | -
 
 # Entidade: Item
@@ -131,7 +131,7 @@ A tabela a seguir descreve a entidade `Item`, que representa os itens associados
 
 A tabela a seguir descreve a entidade `Itens`, que representa os itens associados a uma missão, incluindo identificadores da missão e do item.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e `Missao`.
+Observação: essa tabela possui chave estrangeira para as tabelas `InstItem` e `Missao`.
 
 | Variável  | Tipo | Descrição                                             | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |-----------|------|-------------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -152,9 +152,9 @@ A tabela a seguir descreve a entidade `Missao`, que representa as missões no si
 
 # Entidade: MissaoExploracaoObterItem
 
-A tabela a seguir descreve a entidade `MissaoExploracao_ObterItem`, que representa missões de exploração para obter itens, incluindo identificadores, objetivos, itens adquiridos e participantes.
+A tabela a seguir descreve a entidade `MissaoExploracaoObterItem`, que representa missões de exploração para obter itens, incluindo identificadores, objetivos, itens adquiridos e participantes.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item`, `Missao` e `PC`.
+Observação: essa tabela possui chave estrangeira para as tabelas `InstItem`, `Missao` e `PC`.
 
 | Variável         | Tipo       | Descrição                                                   | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições                       |
 |------------------|------------|-------------------------------------------------------------|--------------------|------------------------|----------|----------------------------------------|
@@ -239,27 +239,14 @@ Observação: essa tabela possui chave estrangeira para a tabela `PC`.
 
 
 
-# Entidade: Inventario
+# Entidade: InstItem
 
-A tabela a seguir descreve a entidade `Inventario`, que representa os inventários no sistema, incluindo identificadores, descrições e capacidades.
-
-| Variável           | Tipo       | Descrição                                               | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
-|--------------------|------------|---------------------------------------------------------|--------------------|------------------------|----------|--------------------|
-| idInventario       | int        | Identificador único para o inventário                  | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| descricao          | string[400]| Descrição detalhada dos itens contidos no inventário    | A-Z <br /> a-z           | Não                    | Não      | -                  |
-| capacidadeInvent   | int        | Capacidade máxima do inventário                        | 1 - 5000           | Não                    | Não      | -                  |
-
-
-
-
-# Entidade: Inst_Item
-
-A tabela a seguir descreve a entidade `Inst_Item`, que representa os itens no inventário, incluindo identificadores e tipos de item.
+A tabela a seguir descreve a entidade `InstItem`, que representa os itens no inventário, incluindo identificadores e tipos de item.
 
 | Variável   | Tipo      | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |------------|-----------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idInstItem     | int       | Identificador único para a instância do item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-
+| IdItem     | int       | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 
 
 
@@ -267,7 +254,7 @@ A tabela a seguir descreve a entidade `Inst_Item`, que representa os itens no in
 
 A tabela a seguir descreve a entidade `Arma`, que representa as armas contidas no inventário, incluindo identificadores, nomes, dano, munição e tipo de arma.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e `Inventario`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
 
 | Variável       | Tipo       | Descrição                                            | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------------|------------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -279,7 +266,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 | municaoMax     | int        | Quantidade máxima de munição da arma                | 0 - 10             | Não                    | Não      | -                  |
 | IdInventario   | int        | Identificador do inventário ao qual a arma pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | eAtaque        | boolean    | Indica se a arma é de ataque (true) ou defesa (false)| true/false         | Não                    | Não      | -                  |
-| descricaoItem       | string[50]    | Descrição da arma, incluindo informações como cor, tamanho e formato        | Não                    | Não      | -                  |
+| descricaoItem       | string[400]    | Descrição da arma, incluindo informações como cor, tamanho e formato        | Não                    | Não      | -                  |
 
 
 
@@ -289,7 +276,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 
 A tabela a seguir descreve a entidade `Vestimenta`, que representa as vestimentas contidas no inventário, incluindo identificadores, nomes, descrições e se são de ataque ou defesa.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e `Inventario`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
 
 | Variável       | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -307,7 +294,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 
 A tabela a seguir descreve a entidade `Alimento`, que representa os alimentos contidos no inventário, incluindo identificadores, nomes, tipos e efeitos no jogo.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e `Inventario`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
 
 | Variável      | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |---------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -318,7 +305,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 | aumentoVida   | int        | Quantidade de vida que o alimento aumenta          | 1 - 20             | Não                    | Não      | -                  |
 | IdInventario  | int        | Identificador do inventário ao qual o alimento pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | eAtaque       | boolean    | Indica se o alimento é de ataque (true) ou defesa (false) | false              | Não                    | Não      | Como alimento não pode ser classificado como ataque ou defesa, seu valor será sempre falso |
-| descricaoItem       | string[50]    | Descrição do alimento, incluindo informações como classificação, cor, tamanho etc        | Não                    | Não      | -                  |
+| descricaoItem       | string[400]    | Descrição do alimento, incluindo informações como classificação, cor, tamanho etc        | Não                    | Não      | -                  |
 
 
 
@@ -327,7 +314,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e
 
 A tabela a seguir descreve a entidade `Receita`, que representa as receitas disponíveis, incluindo identificadores, nomes, descrições, tempo de preparo e itens resultantes.
 
-Observação: essa tabela possui chave estrangeira para a tabela `Inst_Item`.
+Observação: essa tabela possui chave estrangeira para a tabela `Item`.
 
 | Variável       | Tipo      | Descrição                                         | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|-----------|---------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -347,7 +334,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Inst_Item`.
 
 A tabela a seguir descreve a entidade `Ingrediente`, que representa os ingredientes utilizados em receitas, incluindo identificadores únicos e quantidades.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Inst_Item` e `Receita`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Receita`.
 
 | Variável       | Tipo | Descrição                                          | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------|----------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -407,7 +394,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 | Variável | Tipo | Descrição | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------|------|-----------|--------------------|------------------------|----------|--------------------|
-| IdInstNPPC    | int  | Identificador único para a instância do NPC | 1 - 5000 | Não | Sim. Chave estrangeira | - |
+| IdInstNPC    | int  | Identificador único para a instância do NPC | 1 - 5000 | Não | Sim. Chave estrangeira | - |
 
 
 # Entidade: Infectado 

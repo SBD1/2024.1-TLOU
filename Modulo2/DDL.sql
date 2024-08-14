@@ -1,56 +1,51 @@
 -- definição de tabelas
 
-CREATE TABLE Mundo (
-    idMundo SERIAL NOT NULL,
-    descricaoMundo VARCHAR (400) NOT NULL,
-    nomeMundo VARCHAR (50) NOT NULL,
-    
-    CONSTRAINT mundo_pk PRIMARY KEY (idMundo),
-    UNIQUE (nomeMundo)
-);
-
 CREATE TABLE Regiao (
     idRegiao SERIAL NOT NULL,
     descricaoRegiao VARCHAR (400) NOT NULL,
-    coordenadaX INT NOT NULL,
-    coordenadaY INT NOT NULL,
     nomeRegiao VARCHAR (50) NOT NULL,
     capacidade INT,
-    IdMundo INT NOT NULL,
     tipoRegiao INT,
 
     CONSTRAINT regiao_pk PRIMARY KEY (idRegiao),
-    CONSTRAINT mundo_fk FOREIGN KEY (IdMundo) REFERENCES Mundo (idMundo),
     UNIQUE (nomeRegiao)
 );
 
+CREATE TABLE Sala (
+    idSala SERIAL NOT NULL,
+    IdRegiao INT NOT NULL, 
+    
+    CONSTRAINT sala_pk PRIMARY KEY (idSala),
+    CONSTRAINT regiao_sala_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
+);
+
 CREATE TABLE ZonaQuarentena (
-    IdRegiao SERIAL NOT NULL,
+    IdRegiao INT NOT NULL,
     idZona SERIAL NOT NULL,
     seguranca INT NOT NULL, 
     populacaoAtual INT,
 
     CONSTRAINT zonaQuarentena_pk PRIMARY KEY (idZona),
-    CONSTRAINT regiao_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
+    CONSTRAINT regiao_zona_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
 );
 
 CREATE TABLE Acampamento (
-    IdRegiao SERIAL NOT NULL,
+    IdRegiao INT NOT NULL,
     idAcampamento SERIAL NOT NULL,
     defesa INT NOT NULL, 
 
     CONSTRAINT acampamento_pk PRIMARY KEY (idAcampamento),
-    CONSTRAINT regiao_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
+    CONSTRAINT regiao_acamp_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
 );
 
 CREATE TABLE LocalAbandonado (
-    IdRegiao SERIAL NOT NULL,
+    IdRegiao INT NOT NULL,
     idLocal SERIAL NOT NULL,
     nivelInfestacao INT, 
     periculosidade	INT NOT NULL,
 
     CONSTRAINT local_pk PRIMARY KEY (idLocal),
-    CONSTRAINT regiao_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
+    CONSTRAINT regiao_local_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
 );
 
 CREATE TABLE Personagem (
@@ -76,11 +71,19 @@ CREATE TABLE Missao (
     CONSTRAINT missao_pk PRIMARY KEY (idMissao)
 );
 
-CREATE TABLE InstItem (
+CREATE TABLE Item (
     idItem SERIAL NOT NULL,
     tipoItem INT NOT NULL,
 
     CONSTRAINT item_pk PRIMARY KEY (idItem)
+);
+
+CREATE TABLE InstItem ( 
+    idInstItem SERIAL NOT NULL,
+    IdItem INT NOT NULL,
+
+    CONSTRAINT instItem_pk PRIMARY KEY (idInstItem),
+    CONSTRAINT item_inst_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
 CREATE TABLE Itens (
@@ -89,28 +92,24 @@ CREATE TABLE Itens (
     
     CONSTRAINT itens_pk PRIMARY KEY (IdMissao, IdItem),
     CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem)
+    CONSTRAINT itens_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
 CREATE TABLE NPC (
-    IdPersonagem SERIAL NOT NULL,
+    IdPersonagem INT NOT NULL,
     idNPC SERIAL NOT NULL,
-    locEmX INT NOT NULL,
-    locEmY INT NOT NULL,
+    Sala INT NOT NULL,
     xp INT NOT NULL,
     vidaMax INT NOT NULL,
     vidaAtual INT,
     nomePersonagem VARCHAR (50) NOT NULL,
-    Loot INT, 
-    eALiado BOOLEAN NOT NULL, 
-    Mundo INT NOT NULL,
     IdInventario INT NOT NULL, 
+    tipoNPC INT NOT NULL, 
 
     CONSTRAINT npc_pk PRIMARY KEY (idNPC),
     CONSTRAINT npc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
-    CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
-    CONSTRAINT loot_fk FOREIGN KEY (Loot) REFERENCES InstItem (idItem),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT sala_npc_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala),
+    CONSTRAINT inventario_npc_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Arma (
@@ -122,23 +121,24 @@ CREATE TABLE Arma (
     municaoMax INT NOT NULL,
     IdInventario INT NOT NULL,    
     eAtaque BOOLEAN NOT NULL,
+    descricaoItem VARCHAR (400) NOT NULL,
 
     CONSTRAINT arma_pk PRIMARY KEY (idArma),
-    CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT item_arma_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
+    CONSTRAINT inventario_arma_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Vestimenta (
     idVestimenta SERIAL NOT NULL,
     IdItem INT NOT NULL,
     nomeVestimenta VARCHAR (50) NOT NULL,
-    descricaoVestimenta VARCHAR (400) NOT NULL,
+    descricaoItem VARCHAR (400) NOT NULL,
     IdInventario INT NOT NULL,    
     eAtaque BOOLEAN NOT NULL,
 
     CONSTRAINT vestimenta_pk PRIMARY KEY (idVestimenta),
-    CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT item_vest_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
+    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Alimento (
@@ -149,10 +149,11 @@ CREATE TABLE Alimento (
     aumentoVida INT NOT NULL,  
     IdInventario  INT NOT NULL,
     eAtaque BOOLEAN NOT NULL,
+    descricaoItem VARCHAR (400) NOT NULL,
 
     CONSTRAINT alimento_pk PRIMARY KEY (idAlimento),
-    CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT item_alimento_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
+    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Receita (
@@ -163,7 +164,7 @@ CREATE TABLE Receita (
     IdItem INT NOT NULL,
 
     CONSTRAINT receita_pk PRIMARY KEY (idReceita),
-    CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem)
+    CONSTRAINT item_receita_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
 CREATE TABLE Ingrediente (
@@ -174,7 +175,7 @@ CREATE TABLE Ingrediente (
 
     CONSTRAINT igrediente_pk PRIMARY KEY (idIngrediente),
     CONSTRAINT receita_fk FOREIGN KEY (IdReceita) REFERENCES Receita (idReceita),
-    CONSTRAINT item_fk FOREIGN KEY (IdItem) REFERENCES InstItem (idItem)
+    CONSTRAINT item_ingrediente_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
 CREATE TABLE Evolucao (
@@ -188,34 +189,32 @@ CREATE TABLE Evolucao (
 CREATE TABLE PC (
     IdPersonagem SERIAL NOT NULL,
     idPC SERIAL NOT NULL,
-    locEmX INT NOT NULL,
-    locEmY INT NOT NULL,
+    Sala INT NOT NULL,
     xp INT NOT NULL,
     vidaMax INT NOT NULL,
     vidaAtual INT,
     nomePersonagem VARCHAR (50) NOT NULL,
     estado VARCHAR (20) NOT NULL, 
     Evolucao INT NOT NULL,
-    Mundo INT NOT NULL,
     IdInventario INT NOT NULL, 
 
     CONSTRAINT pc_pk PRIMARY KEY (idPC),
     CONSTRAINT pc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
-    CONSTRAINT mundo_fk FOREIGN KEY (Mundo) REFERENCES Mundo (idMundo),
     CONSTRAINT evolucao_fk FOREIGN KEY (Evolucao) REFERENCES Evolucao (idEvolucao),
-    CONSTRAINT inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT inventario_pc_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
+    CONSTRAINT sala_pc_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE Evento (
     idEvento SERIAL NOT NULL,
     nomeEvento INT NOT NULL,
     descricao VARCHAR (400) NOT NULL,
-    locEmX INT NOT NULL,
-    locEmY INT NOT NULL,
+    Sala INT NOT NULL,
     IdPC INT NOT NULL,
 
     CONSTRAINT evento_pk PRIMARY KEY (idEvento),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+    CONSTRAINT pc_evento_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC),
+    CONSTRAINT sala_evento_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE Itinerario (
@@ -225,7 +224,7 @@ CREATE TABLE Itinerario (
     IdEvento INT NOT NULL,
 
     CONSTRAINT itinerario_pk PRIMARY KEY (idItinerario),
-    CONSTRAINT evento_fk FOREIGN KEY (IdEvento) REFERENCES Evento (idEvento)
+    CONSTRAINT evento_itinerario_fk FOREIGN KEY (IdEvento) REFERENCES Evento (idEvento)
 );
 
 CREATE TABLE Habilidade (
@@ -237,7 +236,7 @@ CREATE TABLE Habilidade (
     IdPC INT NOT NULL,
 
     CONSTRAINT habilidade_pk PRIMARY KEY (idHabilidade),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+    CONSTRAINT pc_habilidade_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
 );
 
 CREATE TABLE MissaoPatrulha (
@@ -251,8 +250,8 @@ CREATE TABLE MissaoPatrulha (
     idPatrulha SERIAL NOT NULL,
     
     CONSTRAINT missaoPatrulha_pk PRIMARY KEY (idPatrulha),
-    CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+    CONSTRAINT missaoPatrulha_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
+    CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
 );
 
 CREATE TABLE MissaoExploracaoObterItem (
@@ -266,9 +265,9 @@ CREATE TABLE MissaoExploracaoObterItem (
     xpMis INT NOT NULL, 
     
     CONSTRAINT missaoExploracao_pk PRIMARY KEY (idExploracao),
-    CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT missaoItens_fk FOREIGN KEY (ItensAdquiridos) REFERENCES InstItem (idItem),
-    CONSTRAINT pc_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+    CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
+    CONSTRAINT missaoItens_fk FOREIGN KEY (ItensAdquiridos) REFERENCES InstItem (idInstItem),
+    CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
 );
 
 CREATE TABLE Concede (
@@ -293,20 +292,21 @@ CREATE TABLE Dialoga (
 );
 
 CREATE TABLE InstNPC (
-    IdNPC INT NOT NULL,
+    IdInstNPC INT NOT NULL,
     tipoNPC INT NOT NULL,
 
-    CONSTRAINT instNPC_pk PRIMARY KEY (IdNPC),
-    CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC) 
+    CONSTRAINT instNPC_pk PRIMARY KEY (IdInstNPC),
+    CONSTRAINT npc_inst_fk FOREIGN KEY (IdInstNPC) REFERENCES NPC (idNPC) 
 );
 
 CREATE TABLE Infectado (
     IdNPC INT NOT NULL,
     idInfectado SERIAL NOT NULL,
     comportamentoInfec VARCHAR (400) NOT NULL,
+    velocidade INT NOT NULL, 
 
     CONSTRAINT infectado_pk PRIMARY KEY (idInfectado),
-    CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC)
+    CONSTRAINT npc_infec_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC)
 );
 
 CREATE TABLE FaccaoHumana (
@@ -315,7 +315,7 @@ CREATE TABLE FaccaoHumana (
     nomeFaccao VARCHAR (50) NOT NULL,
 
     CONSTRAINT faccao_pk PRIMARY KEY (idFaccao),
-    CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC)
+    CONSTRAINT npc_facc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC)
 );
 
 CREATE TABLE Animal (
@@ -325,7 +325,7 @@ CREATE TABLE Animal (
     ameaca VARCHAR (100) NOT NULL,
 
     CONSTRAINT animal_pk PRIMARY KEY (idAnimal),
-    CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC)
+    CONSTRAINT npc_animal_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC)
 );
 
 CREATE TABLE Participacao (
@@ -334,7 +334,7 @@ CREATE TABLE Participacao (
     Missao INT NOT NULL,
 
     CONSTRAINT participacao_pk PRIMARY KEY (IdNPC, Evento, Missao),
-    CONSTRAINT npc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC),
-    CONSTRAINT evento_fk FOREIGN KEY (Evento) REFERENCES Evento (idEvento),
-    CONSTRAINT missao_fk FOREIGN KEY (Missao) REFERENCES Missao (idMissao)
+    CONSTRAINT npc_part_fk FOREIGN KEY (IdNPC) REFERENCES NPC (idNPC),
+    CONSTRAINT evento_part_fk FOREIGN KEY (Evento) REFERENCES Evento (idEvento),
+    CONSTRAINT missao_part_fk FOREIGN KEY (Missao) REFERENCES Missao (idMissao)
 );
