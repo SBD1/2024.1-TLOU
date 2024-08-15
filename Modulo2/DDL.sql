@@ -41,7 +41,7 @@ CREATE TABLE Acampamento (
 CREATE TABLE LocalAbandonado (
     IdRegiao INT NOT NULL,
     idLocal SERIAL NOT NULL,
-    nivelInfestacao INT, 
+    tipo VARCHAR(50) NOT NULL,
     periculosidade	INT NOT NULL,
 
     CONSTRAINT local_pk PRIMARY KEY (idLocal),
@@ -102,7 +102,7 @@ CREATE TABLE NPC (
     xp INT NOT NULL,
     vidaMax INT NOT NULL,
     vidaAtual INT,
-    nomePersonagem VARCHAR (50) NOT NULL,
+    nomePersonagem VARCHAR(50) NOT NULL,
     IdInventario INT NOT NULL, 
     tipoNPC INT NOT NULL, 
 
@@ -146,7 +146,7 @@ CREATE TABLE Consumivel (
     IdItem INT NOT NULL,
     nomeConsumivel VARCHAR (50) NOT NULL,
     tipoConsumivel VARCHAR (40) NOT NULL,
-    aumentoVida INT NOT NULL,  
+    aumentoVida INT,  
     IdInventario  INT NOT NULL,
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
@@ -171,7 +171,7 @@ CREATE TABLE Ingrediente (
     idIngrediente SERIAL NOT NULL,
     IdReceita INT NOT NULL,
     IdItem INT NOT NULL,
-    quatidadeIngre INT NOT NULL,
+    quantidadeIngre INT NOT NULL,
 
     CONSTRAINT igrediente_pk PRIMARY KEY (idIngrediente),
     CONSTRAINT receita_fk FOREIGN KEY (IdReceita) REFERENCES Receita (idReceita),
@@ -207,7 +207,7 @@ CREATE TABLE PC (
 
 CREATE TABLE Evento (
     idEvento SERIAL NOT NULL,
-    nomeEvento INT NOT NULL,
+    nomeEvento VARCHAR (400) NOT NULL,
     descricao VARCHAR (400) NOT NULL,
     Sala INT NOT NULL,
     IdPC INT NOT NULL,
@@ -231,7 +231,7 @@ CREATE TABLE Habilidade (
     idHabilidade SERIAL NOT NULL,
     nomeHabilidade VARCHAR (50) NOT NULL,
     tipoHabilidade VARCHAR (50) NOT NULL, 
-    efeito VARCHAR (50) NOT NULL,
+    efeito VARCHAR (70) NOT NULL,
     duracaoHabilidade INT NOT NULL,
     IdPC INT NOT NULL,
 
@@ -259,14 +259,12 @@ CREATE TABLE MissaoExploracaoObterItem (
     idMissaoPre INT,
     objetivo VARCHAR (400) NOT NULL,
     nomeMis VARCHAR (50) NOT NULL,
-    ItensAdquiridos INT,
     idExploracao SERIAL NOT NULL,
     IdPC INT NOT NULL,
     xpMis INT NOT NULL, 
     
     CONSTRAINT missaoExploracao_pk PRIMARY KEY (idExploracao),
     CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT missaoItens_fk FOREIGN KEY (ItensAdquiridos) REFERENCES InstItem (idInstItem),
     CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
 );
 
@@ -283,7 +281,7 @@ CREATE TABLE Dialoga (
     idDialogo SERIAL NOT NULL,
     IdFalante INT NOT NULL,
     IdOuvinte INT NOT NULL, 
-    conteudo VARCHAR (50) NOT NULL,
+    conteudo VARCHAR (400) NOT NULL,
     duracaoDialogo INT NOT NULL,
     
     CONSTRAINT dialogo_pk PRIMARY KEY (idDialogo),
