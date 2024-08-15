@@ -81,6 +81,7 @@ CREATE TABLE Item (
 CREATE TABLE InstItem ( 
     idInstItem SERIAL NOT NULL,
     IdItem INT NOT NULL,
+    nomeInstItem VARCHAR (50) NOT NULL,
 
     CONSTRAINT instItem_pk PRIMARY KEY (idInstItem),
     CONSTRAINT item_inst_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)

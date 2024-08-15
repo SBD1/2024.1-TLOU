@@ -29,7 +29,7 @@ A tabela a seguir descreve a entidade `Regiao`, que representa regiões dentro d
 | tipoRegiao       | int    | Atributo que define qual o tipo de região (Locais abandonados, acampamento, zona de quarentena ou nenhum desses) por meio de uma enumeração. | 1 - 3               | Sim                    | Não                  | Pode possuir nenhum tipo |
 
 # Entidade: ZonaQuarentena
-A tabela a seguir descreve a entidade `Zona_Quarentena`, que representa zonas de quarentena dentro de uma região, incluindo detalhes sobre a segurança, população e identificadores.
+A tabela a seguir descreve a entidade `ZonaQuarentena`, que representa zonas de quarentena dentro de uma região, incluindo detalhes sobre a segurança, população e identificadores.
 
 Observação: essa tabela possui chave estrangeira para a tabela `Regiao`.
 
@@ -61,7 +61,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Regiao`.
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
 | IdRegiao         | int    | Identificador único para a região                                                                     | 1 - 100             | Não                    | Sim. Chave estrangeira | -                 |
 | idLocal          | int    | Identificador único para o local abandonado                                                           | 1 - 100             | Não                    | Sim. Chave primária  | -                 |
-| nivelInfestacao  | int    | Indicador se o local está com muitos infectados ou não, indo de 0 (poucos infectados) a 5 (muitos infectados) | 0 - 5               | Sim                    | Não                  | -                 |
+| tipo  | string [50]    | Indicador da categoria do local  | A-Z <br />a-z              | Não                    | Não                  | -                 |
 | periculosidade   | int    | Grau de risco do local abandonado                                                                     | 1 - 10              | Não                    | Não                  | -                 |
 
 # Entidade: Personagem
@@ -162,7 +162,6 @@ Observação: essa tabela possui chave estrangeira para as tabelas `InstItem`, `
 | idMissaoPre      | int        | Identificador único para a missão que é pré-requisito       | 1 - 5000           | Sim                    | Não      | -                                      |
 | objetivo         | string[400]| Breve descrição do objetivo da missão, incluindo motivos, envolvidos e local | a - z <br /> A - Z       | Não                    | Não      | -                                      |
 | nomeMis          | string[50] | Nome da missão                                             | a - z <br /> A - Z       | Não                    | Não      | -                                      |
-| ItensAdquiridos  | string[50] | Itens adquiridos durante a missão                          | a - z <br /> A - Z       | Sim                    | Sim. Chave estrangeira | Permite mais de um item                |
 | idExploracao     | int        | Identificador único para a exploração a ser realizada      | 1 - 5000           | Não                    | Sim. Chave primária | -                                      |
 | IdPC             | int        | Identificador para o PC que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                                      |
 | xpMis            | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                                      |
@@ -171,7 +170,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `InstItem`, `
 
 # Entidade: MissaoPatrulha
 
-A tabela a seguir descreve a entidade `Missao_Patrulha`, que representa as missões de patrulha no sistema, incluindo identificadores, objetivos, nomes, quantidades de NPCs inimigos e informações sobre o PC participante.
+A tabela a seguir descreve a entidade `MissaoPatrulha`, que representa as missões de patrulha no sistema, incluindo identificadores, objetivos, nomes, quantidades de NPCs inimigos e informações sobre o PC participante.
 
 Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `PC`.
 
@@ -197,7 +196,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `PC` e `Sala`
 | Variável     | Tipo       | Descrição                                             | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |--------------|------------|-------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idEvento     | int        | Identificador único para o evento                    | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
-| nomeEvento   | int        | Nome do evento em questão                            | 1 - 5000           | Não                    | Não      | -                  |
+| nomeEvento   | string[400]       | Nome do evento em questão                            | <br /> A - Z           | Não                    | Não      | -                  |
 | descricao    | string[400]        | Breve descrição textual do evento, incluindo local, contexto e atividades | a - z <br /> A - Z           | Não                    | Não      | -                  |
 | Sala           | int    | Sala em que o evento acontece                                   | 1 - 5000            | Não                    | Sim. Chave estrangeira                 | -                 |
 | IdPC         | int        | Identificador único para o PC participante do evento  | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
@@ -232,7 +231,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `PC`.
 | idHabilidade     | int        | Identificador único para a habilidade                | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | nomeHabilidade   | string[50] | Nome que identifica não unicamente uma habilidade    | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | tipoHabilidade   | string[50] | Descreve se a habilidade é passiva ou ativa          | A-Z <br /> a-z           | Não                    | Não      | -                  |
-| efeito           | string[50] | Descreve qual efeito a habilidade aplica sobre o jogador ou entidades que ele interage | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| efeito           | string[70] | Descreve qual efeito a habilidade aplica sobre o jogador ou entidades que ele interage | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | duracaoHabilidade| int        | Descreve o tempo que a habilidade dura no alvo       | 1 - 5000           | Não                    | Não      | -                  |
 | IdPC             | int        | PC que possui a habilidade                            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 
@@ -247,6 +246,9 @@ A tabela a seguir descreve a entidade `InstItem`, que representa os itens no inv
 |------------|-----------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idInstItem     | int       | Identificador único para a instância do item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | IdItem     | int       | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
+| nomeInstItem     | string [50]       | Nome do item para identificação      | A-Z <br /> a-z           | Não                    | Não | -                  |
+
+
 
 
 
@@ -290,18 +292,18 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 
 
 
-# Entidade: Alimento
+# Entidade: Consumível
 
-A tabela a seguir descreve a entidade `Alimento`, que representa os alimentos contidos no inventário, incluindo identificadores, nomes, tipos e efeitos no jogo.
+A tabela a seguir descreve a entidade `Consumível`, que representa os alimentos contidos no inventário, incluindo identificadores, nomes, tipos e efeitos no jogo.
 
 Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
 
 | Variável      | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |---------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
-| idAlimento    | int        | Identificador único para o alimento no inventário  | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
+| idConsumivel    | int        | Identificador único para o alimento no inventário  | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | IdItem        | int        | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
-| nomeAlimento  | string[50] | Nome que não identifica unicamente o alimento      | A-Z <br /> a-z           | Não                    | Não      | -                  |
-| tipoAlimento  | string[40] | Tipo de alimento (ex.: fruta, carne, bebida, barras, vitaminas) | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| nomeConsumivel  | string[50] | Nome que não identifica unicamente o alimento      | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| tipoConsumivel  | string[40] | Tipo de alimento (ex.: fruta, carne, bebida, barras, vitaminas) | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | aumentoVida   | int        | Quantidade de vida que o alimento aumenta          | 1 - 20             | Não                    | Não      | -                  |
 | IdInventario  | int        | Identificador do inventário ao qual o alimento pertence | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | eAtaque       | boolean    | Indica se o alimento é de ataque (true) ou defesa (false) | false              | Não                    | Não      | Como alimento não pode ser classificado como ataque ou defesa, seu valor será sempre falso |
@@ -361,7 +363,7 @@ A tabela a seguir descreve a entidade `Evolucao`, que representa as evoluções 
 
 A tabela a seguir descreve o relacionamento `Concede`, que associa evoluções a alimentos, incluindo identificadores para ambos.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Evolucao` e `Alimento`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Evolucao` e `Consumível`.
 
 | **Variável**    | **Tipo** | **Descrição**                                      | **Valores permitidos** | **Permite valores nulos?** | **É chave?**                   | **Outras restrições**                |
 |-------------|------|------------------------------------------------|--------------------|------------------------|----------------------------|----------------------------------|
@@ -381,7 +383,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Personagem`.
 | idDialogo     | int        | Identificador único para o diálogo                | 1 - 5000           | Não                    | Sim. Chave primária | -                            |
 | IdFalante     | int        | Identificador único do falante do diálogo         | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                            |
 | IdOuvinte     | int        | Identificador único do ouvinte do diálogo         | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                            |
-| conteudo      | string[50] | O que foi abordado no diálogo entre os envolvidos | A - Z, a - z        | Não                    | Não      | -                            |
+| conteudo      | string[400] | O que foi abordado no diálogo entre os envolvidos | A - Z, a - z        | Não                    | Não      | -                            |
 | duracaoDialogo| int        | Tempo de duração do diálogo                       | 1 - 2000           | Não                    | Não      | -                            |
 
 
@@ -399,7 +401,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 # Entidade: Infectado 
 
-A tabela a seguir descreve a entidade "Infectado" que contém informações sobre os infectados, incluindo identificadores únicos, comportamentos e características principais.
+A tabela a seguir descreve a entidade `Infectado` que contém informações sobre os infectados, incluindo identificadores únicos, comportamentos e características principais.
 
 Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
@@ -413,7 +415,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 # Entidade: FaccaoHumana
 
-A tabela a seguir descreve a entidade "FaccaoHumana" que contém informações sobre as facções humanas, incluindo identificadores únicos, nomes, e relações com NPCs.
+A tabela a seguir descreve a entidade `FaccaoHumana` que contém informações sobre as facções humanas, incluindo identificadores únicos, nomes, e relações com NPCs.
 
 Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
@@ -427,7 +429,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 # Entidade: Animal
 
-A tabela a seguir descreve a entidade "Animal" que contém informações sobre os animais, incluindo identificadores únicos, nomes, e as ameaças que eles podem apresentar.
+A tabela a seguir descreve a entidade `Animal` que contém informações sobre os animais, incluindo identificadores únicos, nomes, e as ameaças que eles podem apresentar.
 
 Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
@@ -440,7 +442,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 # Relacionamento: Participacao
 
-A tabela a seguir descreve o relacionamento "Participacao", que indica a participação de um NPC em eventos e missões. Cada registro na tabela contém identificadores únicos para o NPC, o evento e a missão.
+A tabela a seguir descreve o relacionamento `Participacao`, que indica a participação de um NPC em eventos e missões. Cada registro na tabela contém identificadores únicos para o NPC, o evento e a missão.
 
 Observação: essa tabela possui chave estrangeira para as tabelas `NPC`, `Evento` e `Missao`.
 

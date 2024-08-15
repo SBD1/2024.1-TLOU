@@ -75,10 +75,10 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (2, 2),
 (3, 3);
 
-INSERT INTO InstItem(idInstItem, IdItem) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
+INSERT INTO InstItem(idInstItem, IdItem, nomeInstItem) VALUES
+(1, 1, 'Alcool'),
+(2, 2, 'Trapos'),
+(3, 3, 'Bomba');
 
 INSERT INTO Itens (IdMissao, idItem) VALUES
 (1, 1),
