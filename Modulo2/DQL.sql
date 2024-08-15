@@ -7,6 +7,11 @@ SELECT Sala
 FROM PC 
 WHERE idPC = 1;
 
+--Ver localização de uma região:
+SELECT R.nomeRegiao, S.descricaoSala
+FROM Regiao R
+JOIN Sala S ON R.idRegiao = S.IdRegiao
+
 -- Descrição de uma região de acordo com a sala em que ela está:
 SELECT r.descricaoRegiao 
 FROM Sala s
@@ -18,6 +23,24 @@ SELECT I.nomeInstItem
 FROM InventarioItem II
 JOIN InstItem I ON II.idItem = I.idItem
 WHERE II.idInventario = 1;
+
+--Ver armas do personagem:
+SELECT I.idItem AS nome, I.tipoItem AS mult_ataque 
+FROM Inventario INV
+JOIN Item I ON INV.idInventario = I.idInventario
+WHERE INV.idPersonagem = ${id_personagem} AND I.tipoItem = 1;
+
+--Ver vestimentas do personagem:
+SELECT I.idItem AS nome, I.tipoItem AS mult_ataque 
+FROM Inventario INV
+JOIN Item I ON INV.idInventario = I.idInventario
+WHERE INV.idPersonagem = ${id_personagem} AND I.tipoItem = 2;
+
+--Ver consumíveis do personagem:
+SELECT I.idItem AS nome, I.tipoItem AS mult_ataque 
+FROM Inventario INV
+JOIN Item I ON INV.idInventario = I.idInventario
+WHERE INV.idPersonagem = ${id_personagem} AND I.tipoItem = 3;
 
 --Consultar todas as zonas de quarentena com segurança acima de um certo nível:
 SELECT idZona, seguranca, populacaoAtual 

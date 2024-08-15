@@ -77,22 +77,46 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (3, 3);
 
 INSERT INTO InstItem(idInstItem, IdItem, nomeInstItem) VALUES
-(1, 1, 'Alcool'),
-(2, 2, 'Trapos'),
-(3, 3, 'Bomba');
+(1, 3, 'Alcool'),
+(2, 3, 'Trapos'),
+(3, 3, 'Bomba'),
+(4, 1, 'Faca'),
+(5, 3, 'Kit de Primeiros Socorros'),
+(6, 3, 'Munição'),
+(7, 3, 'Recipiente'),
+(8, 3, 'Explosivo'),
+(9, 3, 'Fita'),
+(10, 3, 'Lâmina'),
+(11, 3, 'Barra de Cereal'),
+(12, 3, 'Pacote de Biscoitos'),
+(13, 3, 'Garrafa de Água'),
+(14, 3, 'Pacote de Salgadinhos'),
+(15, 3, 'Vitaminas de evolução'),
+(16, 1, 'Arco'),
+(17, 1, 'Escopeta'),
+(18, 1, 'Rifle'),
+(19, 1, 'Pistola'),
+(20, 1, 'Revólver'),
+(21, 2, 'Jaqueta de Couro'),
+(22, 2, 'Colete Tático'),
+(23, 2, 'Calça de Carga'),
+(24, 2, 'Camisa de Combate'),
+(25, 2, 'Escudo de Madeira');
 
-INSERT INTO Itens (IdMissao, idItem) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
+INSERT INTO Itens (IdMissao, IdInstItem) VALUES
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6);
 
 INSERT INTO NPC (IdPersonagem, idNPC, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, tipoNPC) VALUES
-(2, 1, 2, 30, 100, 95, 'Ellie',2, 2),
+(2, 1, 1, 30, 100, 95, 'Ellie',2, 2),
 (3, 2, 3, 10,90, 50, 'Sobrevivente Selvagem', NULL, 2),
 (4, 3, 2, 10, 85, 80, 'Líder de Facção', NULL, 2),
-(5, 4, 2, 10, 80, 105, 'Tess', 4, 2),
+(5, 4, 1, 10, 80, 105, 'Tess', 4, 2),
 (6, 5, 3,10, 120, 115, 'Tommy',3, 2),
-(7, 6, 2,10, 130, 125, 'Marlene', NULL, 2),
+(7, 6, 1,10, 130, 125, 'Marlene', NULL, 2),
 (8, 7, 3, 10, 140, 135, 'Henry', 5, 2),
 (9, 8, 4, 10, 150, 145, 'Sam', NULL, 2),
 (10, 9, 5, 10, 160, 155, 'Bill', NULL, 2),
@@ -209,24 +233,20 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 (9, 'Ataque Certeiro', 'Ativa', 'Aumenta a chance de acerto crítico em ataques.', 5, 1);
 
 INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPC, xpMis, idPatrulha) VALUES
-(12, 11, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, 1),
-(13, 12, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, 2),
-(14, 13, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, 3),
-(15, 14, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, 4),
-(16, 15, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, 5);
+(10, 11, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, 1),
+(11, 12, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, 2),
+(12, 13, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, 3),
+(13, 14, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, 4),
+(14, 15, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, 5);
 
 INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, idExploracao, IdPC, xpMis) VALUES
-(1, NULL, 'Sobreviva ao surto do fungo Cordyceps', 'Surto', 1, 1, 200),
-(2, 1, 'Vá atrás do contrabandista Mark', 'Docas', 2, 1, 300),
-(3, 2, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 3, 1, 500),
-(4, 3, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 4, 1, 250),
-(5, 4, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill',5, 1, 350),
-(6, 5, 'Joel e Ellie chegam a Pittsburgh, onde são emboscados por caçadores. Eles precisam lutar pela sobrevivência e encontrar um caminho para sair da cidade', 'Pittsburgh', 6, 1, 450),
-(7, 6, 'Joel e Ellie encontram Henry e Sam, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 7, 1, 550),
-(8, 7, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 8, 1, 600),
-(9, 8, 'Ellie cuida de Joel enquanto ele se recupera, mas é capturada por David', 'Resort Saltlake', 9, 1, 300),
-(10, 9, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes',10, 1, 300),
-(11, NULL, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 12, 1, 300);
+(1, 2, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 1, 15),
+(2, 3, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 2, 1, 250),
+(3, 4, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill',3, 1, 350),
+(4, 6, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 5, 1, 550),
+(5, 7, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 6, 1, 600),
+(6, 9, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes',8, 1, 300),
+(7, NULL, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 9, 1, 300);
 
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (1, 1),
@@ -241,9 +261,13 @@ INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (10, 10); 
 
 INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
-(1, 1, 1, 'Joel: O que está acontecendo? Onde estou?...', 5),
-(2, 1, 2, 'Joel: O que você está fazendo aqui?', 5),
-(3, 2, 1, 'Ellie: Não sei! Estou desesperada! Só espero que consigamos sobreviver...', 8);
+(1, 1, 1, 'Joel: Tess, qual é a missão de hoje?', 5),
+(2, 1, 1, 'Tess: Joel, precisamos resolver a questão com o Mark, ele está causando problemas de novo.', 10),
+(3, 1, 2, 'Joel: Não temos tempo a perder. Vamos.', 5),
+(4, 1, 2, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
+(5, 1, 2, 'Joel: Como você chegou aqui, garota?', 5),
+(6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8);
+
 
 INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
 (1, 1),
@@ -278,15 +302,8 @@ INSERT INTO Animal(IdNPC, idAnimal, nomeAnimal, ameaca) VALUES
 (1, 4, 'Insetos', 'Baixa');
 
 INSERT INTO Participacao(IdNPC, Evento, Missao) VALUES
-(1, 1, 1),
-(1, 2, 2),
-(1, 3, 3),
-(2, 4, 4),
-(2, 5, 5),
-(2, 6, 6),
-(2, 7, 7),
-(1, 8, 8),
-(1, 9, 9),
-(2, 10, 10);
+(2, 1, 2),
+(5, 2, 2),
+(7, 3, 2);
 
 COMMIT;

@@ -89,11 +89,11 @@ CREATE TABLE InstItem (
 
 CREATE TABLE Itens (
     IdMissao INT NOT NULL,
-    IdItem INT NOT NULL,
+    IdInstItem INT NOT NULL,
     
-    CONSTRAINT itens_pk PRIMARY KEY (IdMissao, IdItem),
+    CONSTRAINT itens_pk PRIMARY KEY (IdMissao, IdInstItem),
     CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT itens_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
+    CONSTRAINT itens_fk FOREIGN KEY (IdInstItem) REFERENCES InstItem (idInstItem)
 );
 
 CREATE TABLE NPC (
