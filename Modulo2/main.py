@@ -1,11 +1,11 @@
 import psycopg2
-from psycopg2 import sql, OperationalError
+from psycopg2 import OperationalError
 
 # Configurações de conexão
 conn_params = {
     'dbname': 'tlou',
-    'user': 'julia-fortunato',
-    'password': '0352',
+    'user': 'postgres',
+    'password': 'postgres',
     'host': 'localhost',
     'port': '5432'
 }
@@ -25,4 +25,11 @@ def close_connection(conn):
     if conn:
         conn.close()
         print("Conexão encerrada.")
+
+def main():
+    connection = create_connection()
+    close_connection(connection)
+
+if __name__ == "__main__":
+    main()
 

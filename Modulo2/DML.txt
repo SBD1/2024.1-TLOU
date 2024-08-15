@@ -1,0 +1,17 @@
+INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
+(1, 1, 2, 'Joel: O que você está fazendo aqui?', 1),
+(2, 1, 2, 'Guardião da Zona: Estou patrulhando a área. E você?', 2),
+(3, 1, 2, 'Sobrevivente Selvagem: Estou procurando suprimentos. Você viu algo?', 3),
+(4, 2, 1, 'Mercador: Tenho itens raros para venda. Interessado?', 4),
+(5, 2, 1, 'Informante: Ouvi rumores sobre uma base secreta. Vamos investigar.', 5),
+(6, 2, 1, 'Líder de Facção: Nossa facção precisa de aliados. O que você acha?', 6),
+(7, 2, 1, 'Sobrevivente Isolado: Estou sozinho há muito tempo. Preciso de ajuda.', 7),
+(8, 2, 1, 'Guarda Costas: Vamos manter a segurança da região juntos.', 8),
+(9, 1, 2, 'Engenheiro: Preciso de materiais para consertar o gerador. Pode ajudar?', 9),
+(10, 2, 1, 'Curandeiro: Vamos tratar dos feridos e doentes. Eles precisam de nós.', 10),
+(11, 1, 2, 'Estranho Misterioso: Tenho informações valiosas sobre o passado. Quer saber?', 11);
+
+ARMA: 
+INSERT INTO Arma(idArma, IdItem, nomeArma, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
+(7, 1, 'Machado', 45, NULL, 10, 1, true, 'Uma arma pesada para combate intenso e destruição.'),
+(8, 1, 'Machete', 40, NULL, 10, 2, true, 'Lâmina larga ideal para cortar e combate corpo a corpo.');

@@ -104,7 +104,7 @@ CREATE TABLE NPC (
     vidaMax INT NOT NULL,
     vidaAtual INT,
     nomePersonagem VARCHAR(50) NOT NULL,
-    IdInventario INT NOT NULL, 
+    IdInventario INT, 
     tipoNPC INT NOT NULL, 
 
     CONSTRAINT npc_pk PRIMARY KEY (idNPC),
@@ -120,7 +120,7 @@ CREATE TABLE Arma (
     dano INT NOT NULL,
     municaoAtual INT,
     municaoMax INT NOT NULL,
-    IdInventario INT NOT NULL,    
+    IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
 
@@ -134,7 +134,7 @@ CREATE TABLE Vestimenta (
     IdItem INT NOT NULL,
     nomeVestimenta VARCHAR (50) NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
-    IdInventario INT NOT NULL,    
+    IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
 
     CONSTRAINT vestimenta_pk PRIMARY KEY (idVestimenta),
@@ -148,7 +148,7 @@ CREATE TABLE Consumivel (
     nomeConsumivel VARCHAR (50) NOT NULL,
     tipoConsumivel VARCHAR (40) NOT NULL,
     aumentoVida INT,  
-    IdInventario  INT NOT NULL,
+    IdInventario  INT,
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
 
