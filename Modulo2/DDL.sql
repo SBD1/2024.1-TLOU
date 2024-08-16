@@ -252,10 +252,10 @@ CREATE TABLE MissaoPatrulha (
     
     CONSTRAINT missaoPatrulha_pk PRIMARY KEY (idPatrulha),
     CONSTRAINT missaoPatrulha_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
+    CONSTRAINT pc_missaoPatrulhMissaoExploracaoObterItema_fk FOREIGN KEY (IdPC) REFERENCES PC (idPC)
 );
 
-CREATE TABLE MissaoExploracaoObterItem (
+CREATE TABLE  (
     IdMissao INT NOT NULL,
     idMissaoPre INT,
     objetivo VARCHAR (400) NOT NULL,

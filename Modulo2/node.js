@@ -1,24 +1,20 @@
-// npm install mysql2
+const { Client } = require('pg');
 
-// Importando o pacote mysql2
-const mysql = require('mysql2');
-
-// Criando uma conexão ao banco de dados
-const connection = mysql.createConnection({
-  host: 'localhost',      // O host onde o banco de dados está rodando
-  user: 'seu_usuario',    // O nome de usuário para acessar o banco de dados
-  password: 'sua_senha',  // A senha do usuário
-  database: 'nome_do_banco' // O nome do banco de dados que você quer acessar
+// Criando uma conexão ao banco de dados PostgreSQL
+const client = new Client({
+  host: 'localhost',
+  user: 'julia-fortunato',
+  password: '0352',
+  port: 5432,
+  database: 'tlou'
 });
 
 // Conectando ao banco de dados
-connection.connect((err) => {
-  if (err) {
+client.connect()
+  .then(() => {
+    console.log('Conectado ao banco de dados com sucesso!');
+    return client.end(); // Fechar a conexão após a conexão ser bem-sucedida
+  })
+  .catch(err => {
     console.error('Erro ao conectar ao banco de dados:', err);
-    return;
-  }
-  console.log('Conectado ao banco de dados com sucesso!');
-});
-
-// Fechando a conexão (opcional, apenas quando precisar)
-connection.end();
+  });
