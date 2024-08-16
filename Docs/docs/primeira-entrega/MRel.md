@@ -11,5 +11,5 @@ O Modelo Relacional(MREL) apresenta um diagrama lógico de como as entidades e s
 *Modelo Relacional The Last of Us - versão 01*
 <br /> 
 
-![Representação do Modelo Relacional](../../static/img/TLOUMRel.png)
+![Representação do Modelo Relacional](../../static/img/TLOUMRel2.png)
 *Modelo Relacional The Last of Us - versão 02*
