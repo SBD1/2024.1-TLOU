@@ -56,6 +56,8 @@ CREATE TABLE Inventario (
     idInventario SERIAL NOT NULL,
     capacidade INT NOT NULL,
     descricao VARCHAR (50) NOT NULL,
+
+    CHECK (capacidade >= 0),
     
     CONSTRAINT inventario_pk PRIMARY KEY (idInventario)
 );
@@ -78,7 +80,6 @@ CREATE TABLE Item (
 CREATE TABLE InstItem ( 
     idInstItem SERIAL NOT NULL,
     IdItem INT NOT NULL,
-    nomeInstItem VARCHAR (50) NOT NULL,
 
     CONSTRAINT instItem_pk PRIMARY KEY (idInstItem),
     CONSTRAINT item_inst_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
@@ -86,11 +87,11 @@ CREATE TABLE InstItem (
 
 CREATE TABLE Itens (
     IdMissao INT NOT NULL,
-    IdInstItem INT NOT NULL,
+    IdItem INT NOT NULL,
     
-    CONSTRAINT itens_pk PRIMARY KEY (IdMissao, IdInstItem),
+    CONSTRAINT itens_pk PRIMARY KEY (IdMissao, IdItem),
     CONSTRAINT missao_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT itens_fk FOREIGN KEY (IdInstItem) REFERENCES InstItem (idInstItem)
+    CONSTRAINT itens_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
 CREATE TABLE NPC (
@@ -103,6 +104,8 @@ CREATE TABLE NPC (
     IdInventario INT, 
     tipoNPC INT NOT NULL, 
 
+    CHECK (vidaAtual > 0),
+
     CONSTRAINT npc_pk PRIMARY KEY (IdPersonagem),
     CONSTRAINT npc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
     CONSTRAINT sala_npc_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala),
@@ -111,7 +114,7 @@ CREATE TABLE NPC (
 
 CREATE TABLE Arma (
     IdItem INT NOT NULL,
-    nomeArma VARCHAR (50) NOT NULL,
+    nomeItem VARCHAR (50) NOT NULL,
     dano INT NOT NULL,
     municaoAtual INT,
     municaoMax INT NOT NULL,
@@ -126,7 +129,7 @@ CREATE TABLE Arma (
 
 CREATE TABLE Vestimenta (
     IdItem INT NOT NULL,
-    nomeVestimenta VARCHAR (50) NOT NULL,
+    nomeItem VARCHAR (50) NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
     IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
@@ -138,7 +141,7 @@ CREATE TABLE Vestimenta (
 
 CREATE TABLE Consumivel (
     IdItem INT NOT NULL,
-    nomeConsumivel VARCHAR (50) NOT NULL,
+    nomeItem VARCHAR (50) NOT NULL,
     tipoConsumivel VARCHAR (40) NOT NULL,
     aumentoVida INT,  
     IdInventario  INT,
@@ -191,6 +194,8 @@ CREATE TABLE PC (
     Evolucao INT NOT NULL,
     IdInventario INT NOT NULL, 
 
+    CHECK (vidaAtual > 0),
+
     CONSTRAINT pc_pk PRIMARY KEY (IdPersonagem),
     CONSTRAINT pc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
     CONSTRAINT evolucao_fk FOREIGN KEY (Evolucao) REFERENCES Evolucao (idEvolucao),
@@ -239,7 +244,8 @@ CREATE TABLE MissaoPatrulha (
     nomeMis VARCHAR (50) NOT NULL,
     qtdNPCs INT NOT NULL,
     IdPersonagem INT NOT NULL,
-    xpMis INT NOT NULL, 
+    xpMis INT NOT NULL,
+    statusMissao BOOLEAN NOT NULL, 
     
     CONSTRAINT missaoPatrulha_pk PRIMARY KEY (IdMissao),
     CONSTRAINT missaoPatrulha_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
@@ -253,6 +259,8 @@ CREATE TABLE  MissaoExploracaoObterItem(
     nomeMis VARCHAR (50) NOT NULL,
     IdPersonagem INT NOT NULL,
     xpMis INT NOT NULL, 
+    statusMissao BOOLEAN NOT NULL, 
+
     
     CONSTRAINT missaoExploracao_pk PRIMARY KEY (IdMissao),
     CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),

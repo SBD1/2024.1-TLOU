@@ -110,34 +110,34 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (24, 3);
 
 
-INSERT INTO InstItem(idInstItem, IdItem, nomeInstItem) VALUES
-(1, 3, 'Alcool'),
-(2, 3, 'Trapos'),
-(3, 3, 'Bomba'),
-(4, 1, 'Faca'),
-(5, 3, 'Kit de Primeiros Socorros'),
-(6, 3, 'Munição'),
-(7, 3, 'Recipiente'),
-(8, 3, 'Explosivo'),
-(9, 3, 'Fita'),
-(10, 3, 'Lâmina'),
-(11, 3, 'Barra de Cereal'),
-(12, 3, 'Pacote de Biscoitos'),
-(13, 3, 'Garrafa de Água'),
-(14, 3, 'Pacote de Salgadinhos'),
-(15, 3, 'Vitaminas de evolução'),
-(16, 1, 'Arco'),
-(17, 1, 'Escopeta'),
-(18, 1, 'Rifle'),
-(19, 1, 'Pistola'),
-(20, 1, 'Revólver'),
-(21, 2, 'Jaqueta de Couro'),
-(22, 2, 'Colete Tático'),
-(23, 2, 'Calça de Carga'),
-(24, 2, 'Camisa de Combate'),
-(25, 2, 'Escudo de Madeira');
+INSERT INTO InstItem(idInstItem, IdItem) VALUES
+(1, 3),
+(2, 3),
+(3, 3),
+(4, 1),
+(5, 3),
+(6, 3),
+(7, 3),
+(8, 3),
+(9, 3),
+(10, 3),
+(11, 3),
+(12, 3),
+(13, 3),
+(14, 3),
+(15, 3),
+(16, 1),
+(17, 1),
+(18, 1),
+(19, 1),
+(20, 1),
+(21, 2),
+(22, 2),
+(23, 2),
+(24, 2),
+(25, 2);
 
-INSERT INTO Itens (IdMissao, IdInstItem) VALUES
+INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),
 (1, 3),
 (1, 4),
@@ -169,7 +169,7 @@ INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdI
 (23, 2, 10, 30, 30, 'Insetos', NULL, 3);
 
 
-INSERT INTO Arma(IdItem, nomeArma, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
+INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
 (1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
 (2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
 (3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.'),
@@ -177,14 +177,14 @@ INSERT INTO Arma(IdItem, nomeArma, dano, municaoAtual, municaoMax, IdInventario,
 (5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.'),
 (6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.');
 
-INSERT INTO Vestimenta(IdItem, nomeVestimenta, descricaoItem, IdInventario, eAtaque) VALUES
+INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
 (7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false),
 (8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false),
 (9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false),
 (10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false),
 (11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false);
 
-INSERT INTO Consumivel(IdItem, nomeConsumivel, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
+INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
 (12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.'),
 (13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.'),
 (14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.'),
@@ -277,21 +277,21 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 (8, 'Defesa Reforçada', 'Passiva', 'Diminui o dano recebido em combate.', 5, 1),
 (9, 'Ataque Certeiro', 'Ativa', 'Aumenta a chance de acerto crítico em ataques.', 5, 1);
 
-INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis) VALUES
-(10, 11, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150),
-(11, 12, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250),
-(12, 13, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400),
-(13, 14, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450),
-(14, 15, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350);
+INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao) VALUES
+(8, 7, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, false),
+(9, 8, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, false),
+(10, 9, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, false),
+(11, 10, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, false),
+(12, 11, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, false);
 
-INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis) VALUES
-(1, 2, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15),
-(2, 3, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 250),
-(3, 4, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 350),
-(4, 6, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 550),
-(5, 7, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600),
-(6, 9, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300),
-(7, NULL, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300);
+INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao) VALUES
+(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false),
+(2, 1, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 250, false),
+(3, 2, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 350, false),
+(4, 3, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 550, false),
+(5, 4, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600, false),
+(6, 5, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300, false),
+(7, 6, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300, false);
 
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (1, 12),
