@@ -14,7 +14,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Regiao`.
 | **Variável**   | **Tipo**     | **Descrição**                                                    | **Valores permitidos** | **Permite valores nulos?** | **É chave?** | **Outras restrições**                |
 | -------------- | ------------ | ---------------------------------------------------------------- | ---------------------- | ------------------------- | ------------ | ------------------------------------ |
 | idSala          | int          | Identificador único para a sala                               | 1 - 5000               | Não                       | Sim. Chave primária       |          -                |
-| IdRegiao         | int          | Identificador para a região em que o mundo está          | 1 - 5000               | Não                       | Sim. Chave estrangeira         |            -              |
+| IdRegiao         | int          | Identificador para a região em que a sala está          | 1 - 5000               | Não                       | Sim. Chave estrangeira         |            -              |
 
 # Entidade: Regiao
 A tabela a seguir descreve a entidade `Regiao`, que representa regiões dentro do mundo, incluindo identificadores, descrições, coordenadas, e características específicas da região.
@@ -72,12 +72,12 @@ A tabela a seguir descreve a entidade `Personagem`, que representa os personagen
 # Entidade: NPC
 A tabela a seguir descreve a entidade `NPC`, que representa os personagens não jogáveis no jogo. Ela detalha os atributos que definem um NPC, incluindo sua localização, experiência, vida, e inventário.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`, `Sala` e `Inventario` e `InstItem`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`, `Sala` e `Inventario`.
 
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
 | IdPersonagem     | int    | Identificador único para o personagem                                                                 | 1 - 5000            | Não                    | Sim. Chave primária e estrangeira | -                 |
-| Sala           | int    | Sala em que o NPC se encontra                                    | 1 - 5000            | Não                    | Sim. Chave estrangeira                 | -                 |
+| Sala           | int    | Sala em que o NPC se encontra                                    | 1 - 5000            | Não                    | Sim. Chave estrangeira                 | Sim. Chave estrangeira.                |
 | xp               | int    | Quantidade de experiência de um NPC                                                                    | 0 - 100             | Não                    | Não                  | -                 |
 | vidaMax          | int    | Quantidade de vida total que um NPC pode ter no nível em que ele está                                  | 0 - 100             | Não                    | Não                  | -                 |
 | vidaAtual        | int    | Quantidade de vida que um NPC possui                                                                   | 0 - 100             | Sim                    | Não                  | -                 |
@@ -88,7 +88,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`,
 # Entidade: PC
 A tabela a seguir descreve a entidade `PC`, que representa os personagens controlados pelos jogadores no jogo. Ela detalha os atributos que definem um PC, incluindo sua localização, experiência, vida, nome, estado atual, evolução, mundo e inventário.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`, `Mundo`, `Inventario` e `Evolucao`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`, `Sala`, `Inventario` e `Evolucao`.
 
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
@@ -105,7 +105,6 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`,
 # Entidade: Inventario
 A tabela a seguir descreve a entidade `Inventario`, que representa os inventários dos personagens no jogo. Ela detalha os atributos que definem um inventário, incluindo identificadores, tipo, quantidade de slots, peso e relação com o personagem que o possui.
 
-Observação: essa tabela possui chave estrangeira para a tabela `Personagem`.
 
 | **Variável**         | **Tipo**   | **Descrição**                                                                                             | **Valores permitidos** | **Permite valores nulos?** | **É chave?**              | **Outras restrições** |
 |------------------|--------|-------------------------------------------------------------------------------------------------------|---------------------|------------------------|----------------------|-------------------|
@@ -126,12 +125,12 @@ A tabela a seguir descreve a entidade `Item`, que representa os itens associados
 
 A tabela a seguir descreve a entidade `Itens`, que representa os itens associados a uma missão, incluindo identificadores da missão e do item.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `InstItem` e `Missao`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Missao`.
 
 | Variável  | Tipo | Descrição                                             | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |-----------|------|-------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | IdMissao  | int  | Identificador único para a missão                    | 1 - 5000           | Não                    | Sim. Chave primária e estrangeira | -                  |
-| IdInstItem    | int  | Identificador único para o item a ser dropado/recebido | 1 - 5000           | Não                    | Sim. Chave primária e estrangeira | -                  |
+| IdItem    | int  | Identificador único para o item a ser dropado/recebido | 1 - 5000           | Não                    | Sim. Chave primária e estrangeira | -                  |
 
 
 # Entidade: Missao
@@ -159,6 +158,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `P
 | nomeMis          | string[50] | Nome da missão                                             | a - z <br /> A - Z       | Não                    | Não      | -                                      |
 | IdPersonagem             | int        | Identificador para o PC que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                                      |
 | xpMis            | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                                      |
+| statusMissao        | boolean      | Mostra se a missão já foi concluída               | true/false         | Não                    | Não      | -                  |
 
 
 
@@ -177,6 +177,8 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `P
 | qtdNPCs       | int        | Número de NPCs inimigos a serem derrotados na missão        | 1 - 30             | Não                    | Não      | -                  |
 | IdPersonagem          | int        | Identificador para o personagem que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | xpMis         | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                  |
+| statusMissao        | boolean      | Mostra se a missão já foi concluída               | true/false         | Não                    | Não      | -                  |
+
 
 
 
@@ -241,7 +243,6 @@ Observação: essa tabela possui chave estrangeira para a tabela `Item`.
 |------------|-----------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idInstItem     | int       | Identificador único para a instância do item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | IdItem     | int       | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
-| nomeInstItem     | string [50]       | Nome do item para identificação      | A-Z <br /> a-z           | Não                    | Não | -                  |
 
 
 
@@ -256,7 +257,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 | Variável       | Tipo       | Descrição                                            | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------------|------------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | IdItem         | int        | Identificador único para o item do inventário       | 1 - 5000           | Não                    | Sim. Chave primária e estrangeira | -                  |
-| nomeArma       | string[50] | Nome que não identifica unicamente a arma equipada ou encontrada | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| nomeItem      | string[50] | Nome que não identifica unicamente a arma equipada ou encontrada | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | dano           | int        | Quantidade de dano que a arma causa                 | 1 - 50             | Não                    | Não      | -                  |
 | municaoAtual   | int        | Quantidade atual de munição da arma                 | 0 - 10             | Sim                    | Não      | -                  |
 | municaoMax     | int        | Quantidade máxima de munição da arma                | 0 - 10             | Não                    | Não      | -                  |
@@ -277,9 +278,9 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 | Variável       | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | IdItem         | int        | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária e estrangeira | -                  |
-| nomeVestimenta | string[50] | Nome que não identifica unicamente a vestimenta    | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| nomeItem | string[50] | Nome que não identifica unicamente a vestimenta    | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | descricaoItem | string[400] | Descrição da vestimenta, incluindo informações como se fornece armadura ou é apenas decorativo | A-Z <br /> a-z           | Não                    | Não      | -                  |
-| IdInventario   | int        | Identificador do inventário ao qual a vestimenta pertence | 1 - 5000           | SIm                    | Sim. Chave estrangeira      | -                  |
+| IdInventario   | int        | Identificador do inventário ao qual a vestimenta pertence | 1 - 5000           | Sim                    | Sim. Chave estrangeira      | -                  |
 | eAtaque        | boolean    | Indica se a vestimenta é de ataque (true) ou defesa (false) | true/false         | Não                    | Não      | -                  |
 
 
@@ -294,7 +295,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 | Variável      | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |---------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | IdItem        | int        | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária e estrangeira | -                  |
-| nomeConsumivel  | string[50] | Nome que não identifica unicamente o alimento      | A-Z <br /> a-z           | Não                    | Não      | -                  |
+| nomeItem  | string[50] | Nome que não identifica unicamente o alimento      | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | tipoConsumivel  | string[40] | Tipo de alimento (ex.: fruta, carne, bebida, barras, vitaminas) | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | aumentoVida   | int        | Quantidade de vida que o alimento aumenta          | 1 - 20             | Sim                    | Não      | -                  |
 | IdInventario  | int        | Identificador do inventário ao qual o alimento pertence | 1 - 5000           | Sim                    | Sim. Chave estrangeira | -                  |
@@ -315,12 +316,8 @@ Observação: essa tabela possui chave estrangeira para a tabela `Item`.
 | idReceita      | int       | Identificador único para a receita                | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | nomeReceita    | string[50]| Nome da receita a ser feita                       | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | descricaoReceita | string[400] | Breve descrição textual da receita, incluindo ingredientes e item a ser feito | A-Z <br /> a-z           | Não                    | Não      | -                  |
-| tempoCraft     | int       | Tempo, em minutos, necessário para que a receita fique pronta | 1 - 60             | Não                    | Não      | -                  |
+| tempoCraft     | int       | Tempo, em segundos, necessário para que a receita fique pronta | 1 - 60             | Não                    | Não      | -                  |
 | IdItem         | int       | Identificador único para o item resultante da receita | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
-
-
-
-
 
 
 
@@ -376,7 +373,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Personagem`.
 | IdFalante     | int        | Identificador único do falante do diálogo         | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                            |
 | IdOuvinte     | int        | Identificador único do ouvinte do diálogo         | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                            |
 | conteudo      | string[400] | O que foi abordado no diálogo entre os envolvidos | A - Z, a - z        | Não                    | Não      | -                            |
-| duracaoDialogo| int        | Tempo de duração do diálogo                       | 1 - 2000           | Não                    | Não      | -                            |
+| duracaoDialogo| int        | Tempo de duração do diálogo em segundos                        | 1 - 2000           | Não                    | Não      | -                            |
 
 
 
@@ -388,8 +385,8 @@ Observação: essa tabela possui chave estrangeira para a tabela `NPC`.
 
 | Variável | Tipo | Descrição | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------|------|-----------|--------------------|------------------------|----------|--------------------|
-| IdInstNPC    | int  | Identificador único para a instância do NPC | 1 - 5000 | Não | Sim. Chave primária e estrangeira | - |
-| tipoNPC    | int  | Referencia qual filho de NPC a intância é criada | 1 - 5000 | Não | Não | - |
+| IdInstNPC    | int  | Identificador único para a instância do NPC | 1 - 5000 | Não | Sim. Chave primária | - |
+| tipoNPC    | int  | Referencia qual filho de NPC a intância é criada | 1 - 5000 | Não | Não | Sim. Chave estrangeira | 
 
 
 # Entidade: Infectado 

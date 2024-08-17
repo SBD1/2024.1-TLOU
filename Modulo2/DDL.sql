@@ -62,7 +62,6 @@ CREATE TABLE Inventario (
     CONSTRAINT inventario_pk PRIMARY KEY (idInventario)
 );
 
-
 CREATE TABLE Missao (
     idMissao SERIAL NOT NULL,
     tipoMis INT NOT NULL,

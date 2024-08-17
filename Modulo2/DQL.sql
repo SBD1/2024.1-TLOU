@@ -227,3 +227,7 @@ WHERE IdMissao = (
     FROM MissaoExploracaoObterItem
     WHERE IdMissao = ${id_missao}
 ) AND statusMissao = 'true';
+
+-- Aumenta a vida de um personagem de acordo com o quanto um consumivel dá
+UPDATE PC SET vidaAtual + (SELECT aumentoVida FROM Consumivel WHERE IdItem = ${id_item})
+WHERE IdPersonagem = ${idPersonagem}
