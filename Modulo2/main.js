@@ -7,8 +7,8 @@ import readlineSync from 'readline-sync';
 // Criando uma conexão ao banco de dados PostgreSQL
 const client = new Client({
     host: 'localhost',
-    user: 'julia-fortunato',
-    password: '0352',
+    user: 'postgres',
+    password: 'postgres',
     port: 5432,
     database: 'tlou'
 });

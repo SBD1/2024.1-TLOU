@@ -21,10 +21,11 @@ JOIN Regiao r
 ON s.IdRegiao = r.idRegiao;
 
 --Itens no inventario do Joel:
-SELECT I.nomeInstItem 
-FROM InventarioItem II
-JOIN InstItem I ON II.idItem = I.idItem
-WHERE II.idInventario = 1;
+SELECT I.nomeItem 
+FROM Item I 
+JOIN Inventario II ON I.IdInventario = II.idInventario 
+WHERE II.idInventario = 1; 
+
 
 --Ver armas do personagem:
 SELECT I.idItem AS nome, I.tipoItem AS mult_ataque 
@@ -109,10 +110,9 @@ FROM NPC NPC
 WHERE NPC.eAliado = false;
 
 --Listar todos os itens em um inventário específico:
-SELECT II.nomeInstItem, I.capacidade, I.descricao 
-FROM InventarioItem II
-JOIN InstItem IT ON II.idItem = IT.idItem
-JOIN Inventario I ON II.idInventario = I.idInventario
+SELECT II.nomeItem, I.capacidade, I.descricao 
+FROM Item II
+JOIN Inventario I ON II.IdInventario = I.idInventario
 WHERE I.idInventario = 1; -- 1 seria um inventário específico 
 
 --Consultar as regiões que possuem mais de um tipo de estrutura (zona de quarentena, acampamento, etc.):
@@ -228,6 +228,6 @@ WHERE IdMissao = (
     WHERE IdMissao = ${id_missao}
 ) AND statusMissao = 'true';
 
--- Aumenta a vida de um personagem de acordo com o quanto um consumivel dá
+-- Aumenta a vida de um personagem de acordo com o quanto de vida um consumivel dá
 UPDATE PC SET vidaAtual + (SELECT aumentoVida FROM Consumivel WHERE IdItem = ${id_item})
 WHERE IdPersonagem = ${idPersonagem}
