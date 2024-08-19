@@ -27,7 +27,9 @@ Em suma, The Last of Us combina ação envolvente, elementos de sobrevivência e
 | Módulo | Link da gravação                                                                                    | Data       |
 | ------ | --------------------------------------------------------------------------------------------------- | ---------- |
 | 1      | [Apresentação do Módulo 1](https://www.youtube.com/watch?v=qEP-Pjk8k78)                                  | 22/07/2024 |
+| 2      | [Apresentação do Módulo 2](https://youtu.be/pTEGCB_m3H0)                                  | 19/08/2024 |
 
+  
 ## Entregas
 
 - Módulo 1
@@ -36,6 +38,12 @@ Em suma, The Last of Us combina ação envolvente, elementos de sobrevivência e
   - [Modelo Entidade-Relacionamento](./Docs/docs/primeira-entrega/MER.md)
   - [Modelo Relacional](./Docs/docs/primeira-entrega/MRel.md)
 
+- Módulo 2
+  - [DDL](./Docs/docs/segunda-entrega/DDL.md)
+  - [DML](./Docs/docs/segunda-entrega/DML.md)
+  - [DQL](./Docs/docs/segunda-entrega/DQL.md)
+  - [Álgebra Relacional](./Docs/docs/segunda-entrega/AR.md)
+
 ## Histórico de versões
 
 | Versão |    Data    | Descrição                                      | Autor                                               | Revisão                                                      |
@@ -43,6 +51,7 @@ Em suma, The Last of Us combina ação envolvente, elementos de sobrevivência e
 | `1.0`  | 22/07/2024 | Inclusão das considerações feitas na modelagem | Ana Júlia e Júlia |       Arthur e Maria Clara |
 | `1.0`  | 22/07/2024 | Estruturação do README do projeto              | Arthur e Maria Clara |               Ana Júlia e Júlia                                               
 | `2.0`  | 09/08/2024 | Correção da primeira entrega do projeto de acordo com *feedback* do professor              | Todos | Todos                       |
+| `2.1`  | 19/08/2024 | Atualização da documentação para o Módulo 2 e entrega.             | Todos | Todos                       |
 
 ## Autores
 
