@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 sidebar_label: "Data Manipulation Language"
 ---
 
@@ -239,6 +239,7 @@ INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdI
 (23, 2, 10, 30, 30, 'Insetor', NULL, 3);
 ```
 
+### Arma
 
 ```sql
 -- Inserção de dados na tabela Arma
@@ -249,7 +250,11 @@ INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario,
 (4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.'),
 (5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.'),
 (6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.');
+```
 
+### Vestimenta
+
+```sql
 -- Inserção de dados na tabela Vestimenta
 INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
 (7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false),
@@ -257,7 +262,11 @@ INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) V
 (9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false),
 (10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false),
 (11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false);
+```
 
+### Consumível
+
+```sql
 -- Inserção de dados na tabela Consumivel
 INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
 (12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.'),
@@ -273,7 +282,11 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventar
 (22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.'),
 (23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.'),
 (24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.');
+```
 
+### Receita
+
+```sql
 -- Inserção de dados na tabela Receita
 INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
 (1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 3),
@@ -284,7 +297,11 @@ INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem
 (6, 'Bomba de Pregos', 'Explosivo improvisado que detona ao contato, causando dano em área com fragmentos de pregos.', 5, 3),
 (7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 3),
 (8, 'Flechas', 'Munição para arco, pode ser craftada utilizando materiais encontrados.', 2, 3);
+```
 
+### Ingrediente
+
+```sql
 -- Inserção de dados na tabela Ingrediente
 INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUES
 (1, 1, 3, 1),
@@ -303,7 +320,11 @@ INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUE
 (14, 7, 3, 1),
 (15, 8, 3, 1),
 (16, 8, 3, 1);
+```
 
+### Evolucao
+
+```sql
 -- Inserção de dados na tabela Evolucao
 INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 (1, 5, 100),
@@ -316,11 +337,19 @@ INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 (8, 12, 450),
 (9, 13, 500),
 (10, 14, 550);
+```
 
+### PC
+
+```sql
 -- Inserção de dados na tabela PC
 INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario) VALUES
 (1, 1, 70, 100, 100, 'Joel', 'saudável', 5, 1);
+```
 
+### Evento
+
+```sql
 -- Inserção de dados na tabela Evento
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (1, 'Primeiros Sinais de Perigo', 'Os primeiros infectados começam a aparecer na cidade, causando pânico entre os moradores.', 1, 1),
@@ -333,11 +362,13 @@ INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (8, 'Comunidade Segura', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie.', 1, 1),
 (9, 'Captura de Ellie', 'Ellie é capturada por David enquanto cuida de Joel em recuperação.', 1, 1),
 (10, 'Fuga do Hospital', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 1, 1);
+```
 
+### Itinenário
+
+```sql
 -- Inserção de dados na tabela Itinerario
 INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
-
-
 (1, 22, '2024-08-14', 1),
 (2, 10, '2004-06-19', 2),
 (3, 15, '2024-01-23', 3),
@@ -348,7 +379,11 @@ INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
 (8, 14, '2024-08-14', 8),
 (9, 16, '2024-01-23', 9),
 (10, 19, '2024-01-23', 10);
+```
 
+### Habilidade
+
+```sql
 -- Inserção de dados na tabela Habilidade
 INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, IdPersonagem) VALUES
 (1, 'Furtividade', 'Passiva', 'Aumenta a chance de passar despercebido pelos inimigos.', 10, 1),
@@ -360,7 +395,11 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 (7, 'Ataque em Grupo', 'Ativa', 'Aumenta o dano causado em ataques conjuntos com aliados.',5, 1),
 (8, 'Defesa Reforçada', 'Passiva', 'Diminui o dano recebido em combate.', 5, 1),
 (9, 'Ataque Certeiro', 'Ativa', 'Aumenta a chance de acerto crítico em ataques.', 5, 1);
+```
 
+### MissaoPatrulha
+
+```sql
 -- Inserção de dados na tabela MissaoPatrulha
 INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao) VALUES
 (8, 7, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, false),
@@ -368,7 +407,11 @@ INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, I
 (10, 9, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, false),
 (11, 10, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, false),
 (12, 11, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, false);
+```
 
+### MissaoExploracaoObterItem
+
+```sql
 -- Inserção de dados na tabela MissaoExploracaoObterItem
 INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao) VALUES
 (1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false),
@@ -378,7 +421,11 @@ INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis,
 (5, 4, 'Joel e Ellie finalmente chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600, false),
 (6, 5, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300, false),
 (7, 6, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300, false);
+```
 
+### Concede
+
+```sql
 -- Inserção de dados na tabela Concede
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (1, 12),
@@ -390,7 +437,11 @@ INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (7, 18),
 (8, 19),
 (9, 21); 
+```
 
+### Dialoga
+
+```sql
 -- Inserção de dados na tabela Dialoga
 INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
 (1, 1, 1, 'Joel: Tess, qual é a missão de hoje?', 5),
@@ -399,7 +450,11 @@ INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) V
 (4, 1, 2, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
 (5, 1, 2, 'Joel: Como você chegou aqui, garota?', 5),
 (6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8);
+```
 
+### InstNPC
+
+```sql
 -- Inserção de dados na tabela InstNPC
 INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
 (1, 2),
@@ -413,26 +468,42 @@ INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
 (9, 10),
 (10, 11),
 (11, 12);
+```
 
+### Infectado
+
+```sql
 -- Inserção de dados na tabela Infectado
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade) VALUES
 (14, 'Corredor', 2),
 (15, 'Estalador', 6),
 (16, 'Baiacu', 8),
 (17, 'Espreitador', 6);
+```
 
+### FaccaoHumana
+
+```sql
 -- Inserção de dados na tabela FaccaoHumana
 INSERT INTO FaccaoHumana(IdNPC, nomeFaccao) VALUES
 (18, 'Vagalumes'),
 (19, 'Serafitas');
+```
 
+### Animal
+
+```sql
 -- Inserção de dados na tabela Animal
 INSERT INTO Animal(IdNPC, nomeAnimal, ameaca) VALUES
 (20, 'Lobo Selvagem', 'Alta'),
 (21, 'Urso Pardo', 'Alta'),
 (22, 'Peixes', 'Alta'),
 (23, 'Insetos', 'Baixa');
+```
 
+### Participacao
+
+```sql
 -- Inserção de dados na tabela Participacao
 INSERT INTO Participacao(IdNPC, Evento, Missao) VALUES
 (2, 1, 2),

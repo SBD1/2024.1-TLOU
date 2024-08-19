@@ -296,7 +296,7 @@ CREATE TABLE Consumivel (
   - `tipoConsumivel`: Tipo de consumível.
 
 
-### **Receita**
+## **Receita**
 A tabela `Receita` armazena informações sobre receitas usadas para criar novos itens no sistema.
 ```sql
 CREATE TABLE Receita (
@@ -317,7 +317,7 @@ CREATE TABLE Receita (
   - `tempoCraft`: Tempo necessário para criar o item.
   - `IdItem`: Identificador do item resultante da receita (chave estrangeira).
 
-### **Ingrediente**
+## **Ingrediente**
 A tabela `Ingrediente` representa os ingredientes necessários para criar um item através de uma receita.
 ```sql
 CREATE TABLE Ingrediente (
@@ -337,7 +337,7 @@ CREATE TABLE Ingrediente (
   - `IdItem`: Identificador do item usado como ingrediente (chave estrangeira).
   - `quantidadeIngre`: Quantidade do ingrediente necessário.
 
-### **Evolucao**
+## **Evolucao**
 A tabela `Evolucao` armazena os níveis de evolução e a experiência necessária para alcançar cada nível.
 ```sql
 CREATE TABLE Evolucao (
@@ -353,7 +353,7 @@ CREATE TABLE Evolucao (
   - `requisitoNivel`: Nível necessário para alcançar esta evolução.
   - `xpEvol`: Experiência necessária para alcançar esta evolução.
 
-### **PC**
+## **PC**
 A tabela `PC` armazena informações sobre personagens no jogo.
 ```sql
 CREATE TABLE PC (
@@ -387,7 +387,7 @@ CREATE TABLE PC (
   - `Evolucao`: Nível de evolução do personagem (chave estrangeira).
   - `IdInventario`: Identificador do inventário do personagem (chave estrangeira).
 
-### **Evento**
+## **Evento**
 A tabela `Evento` representa eventos que ocorrem no jogo.
 ```sql
 CREATE TABLE Evento (
@@ -409,7 +409,7 @@ CREATE TABLE Evento (
   - `Sala`: Sala onde o evento ocorre (chave estrangeira).
   - `IdPersonagem`: Identificador do personagem associado ao evento (chave estrangeira).
 
-### **Itinerario**
+## **Itinerario**
 A tabela `Itinerario` armazena os horários e datas de eventos.
 ```sql
 CREATE TABLE Itinerario (
@@ -428,7 +428,7 @@ CREATE TABLE Itinerario (
   - `dia`: Data do evento.
   - `IdEvento`: Identificador do evento associado (chave estrangeira).
 
-### **Habilidade**
+## **Habilidade**
 A tabela `Habilidade` armazena as habilidades dos personagens.
 ```sql
 CREATE TABLE Habilidade (
@@ -451,7 +451,7 @@ CREATE TABLE Habilidade (
   - `duracaoHabilidade`: Duração da habilidade.
   - `IdPersonagem`: Identificador do personagem que possui a habilidade (chave estrangeira).
 
-### **MissaoPatrulha**
+## **MissaoPatrulha**
 A tabela `MissaoPatrulha` armazena missões de patrulha realizadas pelos personagens.
 ```sql
 CREATE TABLE MissaoPatrulha (
@@ -479,7 +479,7 @@ CREATE TABLE MissaoPatrulha (
   - `xpMis`: Experiência concedida pela missão.
   - `statusMissao`: Status da missão (completa ou não).
 
-### **MissaoExploracaoObterItem**
+## **MissaoExploracaoObterItem**
 A tabela `MissaoExploracaoObterItem` armazena missões de exploração para obter itens.
 ```sql
 CREATE TABLE MissaoExploracaoObterItem(
@@ -505,7 +505,7 @@ CREATE TABLE MissaoExploracaoObterItem(
   - `xpMis`: Experiência concedida pela missão.
   - `statusMissao`: Status da missão (completa ou não).
 
-### **Concede**
+## **Concede**
 A tabela `Concede` relaciona evoluções com consumíveis que podem ser concedidos durante a evolução.
 ```sql
 CREATE TABLE Concede (
@@ -521,7 +521,7 @@ CREATE TABLE Concede (
   - `IdEvolucao`: Identificador da evolução (chave primária composta).
   - `IdConsumivel`: Identificador do consumível concedido (chave primária composta e chave estrangeira).
 
-### **Dialoga**
+## **Dialoga**
 A tabela `Dialoga` representa diálogos entre personagens.
 ```sql
 CREATE TABLE Dialoga (
@@ -543,7 +543,7 @@ CREATE TABLE Dialoga (
   - `conteudo`: Conteúdo do diálogo.
   - `duracaoDialogo`: Duração do diálogo.
 
-### **InstNPC**
+## **InstNPC**
 A tabela `InstNPC` representa instâncias de NPCs com tipos específicos.
 ```sql
 CREATE TABLE InstNPC (
@@ -558,7 +558,7 @@ CREATE TABLE InstNPC (
   - `IdInstNPC`: Identificador da instância do NPC (chave primária).
   - `tipoNPC`: Tipo de NPC (chave estrangeira).
 
-### **Infectado**
+## **Infectado**
 A tabela `Infectado` armazena informações sobre NPCs infectados.
 ```sql
 CREATE TABLE Infectado (
@@ -575,7 +575,7 @@ CREATE TABLE Infectado (
   - `comportamentoInfec`: Comportamento do NPC infectado.
   - `velocidade`: Velocidade do NPC infectado.
 
-### **FaccaoHumana**
+## **FaccaoHumana**
 A tabela `FaccaoHumana` armazena informações sobre facções humanas associadas a NPCs.
 ```sql
 CREATE TABLE FaccaoHumana (
@@ -590,7 +590,7 @@ CREATE TABLE FaccaoHumana (
   - `IdNPC`: Identificador do NPC associado à facção (chave primária e chave estrangeira).
   - `nomeFaccao`: Nome da facção humana.
 
-### **Animal**
+## **Animal**
 A tabela `Animal` armazena informações sobre animais NPCs.
 ```sql
 CREATE TABLE Animal (
@@ -607,7 +607,7 @@ CREATE TABLE Animal (
   - `nomeAnimal`: Nome do animal.
   - `ameaca`: Nível de ameaça representado pelo animal.
 
-### **Participacao**
+## **Participacao**
 A tabela `Participacao` registra a participação de NPCs em eventos e missões.
 ```sql
 CREATE TABLE Participacao (
