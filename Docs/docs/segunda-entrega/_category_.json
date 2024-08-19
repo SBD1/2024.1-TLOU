@@ -1,0 +1,8 @@
+{
+    "label": "Segunda entrega",
+    "position": 3,
+    "link": {
+      "type": "generated-index",
+      "description": "Documentação da segunda entrega do projeto(DDL,DML,DQL e Algebra Relacional)"
+    }
+  }
