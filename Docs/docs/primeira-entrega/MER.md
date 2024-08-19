@@ -26,7 +26,7 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - **Item**
   - **Armas**
   - **Vestimenta**
-  - **Alimento**
+  - **Consumível**
 - **InstItem**
 - **Receita**
 - **Ingrediente**
@@ -63,7 +63,7 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - **Item**: <ins>idItem</ins>, tipoItem
   - **Armas**: <ins>idArma</ins>, idItem, nomeArma, dano, municaoAtual, municaoMax, idInvetario, eAtaque
   - **Vestimenta**: <ins>idVestimenta</ins>, idItem, nomeVestimenta, descricaoVestimenta, idInventario, eAtaque
-  - **Alimento**: <ins>idAlimento</ins>, idItem, nomeAlimento, tipoAlimento, aumentoVida, idIventario, eAtaque
+  - **Consumível**: <ins>idConsumível</ins>, idItem, nomeAlimento, tipoAlimento, aumentoVida, idIventario, eAtaque
 - **Receita**: <ins>idReceita</ins>, nomeReceita, descricaoReceita, tempoCraft, idItem
 - **Ingredientes**: <ins>idIngrediente</ins>, idReceita, idItem, quantidadeIngre, idItem
 - **InstItem**: <ins>idInstItem</ins>

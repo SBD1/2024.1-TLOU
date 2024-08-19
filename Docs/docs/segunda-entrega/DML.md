@@ -3,7 +3,7 @@ sidebar_position: 2
 sidebar_label: "Data Manipulation Language"
 ---
 
-# O que é DML
+# O que é DML?
 
 DML (Data Manipulation Language) é um subconjunto de SQL (Structured Query Language) utilizado para gerenciar e manipular dados dentro de um banco de dados relacional. As principais operações de DML permitem que você insira, atualize, exclua e consulte dados nas tabelas do banco de dados. 
 
@@ -15,7 +15,6 @@ Este documento descreve as tabelas e os dados inseridos no banco de dados para u
 ## Tabelas e Dados
 
 ### Regiao
-Armazena informações sobre diferentes regiões do jogo.
 ```sql
 -- Inserção de dados na tabela Regiao
 INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao) VALUES
@@ -29,7 +28,6 @@ INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegia
 ```
 
 ### Sala
-Relaciona salas com regiões específicas.
 ```sql
 -- Inserção de dados na tabela Sala
 INSERT INTO Sala (idSala, IdRegiao) VALUES
@@ -43,7 +41,6 @@ INSERT INTO Sala (idSala, IdRegiao) VALUES
 ```
 
 ### ZonaQuarentena
-Armazena dados específicos sobre zonas de quarentena.
 ```sql
 -- Inserção de dados na tabela ZonaQuarentena
 INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES 
@@ -52,7 +49,6 @@ INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES
 ```
 
 ### Acampamento
-Armazena informações sobre acampamentos.
 ```sql
 -- Inserção de dados na tabela Acampamento
 INSERT INTO Acampamento (IdRegiao, defesa) VALUES 
@@ -61,7 +57,6 @@ INSERT INTO Acampamento (IdRegiao, defesa) VALUES
 ```
 
 ### LocalAbandonado
-Armazena dados sobre locais abandonados.
 ```sql
 -- Inserção de dados na tabela LocalAbandonado
 INSERT INTO LocalAbandonado (IdRegiao, tipo, periculosidade) VALUES
@@ -71,7 +66,6 @@ INSERT INTO LocalAbandonado (IdRegiao, tipo, periculosidade) VALUES
 ```
 
 ### Personagem
-Armazena informações sobre personagens.
 ```sql
 -- Inserção de dados na tabela Personagem
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
@@ -101,7 +95,6 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 ```
 
 ### Inventario
-Armazena informações sobre inventários dos personagens.
 ```sql
 -- Inserção de dados na tabela Inventario
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
@@ -113,7 +106,6 @@ INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
 ```
 
 ### Missao
-Armazena informações sobre missões.
 ```sql
 -- Inserção de dados na tabela Missao
 INSERT INTO Missao(idMissao, tipoMis) VALUES
@@ -136,7 +128,6 @@ INSERT INTO Missao(idMissao, tipoMis) VALUES
 ```
 
 ### Item
-Armazena informações sobre itens.
 ```sql
 -- Inserção de dados na tabela Item
 INSERT INTO Item(idItem, tipoItem) VALUES
@@ -167,7 +158,6 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 ```
 
 ### InstItem
-Armazena a relação entre itens e suas instâncias.
 ```sql
 -- Inserção de dados na tabela InstItem
 INSERT INTO InstItem(idInstItem, IdItem) VALUES
@@ -199,7 +189,6 @@ INSERT INTO InstItem(idInstItem, IdItem) VALUES
 ```
 
 ### Itens
-Relaciona missões e itens necessários.
 ```sql
 -- Inserção de dados na tabela Itens
 INSERT INTO Itens (IdMissao, IdItem) VALUES
@@ -211,7 +200,6 @@ INSERT INTO Itens (IdMissao, IdItem) VALUES
 ```
 
 ### NPC
-Armazena informações sobre NPCs.
 ```sql
 -- Inserção de dados na tabela NPC
 INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, tipoNPC) VALUES
@@ -240,7 +228,6 @@ INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdI
 ```
 
 ### Arma
-
 ```sql
 -- Inserção de dados na tabela Arma
 INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
@@ -253,7 +240,6 @@ INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario,
 ```
 
 ### Vestimenta
-
 ```sql
 -- Inserção de dados na tabela Vestimenta
 INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
@@ -265,7 +251,6 @@ INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) V
 ```
 
 ### Consumível
-
 ```sql
 -- Inserção de dados na tabela Consumivel
 INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
@@ -285,7 +270,6 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventar
 ```
 
 ### Receita
-
 ```sql
 -- Inserção de dados na tabela Receita
 INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
@@ -300,7 +284,6 @@ INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem
 ```
 
 ### Ingrediente
-
 ```sql
 -- Inserção de dados na tabela Ingrediente
 INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUES
@@ -323,7 +306,6 @@ INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUE
 ```
 
 ### Evolucao
-
 ```sql
 -- Inserção de dados na tabela Evolucao
 INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
@@ -340,7 +322,6 @@ INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 ```
 
 ### PC
-
 ```sql
 -- Inserção de dados na tabela PC
 INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario) VALUES
@@ -348,7 +329,6 @@ INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, esta
 ```
 
 ### Evento
-
 ```sql
 -- Inserção de dados na tabela Evento
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
@@ -365,7 +345,6 @@ INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 ```
 
 ### Itinenário
-
 ```sql
 -- Inserção de dados na tabela Itinerario
 INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
@@ -382,7 +361,6 @@ INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
 ```
 
 ### Habilidade
-
 ```sql
 -- Inserção de dados na tabela Habilidade
 INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, IdPersonagem) VALUES
@@ -398,7 +376,6 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 ```
 
 ### MissaoPatrulha
-
 ```sql
 -- Inserção de dados na tabela MissaoPatrulha
 INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao) VALUES
@@ -410,7 +387,6 @@ INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, I
 ```
 
 ### MissaoExploracaoObterItem
-
 ```sql
 -- Inserção de dados na tabela MissaoExploracaoObterItem
 INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao) VALUES
@@ -424,7 +400,6 @@ INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis,
 ```
 
 ### Concede
-
 ```sql
 -- Inserção de dados na tabela Concede
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
@@ -440,7 +415,6 @@ INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 ```
 
 ### Dialoga
-
 ```sql
 -- Inserção de dados na tabela Dialoga
 INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
@@ -453,7 +427,6 @@ INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) V
 ```
 
 ### InstNPC
-
 ```sql
 -- Inserção de dados na tabela InstNPC
 INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
@@ -471,7 +444,6 @@ INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
 ```
 
 ### Infectado
-
 ```sql
 -- Inserção de dados na tabela Infectado
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade) VALUES
@@ -482,7 +454,6 @@ INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade) VALUES
 ```
 
 ### FaccaoHumana
-
 ```sql
 -- Inserção de dados na tabela FaccaoHumana
 INSERT INTO FaccaoHumana(IdNPC, nomeFaccao) VALUES
@@ -491,7 +462,6 @@ INSERT INTO FaccaoHumana(IdNPC, nomeFaccao) VALUES
 ```
 
 ### Animal
-
 ```sql
 -- Inserção de dados na tabela Animal
 INSERT INTO Animal(IdNPC, nomeAnimal, ameaca) VALUES
@@ -502,7 +472,6 @@ INSERT INTO Animal(IdNPC, nomeAnimal, ameaca) VALUES
 ```
 
 ### Participacao
-
 ```sql
 -- Inserção de dados na tabela Participacao
 INSERT INTO Participacao(IdNPC, Evento, Missao) VALUES

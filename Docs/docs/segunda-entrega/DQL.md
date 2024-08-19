@@ -3,7 +3,7 @@ sidebar_position: 3
 sidebar_label: "Data Query Language"
 ---
 
-# O que é DQL
+# O que é DQL?
 DQL (Data Query Language) é um subconjunto da SQL (Structured Query Language) que é usado para consultar e recuperar dados de um banco de dados. A principal operação em DQL é a instrução SELECT, que permite buscar e retornar dados de uma ou mais tabelas.
 
 
@@ -293,6 +293,30 @@ WHERE pc.Sala = (
 ```
 Mostra itens que podem ser obtidos em missões de patrulha baseadas na sala atual do personagem.
 
+### Consulta se a missão pré-requisito de obter item foi concluída
+```sql
+SELECT statusMissao
+FROM MissaoExploracaoObterItem
+WHERE IdMissao = (
+    SELECT IdMissaoPre
+    FROM MissaoExploracaoObterItem
+    WHERE IdMissao = ${id_missao}
+) AND statusMissao = 'true';
+```
+Verifica se a missão pré-requisito para a missão de obter item foi concluída.
+
+### Consulta se a missão pré-requisito de patrulha foi concluída
+```sql
+SELECT statusMissao
+FROM MissaoPatrulha
+WHERE IdMissao = (
+    SELECT IdMissaoPre
+    FROM MissaoExploracaoObterItem
+    WHERE IdMissao = ${id_missao}
+) AND statusMissao = 'true';
+```
+Verifica se a missão pré-requisito para a missão de patrulha foi concluída.
+
 ## Atualizações
 
 ### Dá update na vida de um PC
@@ -344,34 +368,10 @@ WHERE IdPersonagem = ${idPersonagem};
 ```
 Adiciona a XP da missão de patrulha ao XP do personagem.
 
-### Consulta se a missão pré-requisito de obter item foi concluída
-```sql
-SELECT statusMissao
-FROM MissaoExploracaoObterItem
-WHERE IdMissao = (
-    SELECT IdMissaoPre
-    FROM MissaoExploracaoObterItem
-    WHERE IdMissao = ${id_missao}
-) AND statusMissao = 'true';
-```
-Verifica se a missão pré-requisito para a missão de obter item foi concluída.
-
-### Consulta se a missão pré-requisito de patrulha foi concluída
-```sql
-SELECT statusMissao
-FROM MissaoPatrulha
-WHERE IdMissao = (
-    SELECT IdMissaoPre
-    FROM MissaoExploracaoObterItem
-    WHERE IdMissao = ${id_missao}
-) AND statusMissao = 'true';
-```
-Verifica se a missão pré-requisito para a missão de patrulha foi concluída.
-
 ### Aumenta a vida de um personagem de acordo com o quanto de vida um consumível dá
 ```sql
 UPDATE PC SET vidaAtual = vidaAtual + (SELECT aumentoVida FROM Consumivel WHERE IdItem = ${id_item})
 WHERE IdPersonagem = ${idPersonagem};
 ```
-Aumenta a vida atual do personagem com base na quantidade de vida fornecida pelo item consumível
+Aumenta a vida atual do personagem com base na quantidade de vida fornecida pelo item consumível.
 
