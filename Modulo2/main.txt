@@ -1,0 +1,317 @@
+// Configuração da conexão com o banco de dados
+import pg from "pg";
+const { Client } = pg;
+
+import readlineSync from 'readline-sync';
+
+// Criando uma conexão ao banco de dados PostgreSQL
+const client = new Client({
+    host: 'localhost',
+    user: 'postgres',
+    password: 'postgres',
+    port: 5432,
+    database: 'tlou'
+});
+
+// Conectando ao banco de dados
+client.connect()
+    .then(() => {
+    })
+    .catch(err => {
+        console.error('Erro ao conectar ao banco de dados:', err);
+    });
+
+
+// Função para exibir o texto gradativamente
+function escreverTexto(texto, velocidade, callback) {
+    let i = 0;
+    const intervalo = setInterval(() => {
+        process.stdout.write(texto[i]);
+        i++;
+        if (i >= texto.length) {
+            clearInterval(intervalo);
+            if (callback) callback();
+        }
+    }, velocidade);
+}
+
+// Função para exibir o texto com uma pausa
+function exibirTextoGradativo(texto, velocidade, pausa, callback) {
+    escreverTexto(texto, velocidade, () => {
+        setTimeout(() => {
+            if (callback) callback();
+        }, pausa);
+    });
+}
+
+async function primeiraTela() {
+    try {
+        console.clear();
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        process.stdout.setEncoding('utf-8');
+        console.clear();
+        console.log(` 
+            ████████ ██   ██ ███████     ██       █████  ███████ ████████      ██████  ███████     ██    ██ ███████ 
+               ██    ██   ██ ██          ██      ██   ██ ██         ██        ██    ██ ██          ██    ██ ██      
+               ██    ███████ █████       ██      ███████ ███████    ██        ██    ██ █████       ██    ██ ███████ 
+               ██    ██   ██ ██          ██      ██   ██      ██    ██        ██    ██ ██          ██    ██      ██ 
+               ██    ██   ██ ███████     ███████ ██   ██ ███████    ██         ██████  ██           ██████  ███████ 
+                                                                                                                    
+                                                                                                          `);
+
+        console.log("\n==================================");
+        console.log("Bem-vindo ao The Last of Us - MUD!");
+        console.log("==================================\n");
+
+        // Exibe o texto gradativamente
+        await new Promise(resolve => {
+            exibirTextoGradativo(
+                "O amanhecer mal começou a iluminar o horizonte quando você, Joel Miller, acorda em seu abrigo.\n",
+                1, // velocidade em milissegundos por caractere
+                1000, // pausa após o texto
+                resolve
+            );
+        });
+
+        try {
+            // Obtém informações do jogador
+            const infoJogador = await client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
+            console.log('\n\nSuas informações:');
+            infoJogador.rows.forEach(row => {
+                console.log(`Nome: ${row.nomepersonagem}, Estado: ${row.estado}, \nVida Atual: ${row.vidaatual}, Experiência: ${row.xp}`);
+            });
+        } catch (err) {
+            console.error('Erro ao consultar os dados:', err.stack);
+
+        }
+
+        // Obtém informações da região escolhida
+        const regiaoInicial = await client.query(`SELECT r.nomeregiao, r.descricaoregiao FROM regiao r JOIN sala s ON s.idregiao = r.idregiao JOIN pc p ON p.sala = s.idsala`);
+
+        // Verifica se há resultados e exibe a descrição da região
+        if (regiaoInicial.rows.length > 0) {
+            // Acessa os dados da primeira linha (assumindo que você só está interessado na primeira linha)
+            const regiao = regiaoInicial.rows[0];
+            console.log("\n\nNome da Região que você se encontra:", regiao.nomeregiao);
+            console.log("Descrição da Região em que você se encontra:", regiao.descricaoregiao);
+        } else {
+            console.log("\n\nNenhuma região encontrada.");
+        }
+
+        await new Promise(resolve => {
+            exibirTextoGradativo(
+                "\n \nAo seu lado, Tess, sua parceira de sobrevivência e amiga de longa data, já está acordada, organizando suas coisas para o que será mais um dia nesse inferno que a Terra se tornou. \n" +
+                "O mundo como você conhecia foi devastado há um ano, quando o surto do fungo Cordyceps, mutado por mudanças climáticas, começou a infectar seres humanos, transformando-os em criaturas hostis e extremamente perigosas.\n" +
+                "Com um olhar, você e Tess decidem que é hora de sair. Vocês precisam encontrar Mark para discutir os próximos passos, talvez negociar suprimentos ou obter informações sobre a próxima rota segura. \n" +
+                "No meio do caminho, porém, algo faz você parar abruptamente. À frente, uma figura familiar surge em meio aos destroços. Uma mulher segura a mão de uma criança e faz uma proposta a você.\n",
+                1,
+                1000,
+                resolve
+            );
+        });
+
+
+        // await new Promise(resolve => {
+        //     exibirTextoGradativo(
+        //         "\n\nCom um olhar, você e Tess decidem que é hora de sair. Vocês precisam encontrar Mark para discutir os próximos passos, talvez negociar suprimentos ou obter informações sobre a próxima rota segura.\n",
+        //         1,
+        //         1000,
+        //         resolve
+        //     );
+        // });
+
+        //Escolha da sala!!!!!!
+
+        const salas = await client.query("SELECT idSala FROM Sala WHERE idRegião = regiaoAtual ");
+        console.log("\n\n\n Salas disponíveis:");
+        console.log("===================\n");
+
+        // Listar as salas da região e exibir os itens presentes em cada sala
+        async function explorarRegiao() {
+            try {
+                // Seleciona a região atual em que o jogador se encontra
+                const regioes = await client.query(`
+            SELECT r.nomeRegiao, s.idSala, s.descricaoSala 
+            FROM Regiao r 
+            JOIN Sala s ON s.idRegiao = r.idRegiao 
+            JOIN PC p ON p.sala = s.idSala
+        `);
+
+                if (regioes.rows.length === 0) {
+                    console.log("Nenhuma sala disponível na região atual.");
+                    return;
+                }
+
+                // Loop para avançar pelas salas da região
+                let escolhaSala = 0;
+
+                while (escolhaSala < regioes.rows.length) {
+                    const salaAtual = regioes.rows[escolhaSala];
+                    console.log(`${escolhaSala + 1}. Sala ${salaAtual.idSala}: ${salaAtual.descricaoSala.trim()}`);
+
+                    // Perguntar se o jogador deseja explorar a sala atual
+                    const resposta = readlineSync.question("\nDeseja explorar esta sala? (s/n): ").toLowerCase();
+
+                    if (resposta === 's') {
+                        // Exibe os itens presentes na sala
+                        await mostrarItensDaSala(salaAtual.idSala);
+
+                        // Exibe os NPCs presentes na sala
+                        await mostrarNPCsDaSala(salaAtual.idSala);
+                    }
+
+                    // Pergunta se o jogador deseja continuar explorando
+                    const continuar = readlineSync.question("\nDeseja continuar explorando outras salas? (s/n): ").toLowerCase();
+
+                    if (continuar !== 's') {
+                        console.log("Você decidiu parar de explorar.");
+                        break;
+                    }
+
+                    escolhaSala += 1; // Avança para a próxima sala
+                }
+            } catch (error) {
+                console.error("Erro ao explorar as salas:", error.message || error);
+            }
+        }
+
+        // Função para exibir os itens da sala atual
+        async function mostrarItensDaSala(idSala) {
+            try {
+                const itens = await client.query(`
+            SELECT i.tipoItem, a.nomeItem, a.descricaoItem 
+            FROM InstItem ii
+            JOIN Item i ON ii.IdItem = i.idItem
+            LEFT JOIN Arma a ON i.idItem = a.IdItem
+            WHERE ii.Sala = $1
+        `, [idSala]);
+
+                if (itens.rows.length === 0) {
+                    console.log("Nenhum item encontrado nesta sala.");
+                    return;
+                }
+
+                console.log("\nItens encontrados na sala:");
+                itens.rows.forEach(item => {
+                    console.log(`- ${item.nomeitem}: ${item.descricaoItem}`);
+                });
+            } catch (error) {
+                console.error("Erro ao listar os itens da sala:", error.message || error);
+            }
+        }
+
+        // Função para exibir os NPCs da sala atual
+        async function mostrarNPCsDaSala(idSala) {
+            try {
+                const npcs = await client.query(`
+            SELECT nomePersonagem, tipoNPC, eAliado 
+            FROM NPC 
+            WHERE Sala = $1
+        `, [idSala]);
+
+                if (npcs.rows.length === 0) {
+                    console.log("Nenhum NPC encontrado nesta sala.");
+                    return;
+                }
+
+                console.log("\nNPCs encontrados na sala:");
+                npcs.rows.forEach(npc => {
+                    const tipo = npc.ealiado ? "Aliado" : "Inimigo";
+                    console.log(`- ${npc.nomepersonagem}: ${tipo}`);
+                });
+            } catch (error) {
+                console.error("Erro ao listar os NPCs da sala:", error.message || error);
+            }
+        }
+
+        // Iniciar a exploração
+        async function iniciarExploracao() {
+            try {
+                console.clear();
+
+                // Chama a função que permite explorar a região
+                await explorarRegiao();
+
+                console.log("Você explorou todas as salas disponíveis.");
+            } catch (error) {
+                console.error("Erro durante a exploração:", error.message || error);
+            } finally {
+                console.log("\nEncerrando conexão com o banco de dados...");
+                await client.end();
+                console.log("Banco desconectado.");
+            }
+        }
+
+        // Iniciar a exploração
+        iniciarExploracao();
+
+
+        if (escolhaRegiao >= regioes.rows.length) {
+            console.log("Você visitou todas as regiões disponíveis.");
+        }
+
+
+        const resposta = readlineSync.question("\nDeseja aceitar a missão proposta? (s/n): ").toLowerCase();
+
+        if (resposta !== 's') {
+            console.log("Você decidiu não prosseguir.");
+            await client.end();
+        }
+
+        const missaoAtual = await client.query(
+            "SELECT objetivo FROM MissaoExploracaoObterItem",
+        );
+
+        // Verificar se a consulta retornou algum resultado
+        if (missaoAtual.rows.length > 0) {
+            // Exibir o nome da missão
+            console.log("\n");
+            console.log(`${missaoAtual.rows[0].objetivo.trim()}`);
+        } else {
+            console.log("Nenhuma missão encontrada.");
+        }
+
+
+        // ADICIONAR MAIS COISAS AQUI 
+        const regiaoAtual = await client.query(
+            "SELECT nomeRegiao FROM Regiao",
+        );
+
+        let escolhaRegiao = 0;
+
+        // Loop para avançar pelas regiões
+        while (escolhaRegiao < regioes.rows.length) {
+            const regiaoAtual = regioes.rows[escolhaRegiao];
+            console.log(`${escolhaRegiao + 1}. ${regiaoAtual.nomeregiao.trim()} - ${regiaoAtual.descricaoregiao.trim()}`);
+
+            // Perguntar se o jogador deseja prosseguir para a próxima região
+            if (escolhaRegiao > 0) { // Só pergunta a partir da segunda região
+                const resposta = readlineSync.question("\nDeseja prosseguir para a próxima região? (s/n): ").toLowerCase();
+
+                if (resposta !== 's') {
+                    console.log("Você decidiu não prosseguir.");
+                    break;
+                }
+            }
+
+        }
+    } catch (error) {
+        console.error("\nErro ao executar o início do jogo:", error.message || error);
+    } finally {
+        console.log("\n----------------------------------------------------------------------");
+        console.log("Fechando a conexão com o banco de dados...");
+        await client.end();
+        console.log("Banco desconectado com sucesso!");
+        console.log("----------------------------------------------------------------------\n");
+    }
+}
+primeiraTela();
+
+
+
+update da sala escolhida
+const regiaoAtual = await client.query(`
+            UPDATE PC SET Sala = ${salaEscolhida.idsala}
+        `);

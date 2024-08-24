@@ -11,12 +11,26 @@ INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegia
 
 INSERT INTO Sala (idSala, IdRegiao) VALUES
 (1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7);
+(2, 1),
+(3, 1),
+(4, 2),
+(5, 2),
+(6, 2),
+(7, 3),
+(8, 3),
+(9, 3),
+(10, 4),
+(11, 4),
+(12, 4),
+(13, 5),
+(14, 5),
+(15, 5),
+(16, 6),
+(17, 6),
+(18, 6),
+(19, 7),
+(20, 7),
+(21, 7);
 
 INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES 
 (1, 5, 10),
@@ -144,60 +158,60 @@ INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 5),
 (1, 6);
 
-INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, tipoNPC) VALUES
-(2, 1, 30, 100, 95, 'Ellie',2, 2),
-(3, 3, 10,90, 50, 'Sobrevivente Selvagem', NULL, 2),
-(4, 2, 10, 85, 80, 'Líder de Facção', NULL, 2),
-(5, 1, 10, 80, 105, 'Tess', 4, 2),
-(6, 3,10, 120, 115, 'Tommy',3, 2),
-(7, 1,10, 130, 125, 'Marlene', NULL, 2),
-(8, 3, 10, 140, 135, 'Henry', 5, 2),
-(9, 4, 10, 150, 145, 'Sam', NULL, 2),
-(10, 5, 10, 160, 155, 'Bill', NULL, 2),
-(11, 6, 10, 170, 165, 'David', NULL, 2),
-(12, 5, 10, 100, 95, 'Sobrevivente Viajante', NULL, 2),
-(13, 5, 10, 110, 105, 'Médica da Zona Segura', NULL, 2),
-(14, 2, 10, 30, 30, 'Corredor', NULL, 3),
-(15, 2, 10, 45, 45, 'Estalador', NULL, 3),
-(16, 2, 10, 60, 60, 'Baiacu', NULL, 3),
-(17, 2, 10, 45, 45, 'Espreitador', NULL, 3),
-(18, 2, 10, 30, 30, 'Vagalumes', NULL, 3),
-(19, 2, 10, 30, 30, 'Serafitas', NULL, 3),
-(20, 2, 10, 30, 30, 'Lobo Selvagem', NULL, 3),
-(21, 2, 10, 30, 30, 'Urso Pardo', NULL, 3),
-(22, 2, 10, 30, 30, 'Peixes', NULL, 3),
-(23, 2, 10, 30, 30, 'Insetos', NULL, 3);
+INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) VALUES
+(2, 1, 30, 100, 95, 'Ellie', 2, true, 2),
+(3, 3, 10,90, 50, 'Sobrevivente Selvagem', NULL, false, 2),
+(4, 2, 10, 85, 80, 'Líder de Facção', NULL, false, 2),
+(5, 1, 10, 80, 105, 'Tess', 4, true, 2),
+(6, 3,10, 120, 115, 'Tommy',3, true, 2),
+(7, 1,10, 130, 125, 'Marlene', NULL, false, 2),
+(8, 3, 10, 140, 135, 'Henry', 5, true, 2),
+(9, 4, 10, 150, 145, 'Sam', NULL, true, 2),
+(10, 5, 10, 160, 155, 'Bill', NULL, true, 2),
+(11, 6, 10, 170, 165, 'David', NULL, false, 2),
+(12, 5, 10, 100, 95, 'Sobrevivente Viajante', NULL, false, 2),
+(13, 5, 10, 110, 105, 'Médico da Zona Segura', NULL, false, 2),
+(14, 2, 10, 30, 30, 'Corredor', NULL, false, 3),
+(15, 2, 10, 45, 45, 'Estalador', NULL, false, 3),
+(16, 2, 10, 60, 60, 'Baiacu', NULL, false, 3),
+(17, 2, 10, 45, 45, 'Espreitador', NULL, false, 3),
+(18, 2, 10, 30, 30, 'Vagalumes', NULL, false, 3),
+(19, 2, 10, 30, 30, 'Serafitas', NULL, false, 3),
+(20, 2, 10, 30, 30, 'Lobo Selvagem', NULL, false,3),
+(21, 2, 10, 30, 30, 'Urso Pardo', NULL, false, 3),
+(22, 2, 10, 30, 30, 'Peixes', NULL, false, 3),
+(23, 2, 10, 30, 30, 'Insetos', NULL, false, 3);
 
 
-INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
-(1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
-(2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
-(3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.'),
-(4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.'),
-(5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.'),
-(6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.');
+INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem, Sala) VALUES
+(1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.', 1),
+(2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.', 1),
+(3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.', 1),
+(4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.', 1),
+(5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.', 1),
+(6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.', 1);
 
-INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
-(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false),
-(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false),
-(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false),
-(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false),
-(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false);
+INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque, Sala) VALUES
+(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false, 1),
+(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false, 1),
+(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false, 1),
+(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false, 1),
+(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false, 1);
 
-INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
-(12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.'),
-(13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.'),
-(14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.'),
-(15, 'Pacote de Salgadinhos', 'Salgado', 1, 1, false, 'Aumenta a vitalidade com um toque salgado.'),
-(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, 2, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.'),
-(17, 'Kit de Primeiros Socorros', 'Cura', 20, 1, false, 'Kit essencial para tratar ferimentos e restaurar saúde.'),
-(18, 'Munição', 'Projétil', NULL, 1, true, 'Munição para uso em armas de fogo.'),
-(19, 'Álcool', 'Reagente', NULL, 2, false, 'Reagente útil para criação e improvisação.'),
-(20, 'Trapos', 'Material', NULL, 1, false, 'Material básico para reparos e construção.'),
-(21, 'Recipiente', 'Contêiner', NULL, 2, false, 'Contêiner versátil para armazenar itens e líquidos.'),
-(22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.'),
-(23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.'),
-(24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.');
+INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem, Sala) VALUES
+(12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.', 1),
+(13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.', 1),
+(14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.', 1),
+(15, 'Pacote de Salgadinhos', 'Salgado', 1, 1, false, 'Aumenta a vitalidade com um toque salgado.', 1),
+(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, 2, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', 1),
+(17, 'Kit de Primeiros Socorros', 'Cura', 20, 1, false, 'Kit essencial para tratar ferimentos e restaurar saúde.', 1),
+(18, 'Munição', 'Projétil', NULL, 1, true, 'Munição para uso em armas de fogo.', 1),
+(19, 'Álcool', 'Reagente', NULL, 2, false, 'Reagente útil para criação e improvisação.', 1),
+(20, 'Trapos', 'Material', NULL, 1, false, 'Material básico para reparos e construção.', 1),
+(21, 'Recipiente', 'Contêiner', NULL, 2, false, 'Contêiner versátil para armazenar itens e líquidos.', 1),
+(22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.', 1),
+(23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.', 1),
+(24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.', 1);
 
 INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
 (1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 3),
@@ -277,21 +291,21 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 (8, 'Defesa Reforçada', 'Passiva', 'Diminui o dano recebido em combate.', 5, 1),
 (9, 'Ataque Certeiro', 'Ativa', 'Aumenta a chance de acerto crítico em ataques.', 5, 1);
 
-INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao) VALUES
-(8, 7, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, false),
-(9, 8, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, false),
-(10, 9, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, false),
-(11, 10, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, false),
-(12, 11, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, false);
+INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao, Sala) VALUES
+(8, 7, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, false, 1),
+(9, 8, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, false, 2),
+(10, 9, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, false, 3),
+(11, 10, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, false, 3),
+(12, 11, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, false, 2);
 
-INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao) VALUES
-(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false),
-(2, 1, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 250, false),
-(3, 2, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 350, false),
-(4, 3, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 550, false),
-(5, 4, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600, false),
-(6, 5, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300, false),
-(7, 6, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300, false);
+INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao, Sala) VALUES
+(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false, 1),
+(2, 1, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 250, false, 2),
+(3, 2, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 350, false, 3),
+(4, 3, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 550, false, 3),
+(5, 4, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600, false, 2),
+(6, 5, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300, false, 1),
+(7, 6, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300, false, 1);
 
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (1, 12),

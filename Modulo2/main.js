@@ -1,10 +1,8 @@
-// Configuração da conexão com o banco de dados
 import pg from "pg";
-const { Client } = pg;
-
 import readlineSync from 'readline-sync';
 
-// Criando uma conexão ao banco de dados PostgreSQL
+const { Client } = pg;
+
 const client = new Client({
     host: 'localhost',
     user: 'postgres',
@@ -13,188 +11,141 @@ const client = new Client({
     database: 'tlou'
 });
 
-// Conectando ao banco de dados
-client.connect()
-    .then(() => {
-    })
-    .catch(err => {
-        console.error('Erro ao conectar ao banco de dados:', err);
-    });
-
-
-// Função para exibir o nome do jogo
-async function exibirNomeJogo() {
-    console.log(` 
-████████ ██   ██ ███████     ██       █████  ███████ ████████      ██████  ███████     ██    ██ ███████ 
-   ██    ██   ██ ██          ██      ██   ██ ██         ██        ██    ██ ██          ██    ██ ██      
-   ██    ███████ █████       ██      ███████ ███████    ██        ██    ██ █████       ██    ██ ███████ 
-   ██    ██   ██ ██          ██      ██   ██      ██    ██        ██    ██ ██          ██    ██      ██ 
-   ██    ██   ██ ███████     ███████ ██   ██ ███████    ██         ██████  ██           ██████  ███████ 
-                                                                                                        
-                                                                                              `);
-}
-
-// Função para exibir o texto gradativamente
-function escreverTexto(texto, velocidade, callback) {
-    let i = 0;
-    const intervalo = setInterval(() => {
-        process.stdout.write(texto[i]);
-        i++;
-        if (i >= texto.length) {
-            clearInterval(intervalo);
-            if (callback) callback();
-        }
-    }, velocidade);
-}
-
-// Função para exibir o texto com uma pausa
-function exibirTextoGradativo(texto, velocidade, pausa, callback) {
-    escreverTexto(texto, velocidade, () => {
-        setTimeout(() => {
-            if (callback) callback();
-        }, pausa);
-    });
+async function conectarBanco() {
+    try {
+        await client.connect();
+        console.log("Conectado ao banco de dados com sucesso.");
+    } catch (error) {
+        console.error("Erro ao conectar ao banco de dados:", error);
+    }
 }
 
 async function primeiraTela() {
     try {
-        console.clear();
-        await exibirNomeJogo();
 
-        // Pausa por 5 segundos antes de continuar
-        await new Promise(resolve => setTimeout(resolve, 3));
-
-        process.stdout.setEncoding('utf-8');
         console.clear();
 
-        console.log("\n==================================");
-        console.log("Bem-vindo ao The Last of Us - MUD!");
-        console.log("==================================\n");
+        console.log(` 
+            ████████ ██   ██ ███████     ██       █████  ███████ ████████      ██████  ███████     ██    ██ ███████ 
+               ██    ██   ██ ██          ██      ██   ██ ██         ██        ██    ██ ██          ██    ██ ██      
+               ██    ███████ █████       ██      ███████ ███████    ██        ██    ██ █████       ██    ██ ███████ 
+               ██    ██   ██ ██          ██      ██   ██      ██    ██        ██    ██ ██          ██    ██      ██ 
+               ██    ██   ██ ███████     ███████ ██   ██ ███████    ██         ██████  ██           ██████  ███████ 
+                                                                                                                    
+                                                                                                          `);
 
-        // Exibe o texto gradativamente
-        await new Promise(resolve => {
-            exibirTextoGradativo(
-                "O amanhecer mal começou a iluminar o horizonte quando você, Joel Miller, acorda em seu abrigo.\n",
-                1, // velocidade em milissegundos por caractere
-                1000, // pausa após o texto
-                resolve
-            );
-        });
+        console.log("Bem-vindo ao The Last of Us - MUD!\n");
 
-        try {
-            // Obtém informações do jogador
-            const infoJogador = await client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
-            console.log('\n\nSuas informações:');
-            infoJogador.rows.forEach(row => {
-                console.log(`Nome: ${row.nomepersonagem}, Estado: ${row.estado}, \nVida Atual: ${row.vidaatual}, Experiência: ${row.xp}`);
-            });
-        } catch (err) {
-            console.error('Erro ao consultar os dados:', err.stack);
-
+        const infoJogador = await client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
+        if (infoJogador.rows.length > 0) {
+            const jogador = infoJogador.rows[0];
+            console.log(`Nome: ${jogador.nomepersonagem}, Estado: ${jogador.estado}, Vida Atual: ${jogador.vidaatual}, Experiência: ${jogador.xp}`);
         }
 
-         // Obtém informações da região escolhida
-        const regiaoInicial = await client.query(`SELECT r.nomeregiao, r.descricaoregiao FROM regiao r JOIN sala s ON s.idregiao = r.idregiao JOIN pc p ON p.sala = s.idsala`);
-        
-        // Verifica se há resultados e exibe a descrição da região
-        if (regiaoInicial.rows.length > 0) {
-            console.log("\n\nNome da Região que você se encontra:", regiaoInicial.rows[0].nomeregiao, "\nDescrição da Região em que você se encontra:",  regiaoInicial.rows[0].descricaoregiao);
-        } else {
-            console.log("\n\nNenhuma região encontrada com o nome 'Zona de Quarentena de Boston'.");
-        }
+        // Obtém a região atual do jogador e as salas disponíveis
+        const regiaoAtual = await client.query(`
+            SELECT r.nomeRegiao, r.descricaoRegiao, s.idSala 
+            FROM Regiao r 
+            JOIN Sala s ON s.idRegiao = r.idRegiao 
+            JOIN PC p ON p.sala = s.idSala
+        `);
 
-        await new Promise(resolve => {
-            exibirTextoGradativo(
-                "\n \nAo seu lado, Tess, sua parceira de sobrevivência e amiga de longa data, já está acordada, organizando suas coisas para o que será mais um dia nesse inferno que a Terra se tornou. \n" +
-                "O mundo como você conhecia foi devastado há um ano, quando o surto do fungo Cordyceps, mutado por mudanças climáticas, começou a infectar seres humanos, transformando-os em criaturas hostis e extremamente perigosas.\n" +
-                "Com um olhar, você e Tess decidem que é hora de sair. Vocês precisam encontrar Mark para discutir os próximos passos, talvez negociar suprimentos ou obter informações sobre a próxima rota segura. \n" +
-                "No meio do caminho, porém, algo faz você parar abruptamente. À frente, uma figura familiar surge em meio aos destroços. Uma mulher segura a mão de uma criança e faz uma proposta a você.\n",
-                1,
-                1000,
-                resolve
-            );
-        });
+        if (regiaoAtual.rows.length > 0) {
+            const regiao = regiaoAtual.rows[0];
+            console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
+            console.log(`Descrição: ${regiao.descricaoregiao}\n`);
 
+            const salasDaReg = await client.query(`
+                SELECT idSala FROM Sala WHERE idRegiao = 1;
+            `);
+            if (salasDaReg.rows.length > 0) {
+                console.log("Salas disponíveis nesta região:");
+                salasDaReg.rows.forEach((sala, index) => {
+                    console.log(`${index + 1}. Sala ${sala.idsala}`);
+                });
 
-        // await new Promise(resolve => {
-        //     exibirTextoGradativo(
-        //         "\n\nCom um olhar, você e Tess decidem que é hora de sair. Vocês precisam encontrar Mark para discutir os próximos passos, talvez negociar suprimentos ou obter informações sobre a próxima rota segura.\n",
-        //         1,
-        //         1000,
-        //         resolve
-        //     );
-        // });
+                let escolhaSala;
 
-        const resposta = readlineSync.question("\nDeseja aceitar a missão proposta? (s/n): ").toLowerCase();
+                do {
+                    escolhaSala = readlineSync.questionInt("\nEscolha uma sala para explorar: ");
+                } while (escolhaSala < 1);
 
-        if (resposta !== 's') {
-            console.log("Você decidiu não prosseguir.");
-            await client.end();
-        }
+                const query = 'UPDATE PC SET Sala = $1 WHERE IdPersonagem = $2'; // Adapte o WHERE conforme necessário
+                const values = [escolhaSala, 1]; // para o id do personagem sendo 1, o joel
 
-        const missaoAtual = await client.query(
-            "SELECT objetivo FROM MissaoExploracaoObterItem",
-        );
+                await client.query(query, values);
+                console.log("Sala atualizada com sucesso!");
 
-        // Verificar se a consulta retornou algum resultado
-        if (missaoAtual.rows.length > 0) {
-            // Exibir o nome da missão
-            console.log("\n");
-            console.log(`${missaoAtual.rows[0].objetivo.trim()}`);
-        } else {
-            console.log("Nenhuma missão encontrada.");
-        }
+                // Exibir os itens e NPCs da sala escolhida
+                await mostrarItensDaSala(escolhaSala);
+                await mostrarNPCsDaSala(escolhaSala);
 
-
-        // ADICIONAR MAIS COISAS AQUI 
-
-
-        // Mostra regioes disponíveis
-        const regioes = await client.query("SELECT * FROM Regiao");
-        console.log("\n\n\n\nRegiões disponíveis:");
-        console.log("===================\n");
-
-        const regiaoAtual = await client.query(
-            "SELECT nomeRegiao FROM Regiao",
-        );
-
-        let escolhaRegiao = 0;
-
-        // Loop para avançar pelas regiões
-        while (escolhaRegiao < regioes.rows.length) {
-            const regiaoAtual = regioes.rows[escolhaRegiao];
-            console.log(`${escolhaRegiao + 1}. ${regiaoAtual.nomeregiao.trim()} - ${regiaoAtual.descricaoregiao.trim()}`);
-
-            // Perguntar se o jogador deseja prosseguir para a próxima região
-            if (escolhaRegiao > 0) { // Só pergunta a partir da segunda região
-                const resposta = readlineSync.question("\nDeseja prosseguir para a próxima região? (s/n): ").toLowerCase();
-
-                if (resposta !== 's') {
-                    console.log("Você decidiu não prosseguir.");
-                    break;
-                }
+            } else {
+                console.log("Nenhuma sala disponível na região atual.");
             }
 
-            // Exibir a região escolhida
-            console.log(`\nIndo para a região ${regiaoAtual.nomeregiao.trim()}...\n`);
-
-            // Incrementar para a próxima região
-            escolhaRegiao += 1;
-        }
-        //SELECT conteudo FROM dialoga WHERE iddialogo = 1;
-        // Fim do jogo ou da escolha
-        if (escolhaRegiao >= regioes.rows.length) {
-            console.log("Você visitou todas as regiões disponíveis.");
+        } else {
+            console.log("Nenhuma região encontrada para o jogador.");
         }
 
     } catch (error) {
-        console.error("\nErro ao executar o início do jogo:", error.message || error);
+        console.error("Erro ao executar o início do jogo:", error.message || error);
     } finally {
-        console.log("\n----------------------------------------------------------------------");
         console.log("Fechando a conexão com o banco de dados...");
         await client.end();
         console.log("Banco desconectado com sucesso!");
-        console.log("----------------------------------------------------------------------\n");
     }
 }
-primeiraTela();
+
+// Função para exibir os itens da sala atual
+async function mostrarItensDaSala(idSala) {
+    try {
+        const itens = await client.query(`
+    SELECT A.nomeItem
+    FROM Arma A
+    JOIN Sala s ON A.Sala = s.idSala
+    WHERE s.idSala = $1
+`, [idSala]);
+
+        if (itens.rows.length === 0) {
+            console.log("Nenhum item encontrado nesta sala.");
+        } else {
+            console.log("\nItens encontrados na sala atual:");
+            itens.rows.forEach(item => {
+                console.log(`- ${item.nomeitem}`);
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao listar os itens da sala:", error.message || error);
+    }
+}
+
+// Função para exibir os NPCs da sala atual
+async function mostrarNPCsDaSala(idSala) {
+    try {
+        const npcs = await client.query(`
+    SELECT nomePersonagem, tipoNPC, eAliado 
+    FROM NPC 
+    WHERE Sala = $1
+`, [idSala]);
+
+        if (npcs.rows.length === 0) {
+            console.log("Nenhum NPC encontrado nesta sala.");
+        } else {
+            console.log("\nNPCs encontrados na sala atual:");
+            npcs.rows.forEach(npc => {
+                const tipo = npc.ealiado ? "Aliado" : "Inimigo";
+                console.log(`- ${npc.nomepersonagem}: ${tipo}`);
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao listar os NPCs da sala:", error.message || error);
+    }
+}
+
+async function iniciarJogo() {
+    await conectarBanco();
+    await primeiraTela();
+}
+
+iniciarJogo();

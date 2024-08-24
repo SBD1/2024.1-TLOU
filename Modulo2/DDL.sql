@@ -101,6 +101,7 @@ CREATE TABLE NPC (
     vidaAtual INT,
     nomePersonagem VARCHAR(50) NOT NULL,
     IdInventario INT, 
+    eAliado BOOLEAN NOT NULL,
     tipoNPC INT NOT NULL, 
 
     CHECK (vidaAtual > 0),
@@ -120,10 +121,13 @@ CREATE TABLE Arma (
     IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
+    Sala INT,
 
     CONSTRAINT arma_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_arma_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_arma_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT inventario_arma_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
+    CONSTRAINT sala_arma_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
+
 );
 
 CREATE TABLE Vestimenta (
@@ -132,10 +136,12 @@ CREATE TABLE Vestimenta (
     descricaoItem VARCHAR (400) NOT NULL,
     IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
+    Sala INT,
 
     CONSTRAINT vestimenta_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_vest_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
+    CONSTRAINT sala_vestimenta_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE Consumivel (
@@ -146,10 +152,12 @@ CREATE TABLE Consumivel (
     IdInventario  INT,
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
+    Sala INT, 
 
     CONSTRAINT consumivel_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_Consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
+    CONSTRAINT sala_consumivel_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE Receita (
@@ -245,10 +253,12 @@ CREATE TABLE MissaoPatrulha (
     IdPersonagem INT NOT NULL,
     xpMis INT NOT NULL,
     statusMissao BOOLEAN NOT NULL, 
+    Sala INT NOT NULL,
     
     CONSTRAINT missaoPatrulha_pk PRIMARY KEY (IdMissao),
     CONSTRAINT missaoPatrulha_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem)
+    CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
+    CONSTRAINT sala_missaopatrulha_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE  MissaoExploracaoObterItem(
@@ -258,12 +268,14 @@ CREATE TABLE  MissaoExploracaoObterItem(
     nomeMis VARCHAR (50) NOT NULL,
     IdPersonagem INT NOT NULL,
     xpMis INT NOT NULL, 
-    statusMissao BOOLEAN NOT NULL, 
+    statusMissao BOOLEAN NOT NULL,
+    Sala INT NOT NULL, 
 
     
     CONSTRAINT missaoExploracao_pk PRIMARY KEY (IdMissao),
     CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem)
+    CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
+    CONSTRAINT sala_exploracao_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE Concede (

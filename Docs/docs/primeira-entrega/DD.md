@@ -83,6 +83,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Personagem`,
 | vidaAtual        | int    | Quantidade de vida que um NPC possui                                                                   | 0 - 100             | Sim                    | Não                  | -                 |
 | nomePersonagem   | string [50] | Nome do NPC em questão                                                                            | A-Z <br />a-z             | Não                    | Não                  | -                           |
 | IdInventario    | int    | Indicador único para o inventário que o NPC possui                                                     | 1 - 5000            | Sim                    | Sim. Chave estrangeira | -                 | 
+| eAliado    | boolean    | Indica se é aliado (true), ou não (false)      | true - false           | Não                    | Não | -                 |
 | tipoNPC    | int    | Indicador de qual tipo o NPC pertence       | 1 - 3            | Não                    | Não | -                 |
 
 # Entidade: PC
@@ -148,7 +149,7 @@ A tabela a seguir descreve a entidade `Missao`, que representa as missões no si
 
 A tabela a seguir descreve a entidade `MissaoExploracaoObterItem`, que representa missões de exploração para obter itens, incluindo identificadores, objetivos, itens adquiridos e participantes.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `Personagem`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Missao`, `Personagem` e `Sala`.
 
 | Variável         | Tipo       | Descrição                                                   | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições                       |
 |------------------|------------|-------------------------------------------------------------|--------------------|------------------------|----------|----------------------------------------|
@@ -159,6 +160,9 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `P
 | IdPersonagem             | int        | Identificador para o PC que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                                      |
 | xpMis            | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                                      |
 | statusMissao        | boolean      | Mostra se a missão já foi concluída               | true/false         | Não                    | Não      | -                  |
+| Sala           | int    | Sala em que a missão se encontra                                    | 1 - 5000            | Não                   | Sim. Chave estrangeira                 |-                  |
+
+
 
 
 
@@ -166,7 +170,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `P
 
 A tabela a seguir descreve a entidade `MissaoPatrulha`, que representa as missões de patrulha no sistema, incluindo identificadores, objetivos, nomes, quantidades de NPCs inimigos e informações sobre o PC participante.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `Personagem`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Missao`, `Personagem` e `Sala`.
 
 | Variável      | Tipo       | Descrição                                                   | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |---------------|------------|-------------------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -178,6 +182,9 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Missao` e `P
 | IdPersonagem          | int        | Identificador para o personagem que participa da missão            | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
 | xpMis         | int        | Quantidade de XP que a missão pode conceder                 | 1 - 5000           | Não                    | Não      | -                  |
 | statusMissao        | boolean      | Mostra se a missão já foi concluída               | true/false         | Não                    | Não      | -                  |
+| Sala           | int    | Sala em que a missão se encontra                                    | 1 - 5000            | Não                    | Sim. Chave estrangeira                 |-                  |
+
+
 
 
 
@@ -252,7 +259,7 @@ Observação: essa tabela possui chave estrangeira para a tabela `Item`.
 
 A tabela a seguir descreve a entidade `Arma`, que representa as armas contidas no inventário, incluindo identificadores, nomes, dano, munição e tipo de arma.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item`,`Inventario` e `Sala`.
 
 | Variável       | Tipo       | Descrição                                            | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------------|------------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -264,6 +271,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 | IdInventario   | int        | Identificador do inventário ao qual a arma pertence | 1 - 5000           | Sim                    | Sim. Chave estrangeira | -                  |
 | eAtaque        | boolean    | Indica se a arma é de ataque (true) ou defesa (false)| true/false         | Não                    | Não      | -                  |
 | descricaoItem       | string[400]    | Descrição da arma, incluindo informações como cor, tamanho e formato        | Não                    | Não      | -                  |
+| Sala           | int    | Sala em que a arma se encontra                                    | 1 - 5000            | Sim                    | Sim. Chave estrangeira                 |
 
 
 
@@ -273,7 +281,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 
 A tabela a seguir descreve a entidade `Vestimenta`, que representa as vestimentas contidas no inventário, incluindo identificadores, nomes, descrições e se são de ataque ou defesa.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item`, `Inventario` e `Sala`.
 
 | Variável       | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |----------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -282,6 +290,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 | descricaoItem | string[400] | Descrição da vestimenta, incluindo informações como se fornece armadura ou é apenas decorativo | A-Z <br /> a-z           | Não                    | Não      | -                  |
 | IdInventario   | int        | Identificador do inventário ao qual a vestimenta pertence | 1 - 5000           | Sim                    | Sim. Chave estrangeira      | -                  |
 | eAtaque        | boolean    | Indica se a vestimenta é de ataque (true) ou defesa (false) | true/false         | Não                    | Não      | -                  |
+| Sala           | int    | Sala em que a vestimenta se encontra                                    | 1 - 5000            | Sim                    | Sim. Chave estrangeira                 |
 
 
 
@@ -290,7 +299,7 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 
 A tabela a seguir descreve a entidade `Consumível`, que representa os alimentos contidos no inventário, incluindo identificadores, nomes, tipos e efeitos no jogo.
 
-Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inventario`.
+Observação: essa tabela possui chave estrangeira para as tabelas `Item`, `Inventario` e `Sala`.
 
 | Variável      | Tipo       | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |---------------|------------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
@@ -300,7 +309,8 @@ Observação: essa tabela possui chave estrangeira para as tabelas `Item` e `Inv
 | aumentoVida   | int        | Quantidade de vida que o alimento aumenta          | 1 - 20             | Sim                    | Não      | -                  |
 | IdInventario  | int        | Identificador do inventário ao qual o alimento pertence | 1 - 5000           | Sim                    | Sim. Chave estrangeira | -                  |
 | eAtaque       | boolean    | Indica se o alimento é de ataque (true) ou defesa (false) | false              | Não                    | Não      | Como alimento não pode ser classificado como ataque ou defesa, seu valor será sempre falso |
-| descricaoItem       | string[400]    | Descrição do alimento, incluindo informações como classificação, cor, tamanho etc        | Não                    | Não      | -                  |
+| descricaoItem       | string[400]    | Descrição do alimento, incluindo informações como classificação, cor, tamanho etc        | Não                    | Não      | 
+| Sala           | int    | Sala em que ao consumível se encontra                                    | 1 - 5000            | Sim                    | Sim. Chave estrangeira                 |-                  |
 
 
 
