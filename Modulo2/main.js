@@ -83,10 +83,10 @@ async function primeiraTela() {
 
         try {
             // Obtém informações do jogador
-            const infoJogador = await client.query('SELECT nomePersonagem, estado, vidaAtual FROM PC');
+            const infoJogador = await client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
             console.log('\n\nSuas informações:');
             infoJogador.rows.forEach(row => {
-                console.log(`Nome: ${row.nomepersonagem}, Estado: ${row.estado}, Vida Atual: ${row.vidaatual}`);
+                console.log(`Nome: ${row.nomepersonagem}, Estado: ${row.estado}, \nVida Atual: ${row.vidaatual}, Experiência: ${row.xp}`);
             });
         } catch (err) {
             console.error('Erro ao consultar os dados:', err.stack);
@@ -94,11 +94,11 @@ async function primeiraTela() {
         }
 
          // Obtém informações da região escolhida
-        const regiaoInicial = await client.query(`SELECT descricaoregiao FROM Regiao WHERE nomeregiao = 'Zona de Quarentena de Boston'`);
-
+        const regiaoInicial = await client.query(`SELECT r.nomeregiao, r.descricaoregiao FROM regiao r JOIN sala s ON s.idregiao = r.idregiao JOIN pc p ON p.sala = s.idsala`);
+        
         // Verifica se há resultados e exibe a descrição da região
         if (regiaoInicial.rows.length > 0) {
-            console.log("\n\nDescrição da Região em que você se encontra:", regiaoInicial.rows[0].descricaoregiao);
+            console.log("\n\nNome da Região que você se encontra:", regiaoInicial.rows[0].nomeregiao, "\nDescrição da Região em que você se encontra:",  regiaoInicial.rows[0].descricaoregiao);
         } else {
             console.log("\n\nNenhuma região encontrada com o nome 'Zona de Quarentena de Boston'.");
         }
