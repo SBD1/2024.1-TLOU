@@ -79,9 +79,11 @@ CREATE TABLE Item (
 CREATE TABLE InstItem ( 
     idInstItem SERIAL NOT NULL,
     IdItem INT NOT NULL,
+    Sala INT, 
 
     CONSTRAINT instItem_pk PRIMARY KEY (idInstItem),
-    CONSTRAINT item_inst_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
+    CONSTRAINT item_inst_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
+    CONSTRAINT item_sala_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE Itens (
@@ -121,12 +123,10 @@ CREATE TABLE Arma (
     IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
-    Sala INT,
 
     CONSTRAINT arma_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_arma_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_arma_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
-    CONSTRAINT sala_arma_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
+    CONSTRAINT inventario_arma_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 
 );
 
@@ -136,12 +136,10 @@ CREATE TABLE Vestimenta (
     descricaoItem VARCHAR (400) NOT NULL,
     IdInventario INT,    
     eAtaque BOOLEAN NOT NULL,
-    Sala INT,
 
     CONSTRAINT vestimenta_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_vest_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
-    CONSTRAINT sala_vestimenta_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
+    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Consumivel (
@@ -152,12 +150,10 @@ CREATE TABLE Consumivel (
     IdInventario  INT,
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
-    Sala INT, 
 
     CONSTRAINT consumivel_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_Consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario),
-    CONSTRAINT sala_consumivel_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
+    CONSTRAINT inventario_vest_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
 CREATE TABLE Receita (

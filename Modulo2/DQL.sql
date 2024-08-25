@@ -230,4 +230,15 @@ WHERE IdMissao = (
 
 -- Aumenta a vida de um personagem de acordo com o quanto de vida um consumivel dá
 UPDATE PC SET vidaAtual + (SELECT aumentoVida FROM Consumivel WHERE IdItem = ${id_item})
-WHERE IdPersonagem = ${idPersonagem}
+WHERE IdPersonagem = ${idPersonagem};
+
+-- mostrar a quantidade de itens de um tipo disponiveis em uma sala
+SELECT 
+    COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeItem,
+    COUNT(*) AS quantidade
+FROM InstItem it
+LEFT JOIN Consumivel c ON it.idItem = c.idItem
+LEFT JOIN Arma a ON it.idItem = a.idItem
+LEFT JOIN Vestimenta v ON it.idItem = v.idItem
+WHERE it.Sala = $sala
+GROUP BY COALESCE(a.nomeItem, v.nomeItem, c.nomeItem);

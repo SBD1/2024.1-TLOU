@@ -76,10 +76,17 @@ async function primeiraTela() {
                 await client.query(query, values);
                 console.log("Sala atualizada com sucesso!");
 
-                // Exibir os itens e NPCs da sala escolhida
-                await mostrarItensDaSala(escolhaSala);
-                await mostrarNPCsDaSala(escolhaSala);
 
+                if (escolhaSala == 1) {
+                    await mostrarNPCsDaSala(escolhaSala);
+
+                    const DialogoInicio = 1;
+                    const DialogoFim = 6;
+                    await mostrarDialogo(DialogoInicio, DialogoFim);
+
+                    await mostrarItensDaSala(escolhaSala);
+
+                }
             } else {
                 console.log("Nenhuma sala disponível na região atual.");
             }
@@ -101,10 +108,15 @@ async function primeiraTela() {
 async function mostrarItensDaSala(idSala) {
     try {
         const itens = await client.query(`
-    SELECT A.nomeItem
-    FROM Arma A
-    JOIN Sala s ON A.Sala = s.idSala
-    WHERE s.idSala = $1
+    SELECT 
+    COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeItem,
+    COUNT(*) AS quantidade
+    FROM InstItem it
+    LEFT JOIN Consumivel c ON it.idItem = c.idItem
+    LEFT JOIN Arma a ON it.idItem = a.idItem
+    LEFT JOIN Vestimenta v ON it.idItem = v.idItem
+    WHERE it.Sala = $1
+    GROUP BY COALESCE(a.nomeItem, v.nomeItem, c.nomeItem);
 `, [idSala]);
 
         if (itens.rows.length === 0) {
@@ -112,7 +124,7 @@ async function mostrarItensDaSala(idSala) {
         } else {
             console.log("\nItens encontrados na sala atual:");
             itens.rows.forEach(item => {
-                console.log(`- ${item.nomeitem}`);
+                console.log(`${item.nomeitem}: ${item.quantidade}`);
             });
         }
     } catch (error) {
@@ -142,6 +154,29 @@ async function mostrarNPCsDaSala(idSala) {
         console.error("Erro ao listar os NPCs da sala:", error.message || error);
     }
 }
+
+// Função para exibir um dialogo
+async function mostrarDialogo(DialogoInicio, DialogoFim) {
+    console.log(`\n`);
+    try {
+        const dialogo = await client.query(`
+            SELECT conteudo
+            FROM Dialoga
+            WHERE idDialogo BETWEEN $1 AND $2
+        `, [DialogoInicio, DialogoFim]);
+
+        if (dialogo.rows.length === 0) {
+            console.log("Nenhum diálogo encontrado no intervalo de IDs fornecido.");
+        } else {
+            dialogo.rows.forEach(dialogo => {
+                console.log(`${dialogo.conteudo}`);
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao listar os diálogos:", error.message || error);
+    }
+}
+
 
 async function iniciarJogo() {
     await conectarBanco();

@@ -40,7 +40,7 @@ INSERT INTO Acampamento (IdRegiao, defesa) VALUES
 INSERT INTO LocalAbandonado (IdRegiao, tipo, periculosidade) VALUES
 (2, 'Cidade Abandonada', 8),
 (4, 'Esgoto', 5),
-(7, 'Hospital', 10);
+(6, 'Hospital', 10);
 
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
 (1, 1),
@@ -121,32 +121,16 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (24, 3);
 
 
-INSERT INTO InstItem(idInstItem, IdItem) VALUES
-(1, 3),
-(2, 3),
-(3, 3),
-(4, 1),
-(5, 3),
-(6, 3),
-(7, 3),
-(8, 3),
-(9, 3),
-(10, 3),
-(11, 3),
-(12, 3),
-(13, 3),
-(14, 3),
-(15, 3),
-(16, 1),
-(17, 1),
-(18, 1),
-(19, 1),
-(20, 1),
-(21, 2),
-(22, 2),
-(23, 2),
-(24, 2),
-(25, 2);
+INSERT INTO InstItem(idInstItem, IdItem, Sala) VALUES
+(1, 18,1),
+(2, 18,1),
+(3, 18,1),
+(4, 18,1),
+(5, 18,1),
+(6, 12,1),
+(7, 12,1),
+(8, 17,1),
+(9, 17,1);
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),
@@ -180,35 +164,35 @@ INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdI
 (23, 2, 10, 30, 30, 'Insetos', NULL, false, 3);
 
 
-INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem, Sala) VALUES
-(1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.', 1),
-(2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.', 1),
-(3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.', 1),
-(4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.', 1),
-(5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.', 1),
-(6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.', 1);
+INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
+(1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
+(2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
+(3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.'),
+(4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.'),
+(5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.'),
+(6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.');
 
-INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque, Sala) VALUES
-(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false, 1),
-(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false, 1),
-(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false, 1),
-(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false, 1),
-(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false, 1);
+INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
+(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false),
+(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false),
+(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false),
+(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false),
+(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false);
 
-INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem, Sala) VALUES
-(12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.', 1),
-(13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.', 1),
-(14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.', 1),
-(15, 'Pacote de Salgadinhos', 'Salgado', 1, 1, false, 'Aumenta a vitalidade com um toque salgado.', 1),
-(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, 2, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', 1),
-(17, 'Kit de Primeiros Socorros', 'Cura', 20, 1, false, 'Kit essencial para tratar ferimentos e restaurar saúde.', 1),
-(18, 'Munição', 'Projétil', NULL, 1, true, 'Munição para uso em armas de fogo.', 1),
-(19, 'Álcool', 'Reagente', NULL, 2, false, 'Reagente útil para criação e improvisação.', 1),
-(20, 'Trapos', 'Material', NULL, 1, false, 'Material básico para reparos e construção.', 1),
-(21, 'Recipiente', 'Contêiner', NULL, 2, false, 'Contêiner versátil para armazenar itens e líquidos.', 1),
-(22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.', 1),
-(23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.', 1),
-(24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.', 1);
+INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
+(12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.'),
+(13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.'),
+(14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.'),
+(15, 'Pacote de Salgadinhos', 'Salgado', 1, 1, false, 'Aumenta a vitalidade com um toque salgado.'),
+(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, 2, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.'),
+(17, 'Kit de Primeiros Socorros', 'Cura', 20, 1, false, 'Kit essencial para tratar ferimentos e restaurar saúde.'),
+(18, 'Munição', 'Projétil', NULL, 1, true, 'Munição para uso em armas de fogo.'),
+(19, 'Álcool', 'Reagente', NULL, 2, false, 'Reagente útil para criação e improvisação.'),
+(20, 'Trapos', 'Material', NULL, 1, false, 'Material básico para reparos e construção.'),
+(21, 'Recipiente', 'Contêiner', NULL, 2, false, 'Contêiner versátil para armazenar itens e líquidos.'),
+(22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.'),
+(23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.'),
+(24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.');
 
 INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
 (1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 3),
@@ -262,7 +246,7 @@ INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 14, 1),
 (7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 15, 1),
 (8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 16, 1),
-(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 20, 1);
+(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 18, 1);
 
 INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
 (1, 10, '2024-01-23', 1),  
@@ -313,11 +297,11 @@ INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (8, 19),
 (9, 21); 
 
-INSERT INTO Dialogo(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
-(1, 1, 1, 'Joel: Tess, qual é a missão de hoje?', 5),
-(2, 1, 1, 'Tess: Joel, precisamos resolver a questão com o Mark, ele está causando problemas de novo.', 10),
-(3, 1, 2, 'Joel: Não temos tempo a perder. Vamos.', 5),
-(4, 1, 2, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
+INSERT INTO Dialoga (idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
+(1, 1, 5, 'Joel: Tess, qual é a missão de hoje?', 5),
+(2, 5, 1, 'Tess: Joel, precisamos resolver a questão com o Mark, ele está causando problemas de novo.', 10),
+(3, 1, 5, 'Joel: Não temos tempo a perder. Vamos.', 5),
+(4, 7, 1, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
 (5, 1, 2, 'Joel: Como você chegou aqui, garota?', 5),
 (6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8),
 
