@@ -5,9 +5,8 @@ INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegia
 (2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 4),
 (3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 3),
 (4, 'Esgoto infestado de criaturas perigosas.','Esgoto Abandonado', 15, 4),
-(5, 'Vila liderada por David, situada no inverno', 'Silver Lake', 10, 3),
-(6, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 3),
-(7, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 1);
+(5, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 3),
+(6, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 1);
 
 INSERT INTO Sala (idSala, IdRegiao) VALUES
 (1, 1),
@@ -25,12 +24,10 @@ INSERT INTO Sala (idSala, IdRegiao) VALUES
 (13, 5),
 (14, 5),
 (15, 5),
-(16, 6),
+(16, 5),
 (17, 6),
 (18, 6),
-(19, 7),
-(20, 7),
-(21, 7);
+(19, 6);
 
 INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES 
 (1, 5, 10),
@@ -257,28 +254,26 @@ INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, esta
 (1, 1, 70, 100, 100, 'Joel', 'saudável', 5, 1);
 
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
-(1, 'Primeiros Sinais de Perigo', 'Os primeiros infectados começam a aparecer na cidade, causando pânico entre os moradores.', 1, 1),
-(2, 'Contrabandista Localizado', 'O contrabandista Mark foi encontrado nas docas, mas não está sozinho. Você precisará neutralizar sua guarda.', 1, 1),
-(3, 'A Fuga de Ellie', 'Marlene pediu para Ellie ser levada para fora da cidade. Você precisará enfrentar facções e infectados pelo caminho.', 1, 1),
-(4, 'Encontro com Bill', 'Durante a busca por suprimentos, você encontra Bill, que ajuda a montar um veículo para continuar a viagem.', 1, 1),
-(5, 'Cidade de Bill Inundada', 'Chuvas torrenciais inundam parte da cidade de Bill, dificultando a busca por suprimentos.', 1, 1),
-(6, 'Emboscada dos Caçadores', 'Caçadores emboscaram Joel e Ellie. Eles precisam encontrar um caminho para sair da cidade.', 1, 1),
-(7, 'Henry e Sam Resgatados', 'Joel e Ellie resgatam Henry e Sam em meio a um ataque de infectados.', 1, 1),
-(8, 'Comunidade Segura', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie.', 1, 1),
-(9, 'Captura de Ellie', 'Ellie é capturada por David enquanto cuida de Joel em recuperação.', 1, 1),
-(10, 'Fuga do Hospital', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 1, 1);
+(1, 'Primeiro contato com Ellie', 'Ellie é encontrada pela primeira vez, trazida por Marlene na Zona de Quarentena.', 1, 1),
+(2, 'Morte de Tess', 'Tess sacrifica sua vida para garantir a segurança do grupo, enfrentando os infectados com coragem e determinação.', 3, 1),
+(3, 'Joel descobre que Ellie é imune', 'Joel descobre que Ellie é imune ao vírus após uma conversa com Marlene.', 6, 1),
+(4, 'Encontro com Bill', 'Durante a busca por suprimentos, Joel e Ellie encontram Bill, que os ajuda a montar um veículo para continuar a viagem.', 8, 1),
+(5, 'Sam se infecta e Henry tira sua própria vida', 'Sam é infectado, e, incapaz de lidar com a perda, Henry tira sua própria vida.', 12, 1),
+(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 14, 1),
+(7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 15, 1),
+(8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 16, 1),
+(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 20, 1);
 
 INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
-(1, 22, '2024-08-14', 1),
-(2, 10, '2004-06-19', 2),
-(3, 15, '2024-01-23', 3),
-(4, 18, '2004-12-13', 4),
-(5, 12, '2024-01-23', 5),
-(6, 08, '2024-01-23', 6),
-(7, 20, '2024-01-23', 7),
-(8, 14, '2024-08-14', 8),
-(9, 16, '2024-01-23', 9),
-(10, 19, '2024-01-23', 10);
+(1, 10, '2024-01-23', 1),  
+(2, 12, '2024-01-23', 2),
+(3, 14, '2024-01-23', 3), 
+(4, 16, '2024-01-23', 4), 
+(5, 18, '2024-01-23', 5),  
+(6, 08, '2024-08-14', 6),  
+(7, 20, '2024-08-14', 7),  
+(8, 22, '2024-08-14', 8),  
+(9, 19, '2024-08-14', 9);  
 
 INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, IdPersonagem) VALUES
 (1, 'Furtividade', 'Passiva', 'Aumenta a chance de passar despercebido pelos inimigos.', 10, 1),
@@ -292,20 +287,20 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 (9, 'Ataque Certeiro', 'Ativa', 'Aumenta a chance de acerto crítico em ataques.', 5, 1);
 
 INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao, Sala) VALUES
-(8, 7, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, false, 1),
-(9, 8, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, false, 2),
-(10, 9, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, false, 3),
-(11, 10, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, false, 3),
-(12, 11, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, false, 2);
+(2, 1, 'Patrulhar a àrea devastada em busca de ameaças.', 'Segurança', 5, 1, 150, false, 4),
+(6, 5, 'Neutralizar os infectados próximos ao esgoto.', 'Segurança do Acampamento', 8, 1, 250, false, 12),
+(8, 7, 'Resgatar Ellie de David.', 'Operação de Reconhecimento', 9, 1, 400, false, 14),
+(10, 9, 'Mate todos os vagalumes do Hospital Saint Mary.', 'Defesa do Assentamento', 8, 1, 450, false, 18),
+(11, 10, 'Limpe o caminho para chegar até Jackson.', 'Proteção das Fronteiras', 5, 1, 350, false, 15);
 
 INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao, Sala) VALUES
-(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false, 1),
-(2, 1, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 250, false, 2),
-(3, 2, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 350, false, 3),
-(4, 3, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 550, false, 3),
-(5, 4, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600, false, 2),
-(6, 5, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300, false, 1),
-(7, 6, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300, false, 1);
+(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false, 3),
+(3, 2, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 25, false, 6),
+(4, 3, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 35, false, 8),
+(5, 4, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 55, false, 11),
+(7, 6, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 60, false, 13),
+(9, 8, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 30, false, 17),
+(12, 11, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 30, false, 16);
 
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (1, 12),
@@ -318,13 +313,55 @@ INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 (8, 19),
 (9, 21); 
 
-INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
+INSERT INTO Dialogo(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
 (1, 1, 1, 'Joel: Tess, qual é a missão de hoje?', 5),
 (2, 1, 1, 'Tess: Joel, precisamos resolver a questão com o Mark, ele está causando problemas de novo.', 10),
 (3, 1, 2, 'Joel: Não temos tempo a perder. Vamos.', 5),
 (4, 1, 2, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
 (5, 1, 2, 'Joel: Como você chegou aqui, garota?', 5),
-(6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8);
+(6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8),
+
+(7, 1, 2, 'Joel: "Ellie, mantenha-se atrás de mim e faça o que eu mandar. Não quero problemas."', 10),
+(8, 2, 1, 'Ellie: "Eu... Eu ainda não entendo por que vocês estão me ajudando."', 8),
+
+(9, 1, 2, 'Joel: "Ellie, pegue o que puder. Cada bala, cada pedaço de comida... tudo conta."', 10),
+(10, 2, 1, 'Ellie: "Joel, por que você continua me protegendo? Eu sou só um fardo para você?"', 10),
+(11, 1, 2, 'Joel: "Não é nada disso, Ellie. Apenas faça o que eu digo."', 8),
+
+(12, 1, 2, 'Joel: "Por que não me disse antes? Por que escondemos isso?"', 8),
+(13, 2, 1, 'Ellie: "Eu achei que você ia me abandonar, como todos os outros..."', 8),
+
+(14, 10, 2, 'Bill: "Vocês estão ferrados, sabiam? O mundo lá fora... não é um lugar pra amadores."', 10),
+(15, 2, 10, 'Ellie: "Bill, você é um cara difícil, sabia? Mas acho que gosta de ter companhia."', 10),
+(16, 1, 10, 'Joel: "Bill, só nos ajude a sair daqui vivos. Depois a gente vê quem está certo."', 10),
+
+(17, 8, 8, 'Henry: "Sam, fica perto de mim, tá? Não podemos nos dar ao luxo de nos separarmos."', 8),
+(18, 2, 1, 'Ellie: "Joel, esses caras... eles estão com medo, não estão?"', 10),
+(19, 1, 2, 'Joel: "Medo é o que nos mantém vivos, Ellie. Mas não deixe que ele te controle."', 10),
+
+(20, 8, 8, 'Henry (desesperado): "Sam... Não... Por quê? Por quê?"', 10),
+(21, 2, 8, 'Ellie (chorando): "Henry, não... Não faça isso!"', 8),
+(22, 1, 8, 'Joel: "Henry, por favor... Não..."', 10),
+
+(23, 6, 1, 'Tommy: "Joel, o que você está fazendo aqui? Pensei que não fosse mais voltar."', 10),
+(24, 1, 6, 'Joel: "Não estou aqui por mim, Tommy. É por ela. Preciso que leve ele até aos Vagalumes"', 10),
+(25, 2, 1, 'Ellie: "O que?"', 5),
+
+(26, 2, 1, 'Ellie: "Eu não sou ela, sabe... Eu sou só mais uma pessoa que você vai perder, não é?"', 10),
+(27, 1, 2, 'Joel: "Você não sabe do que está falando! Eu não posso continuar perdendo. Não mais."', 10),
+(28, 2, 1, 'Ellie: "Todo mundo que eu amei ou morreu ou me deixou... menos você. Então, não me diga que eu estaria mais segura com outra pessoa."', 15),
+(29, 1, 2, 'Joel: "Você está certo... você não é minha filha. E eu com certeza não sou seu pai... e vamos nos separar."', 15),
+
+(30, 2, 1, 'Ellie (em pânico): "Você não vai me machucar de novo... Você não vai!"', 10),
+(31, 1, 2, 'Joel (tentando acalmá-la): "Ellie... sou eu. Está tudo bem... Está tudo bem."', 10),
+
+(32, 7, 1, 'Marlene: "Joel, você sabe o que está em jogo aqui. Não torne isso mais difícil do que já é."', 10),
+(33, 1, 7, 'Joel: "Difícil? Você quer sacrificá-la! Não vou deixar isso acontecer."', 10),
+(34, 7, 1, 'Marlene: "Eu não tenho escolha, Joel. Você sabe disso."', 10),
+
+(35, 2, 1, 'Ellie: "Joel... O que aconteceu lá no hospital?"', 8),
+(36, 1, 2, 'Joel: "Eu... Eu fiz o que precisava ser feito. Agora estamos a salvo. É tudo o que importa."', 10),
+(37, 2, 1, 'Ellie: "Eu só quero acreditar que você está dizendo a verdade..."', 10);
 
 
 INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
