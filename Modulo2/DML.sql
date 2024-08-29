@@ -3,7 +3,7 @@ BEGIN TRANSACTION;
 INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao) VALUES
 (1, 'Zona de quarentena fortemente vigiada, com muros altos e guardas armados.', 'Zona de Quarentena de Boston', 20, 2),
 (2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 4),
-(3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 3),
+(3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 2),
 (4, 'Esgoto infestado de criaturas perigosas.','Esgoto Abandonado', 15, 4),
 (5, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 3),
 (6, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 1);
@@ -34,13 +34,11 @@ INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES
 (3, 5, 10);
 
 INSERT INTO Acampamento (IdRegiao, defesa) VALUES 
-(5, 12),
-(6, 14);
+(5, 12);
 
 INSERT INTO LocalAbandonado (IdRegiao, tipo, periculosidade) VALUES
 (2, 'Cidade Abandonada', 8),
-(4, 'Esgoto', 5),
-(6, 'Hospital', 10);
+(4, 'Esgoto', 5);
 
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
 (1, 1),
@@ -67,8 +65,6 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 (22, 2),
 (23, 2);
 
-
-
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
 (1, 30, 'Inventário do Joel.'),
 (2, 30, 'Inventário do Ellie.'),
@@ -78,21 +74,17 @@ INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
 
 INSERT INTO Missao(idMissao, tipoMis) VALUES
 (1, 1),
-(2, 1),
+(2, 2),
 (3, 1),
-(4, 1),
+(4, 2),
 (5, 1),
-(6, 1),
+(6, 2),
 (7, 1),
-(8, 1),
+(8, 2),
 (9, 1),
-(10, 1),
+(10, 2),
 (11, 2),
-(12, 2),
-(13, 2),
-(14, 2),
-(15, 2),
-(16,2);
+(12, 1);
 
 INSERT INTO Item(idItem, tipoItem) VALUES
 (1, 1),
@@ -121,16 +113,16 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (24, 3);
 
 
-INSERT INTO InstItem(idInstItem, IdItem, Sala) VALUES
-(1, 18,1),
-(2, 18,1),
-(3, 18,1),
-(4, 18,1),
-(5, 18,1),
-(6, 12,1),
-(7, 12,1),
-(8, 17,1),
-(9, 17,1);
+INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
+(1, 18,1, NULL),
+(2, 18,1, NULL),
+(3, 18,1, NULL),
+(4, 18,1, NULL),
+(5, 18,1, NULL),
+(6, 12,1, NULL),
+(7, 12,1, NULL),
+(8, 17,1, NULL),
+(9, 17,1, NULL);
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),
@@ -164,35 +156,35 @@ INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdI
 (23, 2, 10, 30, 30, 'Insetos', NULL, false, 3);
 
 
-INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
-(1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
-(2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
-(3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.'),
-(4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.'),
-(5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.'),
-(6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.');
+INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, descricaoItem) VALUES
+(1, 'Revólver', 40, 6, 6, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
+(2, 'Pistola', 35, 8, 8, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
+(3, 'Rifle', 60, 4, 4, true, 'Alto impacto para disparos de longa distância.'),
+(4, 'Escopeta', 30, 2, 2, true, 'Poder de fogo considerável a curta distância.'),
+(5, 'Arco', 35, 10, 10, true, 'Silencioso e eficaz para ataques de longo alcance.'),
+(6, 'Faca', 20, NULL, 10, true, 'Afiada e versátil para combate corpo a corpo.');
 
-INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
-(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false),
-(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false),
-(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false),
-(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false),
-(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false);
+INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, eAtaque) VALUES
+(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', false),
+(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.',false),
+(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', false),
+(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', false),
+(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', false);
 
-INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
-(12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.'),
-(13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.'),
-(14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.'),
-(15, 'Pacote de Salgadinhos', 'Salgado', 1, 1, false, 'Aumenta a vitalidade com um toque salgado.'),
-(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, 2, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.'),
-(17, 'Kit de Primeiros Socorros', 'Cura', 20, 1, false, 'Kit essencial para tratar ferimentos e restaurar saúde.'),
-(18, 'Munição', 'Projétil', NULL, 1, true, 'Munição para uso em armas de fogo.'),
-(19, 'Álcool', 'Reagente', NULL, 2, false, 'Reagente útil para criação e improvisação.'),
-(20, 'Trapos', 'Material', NULL, 1, false, 'Material básico para reparos e construção.'),
-(21, 'Recipiente', 'Contêiner', NULL, 2, false, 'Contêiner versátil para armazenar itens e líquidos.'),
-(22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.'),
-(23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.'),
-(24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.');
+INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, descricaoItem) VALUES
+(12, 'Barra de Cereal', 'Energético', 10,  false, 'Fornece um aumento leve de energia e vitalidade.'),
+(13, 'Pacote de Biscoitos', 'Carboidrato', 1, false, 'Aumenta a energia com um bom nível de carboidratos.'),
+(14, 'Garrafa de Água', 'Hidratante', 25,  false, 'Restaura a hidratação e aumenta a resistência.'),
+(15, 'Pacote de Salgadinhos', 'Salgado', 1, false, 'Aumenta a vitalidade com um toque salgado.'),
+(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.'),
+(17, 'Kit de Primeiros Socorros', 'Cura', 20, false, 'Kit essencial para tratar ferimentos e restaurar saúde.'),
+(18, 'Munição', 'Projétil', NULL, true, 'Munição para uso em armas de fogo.'),
+(19, 'Álcool', 'Reagente', NULL, false, 'Reagente útil para criação e improvisação.'),
+(20, 'Trapos', 'Material', NULL,false, 'Material básico para reparos e construção.'),
+(21, 'Recipiente', 'Contêiner', NULL, false, 'Contêiner versátil para armazenar itens e líquidos.'),
+(22, 'Explosivo', 'Reagente', NULL, true, 'Reagente perigoso para criar explosivos e destruição.'),
+(23, 'Fita', 'Material', NULL,false, 'Material adesivo útil para reparos rápidos.'),
+(24, 'Lâmina', 'Material', NULL, true, 'Lâmina cortante para combate ou uso em ferramentas.');
 
 INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
 (1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 3),
