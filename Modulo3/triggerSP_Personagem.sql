@@ -33,6 +33,8 @@ CREATE TRIGGER t_inserirPCouNPC
 BEFORE INSERT ON PC OR NPC 
 FOR EACH ROW EXECUTE PROCEDURE inserirEspecificoPersonagem();
 
+--fazer remocao
+--trigger que impeca a mudanca de tipo
 --------------------------------------------------------------------------------------------------------------------------------
 
 -- sp e trigger para inserir um item em uma tabela especifica (arma, vestimenta ou consumivel), arma = 1, vestimeta = 2, consumivel = 3 

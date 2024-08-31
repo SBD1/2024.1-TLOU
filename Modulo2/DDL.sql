@@ -47,7 +47,7 @@ CREATE TABLE LocalAbandonado (
 
 CREATE TABLE Personagem (
     idPersonagem SERIAL NOT NULL,
-    tipoPersonagem INT NOT NULL,
+    tipoPersonagem VARCHAR (1) NOT NULL,
 
     CONSTRAINT personagem_pk PRIMARY KEY (idPersonagem)
 );
