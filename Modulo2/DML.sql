@@ -1,12 +1,12 @@
 BEGIN TRANSACTION;
 
-INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao) VALUES
-(1, 'Zona de quarentena fortemente vigiada, com muros altos e guardas armados.', 'Zona de Quarentena de Boston', 20, 2),
-(2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 4),
-(3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 2),
-(4, 'Esgoto infestado de criaturas perigosas.','Esgoto Abandonado', 15, 4),
-(5, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 3),
-(6, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 1);
+INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao,z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade) VALUES
+(1, 'Zona de quarentena fortemente vigiada, com muros altos e guardas armados.', 'Zona de Quarentena de Boston', 20, 'Z',5 , 10, NULL, NULL, NULL),
+(2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 'L', NULL, NULL, NULL, 'Cidade Abandonada', 8),
+(3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 'Z',5 , 10, NULL, NULL, NULL),
+(4, 'Esgoto infestado de criaturas perigosas.','Esgoto Abandonado', 15, 'L', NULL, NULL, NULL, 'Esgoto', 5),
+(5, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 'A', NULL,NULL,12,NULL,NULL),
+(6, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 'R', NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO Sala (idSala, IdRegiao) VALUES
 (1, 1),
@@ -28,17 +28,6 @@ INSERT INTO Sala (idSala, IdRegiao) VALUES
 (17, 6),
 (18, 6),
 (19, 6);
-
-INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES 
-(1, 5, 10),
-(3, 5, 10);
-
-INSERT INTO Acampamento (IdRegiao, defesa) VALUES 
-(5, 12);
-
-INSERT INTO LocalAbandonado (IdRegiao, tipo, periculosidade) VALUES
-(2, 'Cidade Abandonada', 8),
-(4, 'Esgoto', 5);
 
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
 (1, 'P'),
@@ -73,44 +62,44 @@ INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
 (5, 15, 'Inventário do Henry.');
 
 INSERT INTO Missao(idMissao, tipoMis) VALUES
-(1, 1),
-(2, 2),
-(3, 1),
-(4, 2),
-(5, 1),
-(6, 2),
-(7, 1),
-(8, 2),
-(9, 1),
-(10, 2),
-(11, 2),
-(12, 1);
+(1, 'E'),
+(2,'P'),
+(3, 'E'),
+(4, 'P'),
+(5, 'E'),
+(6, 'P'),
+(7, 'E'),
+(8, 'P'),
+(9, 'E'),
+(10, 'P'),
+(11, 'P'),
+(12, 'E');
 
 INSERT INTO Item(idItem, tipoItem) VALUES
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
-(7, 2),
-(8, 2),
-(9, 2),
-(10, 2),
-(11, 2),
-(12, 3),
-(13, 3),
-(14, 3),
-(15, 3),
-(16, 3),
-(17, 3),
-(18, 3),
-(19, 3),
-(20, 3),
-(21, 3),
-(22, 3),
-(23, 3),
-(24, 3);
+(1, 'A'),
+(2, 'A'),
+(3, 'A'),
+(4, 'A'),
+(5, 'A'),
+(6, 'A'),
+(7, 'V'),
+(8, 'V'),
+(9, 'V'),
+(10, 'V'),
+(11, 'V'),
+(12, 'C'),
+(13, 'C'),
+(14, 'C'),
+(15, 'C'),
+(16, 'C'),
+(17, 'C'),
+(18, 'C'),
+(19, 'C'),
+(20, 'C'),
+(21, 'C'),
+(22, 'C'),
+(23, 'C'),
+(24, 'C');
 
 
 INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
@@ -132,28 +121,28 @@ INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 6);
 
 INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) VALUES
-(2, 1, 30, 100, 95, 'Ellie', 2, true, 2),
-(3, 3, 10,90, 50, 'Sobrevivente Selvagem', NULL, false, 2),
-(4, 2, 10, 85, 80, 'Líder de Facção', NULL, false, 2),
-(5, 1, 10, 80, 105, 'Tess', 4, true, 2),
-(6, 3,10, 120, 115, 'Tommy',3, true, 2),
-(7, 1,10, 130, 125, 'Marlene', NULL, false, 2),
-(8, 3, 10, 140, 135, 'Henry', 5, true, 2),
-(9, 4, 10, 150, 145, 'Sam', NULL, true, 2),
-(10, 5, 10, 160, 155, 'Bill', NULL, true, 2),
-(11, 6, 10, 170, 165, 'David', NULL, false, 2),
-(12, 5, 10, 100, 95, 'Sobrevivente Viajante', NULL, false, 2),
-(13, 5, 10, 110, 105, 'Médico da Zona Segura', NULL, false, 2),
-(14, 2, 10, 30, 30, 'Corredor', NULL, false, 3),
-(15, 2, 10, 45, 45, 'Estalador', NULL, false, 3),
-(16, 2, 10, 60, 60, 'Baiacu', NULL, false, 3),
-(17, 2, 10, 45, 45, 'Espreitador', NULL, false, 3),
-(18, 2, 10, 30, 30, 'Vagalumes', NULL, false, 3),
-(19, 2, 10, 30, 30, 'Serafitas', NULL, false, 3),
-(20, 2, 10, 30, 30, 'Lobo Selvagem', NULL, false,3),
-(21, 2, 10, 30, 30, 'Urso Pardo', NULL, false, 3),
-(22, 2, 10, 30, 30, 'Peixes', NULL, false, 3),
-(23, 2, 10, 30, 30, 'Insetos', NULL, false, 3);
+(2, 1, 30, 100, 95, 'Ellie', 2, true, 'F'),
+(3, 3, 10,90, 50, 'Sobrevivente Selvagem', NULL, false, 'F'),
+(4, 2, 10, 85, 80, 'Líder de Facção', NULL, false, 'F'),
+(5, 1, 10, 80, 105, 'Tess', 4, true, 'F'),
+(6, 3,10, 120, 115, 'Tommy',3, true, 'F'),
+(7, 1,10, 130, 125, 'Marlene', NULL, false, 'F'),
+(8, 3, 10, 140, 135, 'Henry', 5, true, 'F'),
+(9, 4, 10, 150, 145, 'Sam', NULL, true, 'F'),
+(10, 5, 10, 160, 155, 'Bill', NULL, true, 'F'),
+(11, 6, 10, 170, 165, 'David', NULL, false, 'F'),
+(12, 5, 10, 100, 95, 'Sobrevivente Viajante', NULL, false, 'F'),
+(13, 5, 10, 110, 105, 'Médico da Zona Segura', NULL, false, 'F'),
+(14, 2, 10, 30, 30, 'Corredor', NULL, false, 'I'),
+(15, 2, 10, 45, 45, 'Estalador', NULL, false, 'I'),
+(16, 2, 10, 60, 60, 'Baiacu', NULL, false,'I'),
+(17, 2, 10, 45, 45, 'Espreitador', NULL, false, 'I'),
+(18, 2, 10, 30, 30, 'Vagalumes', NULL, false, 'F'),
+(19, 2, 10, 30, 30, 'Serafitas', NULL, false, 'F'),
+(20, 2, 10, 30, 30, 'Lobo Selvagem', NULL, false, 'A'),
+(21, 2, 10, 30, 30, 'Urso Pardo', NULL, false, 'A'),
+(22, 2, 10, 30, 30, 'Peixes', NULL, false, 'A'),
+(23, 2, 10, 30, 30, 'Insetos', NULL, false, 'A');
 
 
 INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, descricaoItem) VALUES

@@ -30,7 +30,7 @@ BEFORE INSERT OR UPDATE ON NPC
 FOR EACH ROW EXECUTE FUNCTION check_NPC();
 
 ------------ teste 
-INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES (25, 'N');
+INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES (23, 2, 10, 30, 30, 'Insetos', NULL, false, 'A');
 
 INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC)
 VALUES (25, 1, 100, 100, 100, 'Test NPC', NULL, 'true', 3);

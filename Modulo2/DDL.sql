@@ -5,7 +5,12 @@ CREATE TABLE Regiao (
     descricaoRegiao VARCHAR (400) NOT NULL,
     nomeRegiao VARCHAR (50) NOT NULL,
     capacidade INT,
-    tipoRegiao INT,
+    tipoRegiao VARCHAR(1) NOT NULL,
+    z_seguranca INT, 
+    z_populacaoAtual INT,
+    a_defesa INT, 
+    l_tipo VARCHAR(50),
+    l_periculosidade INT,
 
     CONSTRAINT regiao_pk PRIMARY KEY (idRegiao),
     UNIQUE (nomeRegiao)
@@ -19,31 +24,6 @@ CREATE TABLE Sala (
     CONSTRAINT regiao_sala_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
 );
 
-CREATE TABLE ZonaQuarentena (
-    IdRegiao INT NOT NULL,
-    seguranca INT NOT NULL, 
-    populacaoAtual INT,
-
-    CONSTRAINT zonaQuarentena_pk PRIMARY KEY (IdRegiao),
-    CONSTRAINT regiao_zona_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
-);
-
-CREATE TABLE Acampamento (
-    IdRegiao INT NOT NULL,
-    defesa INT NOT NULL, 
-
-    CONSTRAINT acampamento_pk PRIMARY KEY (IdRegiao),
-    CONSTRAINT regiao_acamp_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
-);
-
-CREATE TABLE LocalAbandonado (
-    IdRegiao INT NOT NULL,
-    tipo VARCHAR(50) NOT NULL,
-    periculosidade	INT NOT NULL,
-
-    CONSTRAINT local_pk PRIMARY KEY (IdRegiao),
-    CONSTRAINT regiao_local_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
-);
 
 CREATE TABLE Personagem (
     idPersonagem SERIAL NOT NULL,
@@ -64,14 +44,14 @@ CREATE TABLE Inventario (
 
 CREATE TABLE Missao (
     idMissao SERIAL NOT NULL,
-    tipoMis INT NOT NULL,
+    tipoMis VARCHAR (1) NOT NULL,
 
     CONSTRAINT missao_pk PRIMARY KEY (idMissao)
 );
 
 CREATE TABLE Item (
     idItem SERIAL NOT NULL,
-    tipoItem INT NOT NULL,
+    tipoItem VARCHAR (1) NOT NULL,
 
     CONSTRAINT item_pk PRIMARY KEY (idItem)
 );
@@ -107,7 +87,7 @@ CREATE TABLE NPC (
     nomePersonagem VARCHAR(50) NOT NULL,
     IdInventario INT, 
     eAliado BOOLEAN NOT NULL,
-    tipoNPC INT NOT NULL, 
+    tipoNPC VARCHAR (1) NOT NULL, 
 
     CHECK (vidaAtual > 0),
 
