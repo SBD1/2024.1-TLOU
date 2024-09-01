@@ -29,8 +29,6 @@ BEGIN
      AND NEW.l_periculosidade IS NOT NULL AND NEW.l_tipo IS NOT NULL)THEN
         RETURN NEW;
     END IF;
-
-    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -40,8 +38,6 @@ AFTER INSERT ON Regiao
 FOR EACH ROW
 EXECUTE PROCEDURE check_Regiao();
 
--- Criação de triggers para as tabelas específicas para garantir que
--- todas as inserções nas tabelas específicas tenham uma entrada na tabela genérica
 CREATE TRIGGER check_Regiao_ZQ
 BEFORE INSERT OR UPDATE ON ZonaQuarentena
 FOR EACH ROW
@@ -56,6 +52,8 @@ CREATE TRIGGER check_Regiao_LA
 BEFORE INSERT OR UPDATE ON LocalAbandonado
 FOR EACH ROW
 EXECUTE PROCEDURE check_Regiao();
+
+-----testes 
 
 INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
 VALUES
