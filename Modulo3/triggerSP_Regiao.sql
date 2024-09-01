@@ -10,24 +10,32 @@ BEGIN
     IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL 
     AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL AND NEW.tipoRegiao = 'R') THEN
         RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'Preencha os atributos obrigatórios!';
     END IF;
     
     IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL 
     AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL AND 
     NEW.tipoRegiao = 'Z' AND NEW.z_seguranca IS NOT NULL) THEN
-        RETURN NEW;
+        RETURN NEW; 
+    ELSE 
+        RAISE EXCEPTION 'Preencha os atributos obrigatórios!';
     END IF;
 
     IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL 
     AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL 
     AND NEW.tipoRegiao = 'A' AND NEW.a_defesa IS NOT NULL) THEN
         RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'Preencha os atributos obrigatórios!';
     END IF;
 
     IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL 
     AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL AND NEW.tipoRegiao = 'L'
      AND NEW.l_periculosidade IS NOT NULL AND NEW.l_tipo IS NOT NULL)THEN
         RETURN NEW;
+    ELSE 
+        RAISE EXCEPTION 'Preencha os atributos obrigatórios!';
     END IF;
 END;
 $$ LANGUAGE plpgsql;
