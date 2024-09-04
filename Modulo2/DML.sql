@@ -174,7 +174,7 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, d
 (14, 'Garrafa de Água', 'Hidratante', 25,  false, 'Restaura a hidratação e aumenta a resistência.', NULL),
 (15, 'Pacote de Salgadinhos', 'Salgado', 1, false, 'Aumenta a vitalidade com um toque salgado.', NULL),
 (16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', NULL),
-(17, 'Kit de Primeiros Socorros', 'Kit básico para curativos', 50, false, 'Combinação de álcool e trapos para aumentar vida', NULL);
+(17, 'Kit de Primeiros Socorros', 'Kit básico para curativos', 50, false, 'Combinação de álcool e trapos para aumentar vida', NULL),
 (18, 'Munição', 'Projétil', NULL, true, 'Munição para uso em armas de fogo.', NULL),
 (19, 'Álcool', 'Reagente', NULL, false, 'Reagente útil para criação e improvisação.', NULL),
 (20, 'Trapos', 'Material', NULL,false, 'Material básico para reparos e construção.', NULL),
@@ -196,7 +196,7 @@ INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem
 (4, 'Coquetel Molotov', 'Garrafa incendiária utilizada para causar danos de fogo em área.', 7, 27, 'Álcool + Trapos'), 
 (5, 'Faca', 'Ferramenta improvisada que pode ser usada para ataques furtivos e abrir portas trancadas.', 2, 6, 'Lâmina + Trapos'),
 (6, 'Bomba de Pregos', 'Explosivo improvisado que detona ao contato, causando dano em área com fragmentos de pregos.', 5, 28, 'Explosivo + Lâmina'),
-(7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 29, 'Álcool + Explosivo')
+(7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 29, 'Álcool + Explosivo'),
 (8, 'Flechas', 'Munição para arco, pode ser craftada utilizando materiais encontrados.', 2, 30, 'Fita + Lâmina');
 
 INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUES
