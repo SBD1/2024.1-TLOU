@@ -60,7 +60,6 @@ async function primeiraTela() {
     }
 
     if (r == 1) {
-      
       const infoJogador = await api.client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
       if (infoJogador.rows.length > 0) {
         const jogador = infoJogador.rows[0];
@@ -69,7 +68,7 @@ async function primeiraTela() {
 
       // Obtém a região atual do jogador e as salas disponíveis
       const regiaoAtual = await api.client.query(`
-            SELECT r.nomeRegiao, r.descricaoRegiao, s.idSala 
+            SELECT r.nomeRegiao, r.descricaoRegiao
             FROM Regiao r 
             JOIN Sala s ON s.idRegiao = r.idRegiao 
             JOIN PC p ON p.sala = s.idSala
@@ -101,15 +100,14 @@ async function primeiraTela() {
 
           if (escolhaSala == 1) {
             await api.mostrarNPCsDaSala(escolhaSala);
-
             const DialogoInicio = 1;
             const DialogoFim = 6;
             await api.mostrarDialogo(DialogoInicio, DialogoFim);
-
+            await api.evento(escolhaSala);
             await api.mostrarItensDaSala(escolhaSala);
 
             console.log("\nVocê encontrou alguns itens! Deseja pegá-los?");
-            var choose = askAndReturn("S/N\n");
+            let choose = askAndReturn("S/N\n");
 
             if (choose.toLowerCase() == 's') {
               await api.adicionarItemAoInventario(1, 1, 18);
@@ -124,26 +122,41 @@ async function primeiraTela() {
               await api.updateCapacidadeInventario(1);
 
               console.log("\nItens adicionados ao inventário com sucesso!\n");
-            }
-            if (choose.toLowerCase() == 'n') {
+            } else {
               console.log("\nVocê não quis os itens.\n");
             }
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-            
+
+            let escolha = askAndReturn("Deseja ver seu inventário?\nS/N\n");
+            if (escolha.toLowerCase() == 's') {
+              console.log("Seu inventário atual é:");
+              await api.mostrarInventario();
+            }
+            console.log("\n\nVocê irá agora para sala 2, aguarde...");
 
             escolhaSala = 2;
+            await sleep(4);
+            console.clear();
           }
 
           if (escolhaSala == 2) {
-            await api.mostrarNPCsDaSala(escolhaSala);
+            // await api.mostrarNPCsDaSala(escolhaSala);
 
             const DialogoInicio = 7;
             const DialogoFim = 8;
             await api.mostrarDialogo(DialogoInicio, DialogoFim);
 
-            console.log("\nUEAPPPA");
-            
+            await api.missaoExploracao(escolhaSala);
+
+            var mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+
+            if (mis.toLowerCase() == 's') {
+              console.log("Missão aceita!");
+              console.log("Você está saindo da zona de quarentena");
+
+            } else {
+              console.log("Missão recusada!");
+            }
+
             //update no xp(ja ta pronto)
             //matar inimigo
           }

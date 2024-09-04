@@ -11,23 +11,22 @@ INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegia
 INSERT INTO Sala (idSala, IdRegiao) VALUES
 (1, 1),
 (2, 1),
-(3, 1),
+(3, 2),
 (4, 2),
 (5, 2),
-(6, 2),
+(6, 3),
 (7, 3),
 (8, 3),
-(9, 3),
+(9, 4),
 (10, 4),
 (11, 4),
-(12, 4),
+(12, 5),
 (13, 5),
 (14, 5),
 (15, 5),
-(16, 5),
+(16, 6),
 (17, 6),
-(18, 6),
-(19, 6);
+(18, 6);
 
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
 (1, 'P'),
@@ -261,7 +260,7 @@ INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, I
 (11, 10, 'Limpe o caminho para chegar até Jackson.', 'Proteção das Fronteiras', 5, 1, 350, false, 15);
 
 INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao, Sala) VALUES
-(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false, 3),
+(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false, 2),
 (3, 2, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 25, false, 6),
 (4, 3, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 35, false, 8),
 (5, 4, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 55, false, 11),

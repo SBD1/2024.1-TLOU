@@ -75,7 +75,8 @@ class Api {
         LEFT JOIN Arma a ON it.idItem = a.idItem
         LEFT JOIN Vestimenta v ON it.idItem = v.idItem
         WHERE it.Sala = $1
-        GROUP BY COALESCE(a.nomeItem, v.nomeItem, c.nomeItem);
+        GROUP BY COALESCE(a.nomeItem, v.nomeItem, c.nomeItem)
+        ORDER BY quantidade DESC;
         `, [idSala]);
 
       if (itens.rows.length === 0) {
@@ -215,6 +216,35 @@ class Api {
     }
   }
 
+  evento = async (sala) => {
+  try {
+    const evento = await this.client.query(`
+      SELECT descricao, nomeevento 
+      FROM Evento 
+      WHERE idEvento = $1`, [sala]);
+    console.log("\n");
+    console.log(evento.rows[0].nomeevento);
+    // console.log("\n");
+    console.log(evento.rows[0].descricao);
+    } catch (error) {
+      console.error("Erro ao realizar evento:", error.message || error);
+    }
+  }
+
+  //funcao para mostrar objetivo da missao exploracao
+  missaoExploracao = async (sala) => {
+    try {
+      const objetivo = await this.client.query(`
+        SELECT objetivo 
+        FROM missaoexploracaoobteritem 
+        WHERE sala = $1`, [sala]);
+      console.log("\n");
+      console.log(objetivo.rows[0].objetivo);
+    } catch (error) {
+      console.error("Erro ao realizar missão:", error.message || error);
+    }
+  }
+
   atacarNPC = async (id_npc, id_arma) => {
     try {
       // Obter os dados do NPC
@@ -284,8 +314,6 @@ class Api {
       console.error("Erro ao atacar NPC:", error.message || error);
     }
   }
-
-
 
 }
 
