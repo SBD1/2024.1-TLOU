@@ -21,35 +21,50 @@ A narrativa intensa e os personagens complexos enriquecem a experiência, com di
 
 Em suma, The Last of Us combina ação envolvente, elementos de sobrevivência e uma história emocionalmente cativante, desafiando os jogadores a enfrentar não apenas os perigos físicos do mundo pós-apocalíptico, mas também os dilemas morais de uma sociedade à beira do colapso.
 
-## Como rodar?
+## Como Jogar?
 
-Para jogar **The Last of Us - MUD**, siga os passos abaixo:
+Para jogar ***The Last of Us* - MUD**, siga os passos abaixo:
 
-1. **Requisitos**
-   - [Docker](https://www.docker.com/get-started)
-   - [Node.js](https://nodejs.org/)
+#### **Requisitos**
+- É necessário que o usuário tenha instalado em sua máquina as seguintes aplicações:
+  - [*Node.js*](https://nodejs.org/)
+  - [*Docker*](https://www.docker.com/get-started)
 
-2. **Subir os contêineres em segundo plano:**
-   - Abra o terminal e dirija-se até o repositório "2024.1-TLOU" e execute:
-     ```bash
-     docker compose up -d
-     docker compose up --build
-     ```
+1. **Clone o repositório**
+- Primeiro clone o repositório com esse comando:
+  
+```bash
+git clone https://github.com/SBD1/2024.1-TLOU.git
+```
 
-3. **Instalar dependências e rodar o jogo:**
-   - Abra um segundo terminal, encontre o repositório "2024.1-TLOU" e execute:
-     ```bash
-     npm i
-     cd src
-     node main.js
-     ```
+2. **Subir o banco de dados no Docker:**
+- No terminal, certifique-se que está no diretório "2024.1-TLOU" e execute esse comando para subir o banco de dados no Docker:
+  
+```bash
+docker compose up --build -d # -d é a flag para rodar em segundo plano
+```
+
+3. **Instalar dependências:**
+- Ainda no terminal execute o comando a seguir para instalar as dependências:
+
+```bash
+npm ci # ci = clean install
+```
+
+4. **Iniciar o jogo:**
+- Inicie o jogo executando os seguintes comandos: 
+
+```bash
+cd src 
+node main.js
+```
 
 ## Apresentações
 
-| Módulo | Link da gravação                                                                                             | Data       |
-| ------ | ------------------------------------------------------------------------------------------------------------ | ---------- |
-| 1      | [Apresentação do Módulo 1](https://www.youtube.com/watch?v=qEP-Pjk8k78)                                   | 22/07/2024 |
-| 2      | [Apresentação do Módulo 2](https://youtu.be/pTEGCB_m3H0)                                                   | 19/08/2024 |
+| Módulo | Link da gravação                                                        | Data       |
+| ------ | ----------------------------------------------------------------------- | ---------- |
+| 1      | [Apresentação do Módulo 1](https://www.youtube.com/watch?v=qEP-Pjk8k78) | 22/07/2024 |
+| 2      | [Apresentação do Módulo 2](https://youtu.be/pTEGCB_m3H0)                | 19/08/2024 |
 
 ## Entregas
 
@@ -67,15 +82,15 @@ Para jogar **The Last of Us - MUD**, siga os passos abaixo:
 
 ## Histórico de versões
 
-| Versão |    Data    | Descrição                                      | Autor                                  | Revisão             |
-| :----: | :--------: | ---------------------------------------------- | -------------------------------------- | -------------------- |
-| `1.0`  | 22/07/2024 | Inclusão das considerações feitas na modelagem | Ana Júlia e Júlia                     | Arthur e Maria Clara |
-| `1.1`  | 22/07/2024 | Estruturação do README do projeto              | Arthur e Maria Clara                  | Ana Júlia e Júlia    |
-| `2.0`  | 09/08/2024 | Correção da primeira entrega do projeto de acordo com *feedback* do professor | Todos                                  | Todos               |
-| `2.1`  | 19/08/2024 | Atualização da documentação para o Módulo 2 e entrega.             | Todos                                  | Todos               |
+| Versão |    Data    | Descrição                                                                     | Autor                | Revisão              |
+| :----: | :--------: | ----------------------------------------------------------------------------- | -------------------- | -------------------- |
+| `1.0`  | 22/07/2024 | Inclusão das considerações feitas na modelagem                                | Ana Júlia e Júlia    | Arthur e Maria Clara |
+| `1.1`  | 22/07/2024 | Estruturação do README do projeto                                             | Arthur e Maria Clara | Ana Júlia e Júlia    |
+| `2.0`  | 09/08/2024 | Correção da primeira entrega do projeto de acordo com *feedback* do professor | Todos                | Todos                |
+| `2.1`  | 19/08/2024 | Atualização da documentação para o Módulo 2 e entrega.                        | Todos                | Todos                |
 
 ## Autores
 
 | <a href="https://github.com/ailujana"><img src="https://avatars.githubusercontent.com/u/107697177?v=4" width="150"></img></a> | <a href="https://github.com/Tutzs"><img src="https://avatars.githubusercontent.com/u/110691207?s=400&u=0f285ace4b3188bb274e2531ead3691d7161656a&v=4" width="150"></img></a> | <a href="https://github.com/julia-fortunato"><img src="https://avatars.githubusercontent.com/u/118139107?v=4" width="150"></img></a> | <a href="https://github.com/Oleari19"><img src="https://avatars.githubusercontent.com/u/110275583?v=4" width="150"></img></a> |
-|----------|----------|----------|----------|
-| [Ana Júlia](https://github.com/ailujana) - 221007798 | [Arthur Sousa](https://github.com/Tutzs) - 21022462 | [Júlia Fortunato](https://github.com/julia-fortunato) - 221022355 | [Maria Clara](https://github.com/Oleari19) - 221008338 |
+| ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| [Ana Júlia](https://github.com/ailujana) - 221007798                                                                          | [Arthur Sousa](https://github.com/Tutzs) - 21022462                                                                                                                         | [Júlia Fortunato](https://github.com/julia-fortunato) - 221022355                                                                    | [Maria Clara](https://github.com/Oleari19) - 221008338                                                                        |

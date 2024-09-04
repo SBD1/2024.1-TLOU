@@ -76,7 +76,6 @@ CREATE TABLE IF NOT EXISTS Itens (
 
 CREATE TABLE IF NOT EXISTS NPC (
     IdPersonagem INT NOT NULL,
-    Sala INT NOT NULL,
     xp INT NOT NULL,
     vidaMax INT NOT NULL,
     vidaAtual INT,
@@ -86,10 +85,10 @@ CREATE TABLE IF NOT EXISTS NPC (
     tipoNPC VARCHAR (1) NOT NULL, 
 
     CHECK (vidaAtual > 0),
+    CHECK (vidaAtual <= vidaMax),
 
     CONSTRAINT npc_pk PRIMARY KEY (IdPersonagem),
     CONSTRAINT npc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
-    CONSTRAINT sala_npc_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala),
     CONSTRAINT inventario_npc_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
@@ -124,6 +123,7 @@ CREATE TABLE IF NOT EXISTS Consumivel (
     aumentoVida INT,  
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
+    danoConsumivel INT,
 
     CONSTRAINT consumivel_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_Consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
@@ -171,6 +171,7 @@ CREATE TABLE IF NOT EXISTS PC (
     IdInventario INT NOT NULL, 
 
     CHECK (vidaAtual > 0),
+    CHECK (vidaAtual <= vidaMax),
 
     CONSTRAINT pc_pk PRIMARY KEY (IdPersonagem),
     CONSTRAINT pc_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
@@ -213,6 +214,22 @@ CREATE TABLE IF NOT EXISTS Habilidade (
     CONSTRAINT pc_habilidade_fk FOREIGN KEY (IdPersonagem) REFERENCES PC (IdPersonagem)
 );
 
+CREATE TABLE IF NOT EXISTS MissaoExploracaoObterItem (
+    IdMissao INT NOT NULL,
+    idMissaoPre INT,
+    objetivo VARCHAR (400) NOT NULL,
+    nomeMis VARCHAR (50) NOT NULL,
+    IdPersonagem INT NOT NULL,
+    xpMis INT NOT NULL, 
+    statusMissao BOOLEAN NOT NULL,
+    Sala INT NOT NULL, 
+    
+    CONSTRAINT missaoExploracao_pk PRIMARY KEY (IdMissao),
+    CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
+    CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
+    CONSTRAINT sala_exploracao_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
+);
+
 CREATE TABLE IF NOT EXISTS MissaoPatrulha (
     IdMissao INT NOT NULL,
     idMissaoPre INT,
@@ -228,23 +245,6 @@ CREATE TABLE IF NOT EXISTS MissaoPatrulha (
     CONSTRAINT missaoPatrulha_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
     CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
     CONSTRAINT sala_missaopatrulha_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
-);
-
-CREATE TABLE IF NOT EXISTS MissaoExploracaoObterItem (
-    IdMissao INT NOT NULL,
-    idMissaoPre INT,
-    objetivo VARCHAR (400) NOT NULL,
-    nomeMis VARCHAR (50) NOT NULL,
-    IdPersonagem INT NOT NULL,
-    xpMis INT NOT NULL, 
-    statusMissao BOOLEAN NOT NULL,
-    Sala INT NOT NULL, 
-
-    
-    CONSTRAINT missaoExploracao_pk PRIMARY KEY (IdMissao),
-    CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
-    CONSTRAINT sala_exploracao_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
 CREATE TABLE IF NOT EXISTS Concede (
@@ -271,7 +271,9 @@ CREATE TABLE IF NOT EXISTS Dialoga (
 CREATE TABLE IF NOT EXISTS InstNPC (
     IdInstNPC SERIAL NOT NULL,
     tipoNPC INT NOT NULL,
+    Sala INT,
 
+    CONSTRAINT sala_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala),
     CONSTRAINT instNPC_pk PRIMARY KEY (IdInstNPC),
     CONSTRAINT npc_inst_fk FOREIGN KEY (tipoNPC) REFERENCES NPC (IdPersonagem) 
 );
@@ -280,6 +282,7 @@ CREATE TABLE IF NOT EXISTS Infectado (
     IdNPC INT NOT NULL,
     comportamentoInfec VARCHAR (400) NOT NULL,
     velocidade INT NOT NULL, 
+    danoInfec INT NOT NULL,
 
     CONSTRAINT infectado_pk PRIMARY KEY (IdNPC),
     CONSTRAINT npc_infec_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
@@ -297,6 +300,7 @@ CREATE TABLE IF NOT EXISTS Animal (
     IdNPC INT NOT NULL,
     nomeAnimal VARCHAR (50) NOT NULL,
     ameaca VARCHAR (100) NOT NULL,
+    danoAnimal INT,
 
     CONSTRAINT animal_pk PRIMARY KEY (idNPC),
     CONSTRAINT npc_animal_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
