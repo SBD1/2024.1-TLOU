@@ -2,8 +2,8 @@ import pg from "pg";
 import { readFileSync } from "fs";
 
 const { Client } = pg;
-var sqlTables = readFileSync("/Modulo2/DDL.sql").toString();
-var sqlData = readFileSync("/Modulo2/DML.sql").toString();
+var sqlTables = readFileSync("../Modulo2/DDL.sql").toString();
+var sqlData = readFileSync("../Modulo2/DML.sql").toString();
 // var sqlTrg = readFileSync("Modulo3/trigger_stored_procedure.sql").toString();
 
 function separador() {
