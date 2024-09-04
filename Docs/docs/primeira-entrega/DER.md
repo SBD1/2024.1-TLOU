@@ -11,8 +11,7 @@ O diagrama fornece uma visão lógica do banco de dados, fornecendo um conceito 
 
 ### Versão atualizada
 
-<iframe width="790" height="535" src="https://app.diagrams.net/?title=TLOU-DER.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1GysD-GNaEO_tfmN_8mSevpNNw5mOYNTX%26export%3Ddownload" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
-
+<iframe width="790" height="535" src="https://miro.com/app/live-embed/uXjVKxidW7g=/?moveToViewport=16671,-1100,3729,2030&embedId=260344081674" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
 <details>
   <summary>Versão 1</summary>
   
