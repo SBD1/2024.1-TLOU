@@ -113,7 +113,7 @@ async function primeiraTela() {
 
                 if (receitas.rows.length > 0) {
                   receitas.rows.forEach((receita, index) => {
-                    console.log(`${index + 1}. Receita: ${receita.nomereceita}, Descrição: ${receita.descricaoreceita}, Ingredientes: ${receita.iditem}`);
+                    console.log(`${index + 1}. Receita: ${receita.nomereceita}, Descrição: ${receita.descricaoreceita}, Ingredientes: ${receita.juncao}`);
                   });
 
                   let escolhaReceita;
