@@ -1,0 +1,11 @@
+mostra inventario no começo e opcao dele querer ver o invetario dps de pegar algum item
+verificacao de escolha
+ele quer pegar tudo?
+se sim, bota tudo
+se nao, ele manda o id e a qnt que ele quer
+
+funcao para matar enemy
+A gente tem a tabela Arma, que tem municaoAtual e municaoMax e o dano
+A ideia é pegar a vida do npc e ir decrementando no valor do dano, se chegar a 0 ele morre deleta ele
+checar se municaoatual n chega no 0
+municaoAtual nunca pode passar da municalmax

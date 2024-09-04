@@ -16,8 +16,8 @@ BEGIN
         RAISE EXCEPTION 'O item deve ter o tipo ''V'' para ser inserida em Vestimenta!'; 
     END IF;
 
-    idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao
-    IF (NEW.IdItem IS NOT NULL AND NEW.nomeItem IS NOT NULL AND NEW.descricaoItem IS NOT NULL AND NEW.eAtaque) THEN
+    -- idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao
+    IF (NEW.IdItem IS NOT NULL AND NEW.nomeItem IS NOT NULL AND NEW.descricaoItem IS NOT NULL AND NEW.eAtaque AND NEW.defesa) THEN
         RETURN NEW;
     ELSE
         RAISE EXCEPTION 'Atributos obrigatórios devem ser preenchidos!';

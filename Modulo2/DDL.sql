@@ -1,6 +1,4 @@
--- definição de tabelas
-
-CREATE TABLE Regiao (
+CREATE TABLE IF NOT EXISTS Regiao (
     idRegiao SERIAL NOT NULL,
     descricaoRegiao VARCHAR (400) NOT NULL,
     nomeRegiao VARCHAR (50) NOT NULL,
@@ -16,7 +14,7 @@ CREATE TABLE Regiao (
     UNIQUE (nomeRegiao)
 );
 
-CREATE TABLE Sala (
+CREATE TABLE IF NOT EXISTS Sala (
     idSala SERIAL NOT NULL,
     IdRegiao INT NOT NULL, 
     
@@ -24,15 +22,14 @@ CREATE TABLE Sala (
     CONSTRAINT regiao_sala_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
 );
 
-
-CREATE TABLE Personagem (
+CREATE TABLE IF NOT EXISTS Personagem (
     idPersonagem SERIAL NOT NULL,
     tipoPersonagem VARCHAR (1) NOT NULL,
 
     CONSTRAINT personagem_pk PRIMARY KEY (idPersonagem)
 );
 
-CREATE TABLE Inventario (
+CREATE TABLE IF NOT EXISTS Inventario (
     idInventario SERIAL NOT NULL,
     capacidade INT NOT NULL,
     descricao VARCHAR (50) NOT NULL,
@@ -42,21 +39,21 @@ CREATE TABLE Inventario (
     CONSTRAINT inventario_pk PRIMARY KEY (idInventario)
 );
 
-CREATE TABLE Missao (
+CREATE TABLE IF NOT EXISTS Missao (
     idMissao SERIAL NOT NULL,
     tipoMis VARCHAR (1) NOT NULL,
 
     CONSTRAINT missao_pk PRIMARY KEY (idMissao)
 );
 
-CREATE TABLE Item (
+CREATE TABLE IF NOT EXISTS Item (
     idItem SERIAL NOT NULL,
     tipoItem VARCHAR (1) NOT NULL,
 
     CONSTRAINT item_pk PRIMARY KEY (idItem)
 );
 
-CREATE TABLE InstItem ( 
+CREATE TABLE IF NOT EXISTS InstItem ( 
     idInstItem SERIAL NOT NULL,
     IdItem INT NOT NULL,
     Sala INT, 
@@ -68,8 +65,7 @@ CREATE TABLE InstItem (
     CONSTRAINT item_inventario_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
-
-CREATE TABLE Itens (
+CREATE TABLE IF NOT EXISTS Itens (
     IdMissao INT NOT NULL,
     IdItem INT NOT NULL,
     
@@ -78,7 +74,7 @@ CREATE TABLE Itens (
     CONSTRAINT itens_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
-CREATE TABLE NPC (
+CREATE TABLE IF NOT EXISTS NPC (
     IdPersonagem INT NOT NULL,
     Sala INT NOT NULL,
     xp INT NOT NULL,
@@ -97,7 +93,7 @@ CREATE TABLE NPC (
     CONSTRAINT inventario_npc_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 
-CREATE TABLE Arma (
+CREATE TABLE IF NOT EXISTS Arma (
     IdItem INT NOT NULL,
     nomeItem VARCHAR (50) NOT NULL,
     dano INT NOT NULL,
@@ -110,17 +106,18 @@ CREATE TABLE Arma (
     CONSTRAINT item_arma_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
-CREATE TABLE Vestimenta (
+CREATE TABLE IF NOT EXISTS Vestimenta (
     IdItem INT NOT NULL,
     nomeItem VARCHAR (50) NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,   
     eAtaque BOOLEAN NOT NULL,
+    defesa INT NOT NULL,
 
     CONSTRAINT vestimenta_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_vest_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
-CREATE TABLE Consumivel (
+CREATE TABLE IF NOT EXISTS Consumivel (
     IdItem INT NOT NULL,
     nomeItem VARCHAR (50) NOT NULL,
     tipoConsumivel VARCHAR (40) NOT NULL,
@@ -132,7 +129,7 @@ CREATE TABLE Consumivel (
     CONSTRAINT item_Consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
-CREATE TABLE Receita (
+CREATE TABLE IF NOT EXISTS Receita (
     idReceita SERIAL NOT NULL,
     nomeReceita VARCHAR (50) NOT NULL,
     descricaoReceita VARCHAR (400) NOT NULL,
@@ -143,7 +140,7 @@ CREATE TABLE Receita (
     CONSTRAINT item_receita_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
-CREATE TABLE Ingrediente (
+CREATE TABLE IF NOT EXISTS Ingrediente (
     idIngrediente SERIAL NOT NULL,
     IdReceita INT NOT NULL,
     IdItem INT NOT NULL,
@@ -154,7 +151,7 @@ CREATE TABLE Ingrediente (
     CONSTRAINT item_ingrediente_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 
-CREATE TABLE Evolucao (
+CREATE TABLE IF NOT EXISTS Evolucao (
     idEvolucao SERIAL NOT NULL,
     requisitoNivel INT NOT NULL,
     xpEvol INT NOT NULL,
@@ -162,7 +159,7 @@ CREATE TABLE Evolucao (
     CONSTRAINT evolucao_pk PRIMARY KEY (idEvolucao)
 );
 
-CREATE TABLE PC (
+CREATE TABLE IF NOT EXISTS PC (
     IdPersonagem SERIAL NOT NULL,
     Sala INT NOT NULL,
     xp INT NOT NULL,
@@ -182,7 +179,7 @@ CREATE TABLE PC (
     CONSTRAINT sala_pc_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
-CREATE TABLE Evento (
+CREATE TABLE IF NOT EXISTS Evento (
     idEvento SERIAL NOT NULL,
     nomeEvento VARCHAR (400) NOT NULL,
     descricao VARCHAR (400) NOT NULL,
@@ -194,7 +191,7 @@ CREATE TABLE Evento (
     CONSTRAINT sala_evento_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
-CREATE TABLE Itinerario (
+CREATE TABLE IF NOT EXISTS Itinerario (
     idItinerario SERIAL NOT NULL,
     horario INT NOT NULL,
     dia DATE NOT NULL, 
@@ -204,7 +201,7 @@ CREATE TABLE Itinerario (
     CONSTRAINT evento_itinerario_fk FOREIGN KEY (IdEvento) REFERENCES Evento (idEvento)
 );
 
-CREATE TABLE Habilidade (
+CREATE TABLE IF NOT EXISTS Habilidade (
     idHabilidade SERIAL NOT NULL,
     nomeHabilidade VARCHAR (50) NOT NULL,
     tipoHabilidade VARCHAR (50) NOT NULL, 
@@ -216,7 +213,7 @@ CREATE TABLE Habilidade (
     CONSTRAINT pc_habilidade_fk FOREIGN KEY (IdPersonagem) REFERENCES PC (IdPersonagem)
 );
 
-CREATE TABLE MissaoPatrulha (
+CREATE TABLE IF NOT EXISTS MissaoPatrulha (
     IdMissao INT NOT NULL,
     idMissaoPre INT,
     objetivo VARCHAR (400) NOT NULL,
@@ -233,7 +230,7 @@ CREATE TABLE MissaoPatrulha (
     CONSTRAINT sala_missaopatrulha_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
-CREATE TABLE  MissaoExploracaoObterItem(
+CREATE TABLE IF NOT EXISTS MissaoExploracaoObterItem (
     IdMissao INT NOT NULL,
     idMissaoPre INT,
     objetivo VARCHAR (400) NOT NULL,
@@ -250,7 +247,7 @@ CREATE TABLE  MissaoExploracaoObterItem(
     CONSTRAINT sala_exploracao_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 
-CREATE TABLE Concede (
+CREATE TABLE IF NOT EXISTS Concede (
     IdEvolucao INT NOT NULL,
     IdConsumivel INT NOT NULL,
 
@@ -259,7 +256,7 @@ CREATE TABLE Concede (
     CONSTRAINT Consumivel_fk FOREIGN KEY (IdConsumivel) REFERENCES Consumivel (IdItem)
 );
 
-CREATE TABLE Dialoga (
+CREATE TABLE IF NOT EXISTS Dialoga (
     idDialogo SERIAL NOT NULL,
     IdFalante INT NOT NULL,
     IdOuvinte INT NOT NULL, 
@@ -271,7 +268,7 @@ CREATE TABLE Dialoga (
     CONSTRAINT ouvinte_fk FOREIGN KEY (IdOuvinte) REFERENCES Personagem (idPersonagem)
 );
 
-CREATE TABLE InstNPC (
+CREATE TABLE IF NOT EXISTS InstNPC (
     IdInstNPC SERIAL NOT NULL,
     tipoNPC INT NOT NULL,
 
@@ -279,7 +276,7 @@ CREATE TABLE InstNPC (
     CONSTRAINT npc_inst_fk FOREIGN KEY (tipoNPC) REFERENCES NPC (IdPersonagem) 
 );
 
-CREATE TABLE Infectado (
+CREATE TABLE IF NOT EXISTS Infectado (
     IdNPC INT NOT NULL,
     comportamentoInfec VARCHAR (400) NOT NULL,
     velocidade INT NOT NULL, 
@@ -288,7 +285,7 @@ CREATE TABLE Infectado (
     CONSTRAINT npc_infec_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
 );
 
-CREATE TABLE FaccaoHumana (
+CREATE TABLE IF NOT EXISTS FaccaoHumana (
     IdNPC INT NOT NULL,
     nomeFaccao VARCHAR (50) NOT NULL,
 
@@ -296,7 +293,7 @@ CREATE TABLE FaccaoHumana (
     CONSTRAINT npc_facc_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
 );
 
-CREATE TABLE Animal (
+CREATE TABLE IF NOT EXISTS Animal (
     IdNPC INT NOT NULL,
     nomeAnimal VARCHAR (50) NOT NULL,
     ameaca VARCHAR (100) NOT NULL,
@@ -305,7 +302,7 @@ CREATE TABLE Animal (
     CONSTRAINT npc_animal_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
 );
 
-CREATE TABLE Participacao (
+CREATE TABLE IF NOT EXISTS Participacao (
     IdNPC INT NOT NULL,
     Evento INT NOT NULL,
     Missao INT NOT NULL,

@@ -103,15 +103,17 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 
 
 INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
-(1, 18,1, NULL),
-(2, 18,1, NULL),
-(3, 18,1, NULL),
-(4, 18,1, NULL),
-(5, 18,1, NULL),
-(6, 12,1, NULL),
-(7, 12,1, NULL),
-(8, 17,1, NULL),
-(9, 17,1, NULL);
+(1, 18, 1, NULL),
+(2, 18, 1, NULL),
+(3, 18, 1, NULL),
+(4, 18, 1, NULL),
+(5, 18, 1, NULL),
+(6, 12, 1, NULL),
+(7, 12, 1, NULL),
+(8, 17, 1, NULL),
+(9, 17, 1, NULL),
+(10, 3, 2, NULL),
+(11, 23, 3, NULL);
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),
@@ -153,12 +155,12 @@ INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, desc
 (5, 'Arco', 35, 10, 10, true, 'Silencioso e eficaz para ataques de longo alcance.'),
 (6, 'Faca', 20, NULL, 10, true, 'Afiada e versátil para combate corpo a corpo.');
 
-INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, eAtaque) VALUES
-(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', false),
-(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.',false),
-(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', false),
-(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', false),
-(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', false);
+INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, eAtaque, defesa) VALUES
+(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', false, 7),
+(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.',false, 20),
+(9, 'Calça Canvas', 'Calça muita resistente.', false, 10),
+(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', false, 9),
+(11, 'Escudo de Madeira', 'Escudo robusto para defesa contra inimigos.', false, 17);
 
 INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, descricaoItem) VALUES
 (12, 'Barra de Cereal', 'Energético', 10,  false, 'Fornece um aumento leve de energia e vitalidade.'),
