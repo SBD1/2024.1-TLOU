@@ -14,8 +14,8 @@ class Api {
   client = new Client({
     host: "localhost",
     user: "postgres",
-    password: "lg2x12345",
-    port: 5432,
+    password: "postgres",
+    port: 5451,
     database: "tlou",
   });
 
