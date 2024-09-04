@@ -12,8 +12,9 @@ O Modelo Relacional(MREL) apresenta um diagrama lógico de como as entidades e s
 <details>
   <summary>Versão 2</summary>
 
-  ![Representação do Modelo Relacional](../../static/img/MRel.png)
-  *Modelo Relacional The Last of Us - versão 01*
+  ![Representação do Modelo Relacional](../../static/img/MREL.png)
+*Modelo Relacional The Last of Us - versão 01*
+
 </details>
 
 <details>
@@ -21,4 +22,5 @@ O Modelo Relacional(MREL) apresenta um diagrama lógico de como as entidades e s
 
   ![Representação do Modelo Relacional](../../static/img/TLOUMRel2.png)
   *Modelo Relacional The Last of Us - versão 02*
+  
 </details>
