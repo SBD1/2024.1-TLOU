@@ -9,12 +9,16 @@ O Modelo Relacional(MREL) apresenta um diagrama lógico de como as entidades e s
 
 <iframe width="768" height="432" src="https://lucid.app/documents/embedded/3cdfd4bf-5445-4f6a-8a11-fae8673a0a4a" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
 
-:::note Versão 1
-![Representação do Modelo Relacional](../../static/img/MREL.png)
-*Modelo Relacional The Last of Us - versão 01*
-:::
+<details>
+  <summary>Versão 2</summary>
 
-:::note Versão 2
-![Representação do Modelo Relacional](../../static/img/TLOUMRel2.png)
-*Modelo Relacional The Last of Us - versão 02*
-:::
+  ![Representação do Modelo Relacional](../../static/img/MRel.png)
+  *Modelo Relacional The Last of Us - versão 01*
+</details>
+
+<details>
+  <summary>Versão 2</summary>
+
+  ![Representação do Modelo Relacional](../../static/img/TLOUMRel2.png)
+  *Modelo Relacional The Last of Us - versão 02*
+</details>
