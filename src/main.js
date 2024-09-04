@@ -59,6 +59,9 @@ async function primeiraTela() {
       process.exit();
     }
 
+    await segundaTela();
+
+    async function segundaTela(){
     if (r == 1) {
       const infoJogador = await api.client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
       if (infoJogador.rows.length > 0) {
@@ -88,23 +91,96 @@ async function primeiraTela() {
             console.log(`${index + 1}. Sala ${sala.idsala}`);
           });
 
-          let escolhaSala;
-          do {
-            escolhaSala = readlineSync.questionInt("\nEscolha uma sala para explorar: ");
-          } while (escolhaSala < 1);
+          console.log("\nC. Craft - Ver receitas disponíveis");
 
+          // VAI DA PROBLEMA SE TIVER MAIS Q 2 SALAS RS
+          // while (!['V', 'v'].includes(escolhaReceita) && (isNaN(escolhaReceita) || escolhaReceita < 1 || escolhaReceita > receitas.rows.length));
+          let escolhaSalaOuCraft;
+          do {
+            escolhaSalaOuCraft = askAndReturn("\nEscolha uma sala para explorar ou pressione 'C' para Craft: ");
+          } while (!['1', '2', 'C', 'c'].includes(escolhaSalaOuCraft));
+        
+
+
+
+          
+          if (escolhaSalaOuCraft.toLowerCase() === 'c') {
+            await mostrarReceitas();
+            async function mostrarReceitas() {
+              console.log("\nReceitas de Crafting disponíveis:\n");
+            
+              const receitas = await api.client.query('SELECT * FROM Receita');
+            
+              if (receitas.rows.length > 0) {
+                receitas.rows.forEach((receita, index) => {
+                  console.log(`${index + 1}. Receita: ${receita.nomereceita}, Descrição: ${receita.descricaoreceita}, Ingredientes: ${receita.iditem}`);
+                });
+            
+                let escolhaReceita;
+                do {
+                  escolhaReceita = askAndReturn("\nEscolha o número da receita para realizá-la ou pressione 'V' para voltar: ");
+                  
+                  if (escolhaReceita.toLowerCase() === 'v') {
+                    console.log("\n\n");
+                    return segundaTela(); // Sai da função mostrarReceitas e volta ao menu principal
+                  }
+            
+                  if (!isNaN(escolhaReceita) && escolhaReceita >= 1 && escolhaReceita <= receitas.rows.length) {
+                    const receitaEscolhida = receitas.rows[parseInt(escolhaReceita) - 1];
+                    console.log(`Você escolheu a receita: ${receitaEscolhida.nomereceita}`);
+            
+                    await realizarReceita(receitaEscolhida);
+            
+                    // Após realizar a receita, continua no loop para permitir escolha de outra receita
+                  } else {
+                    console.log("Escolha inválida, tente novamente.");
+                  }
+                } while (true); // Continua pedindo a escolha até que o usuário decida voltar
+              } else {
+                console.log("Nenhuma receita de crafting disponível.");
+              }
+            }
+            
+            async function realizarReceita(receita) {
+              try {
+                console.log(`Realizando a receita: ${receita.nomereceita}`);
+            
+                // Aqui vai a lógica para verificar ingredientes, atualizar inventário, etc.
+                // Exemplo:
+                /*const possuiIngredientes = await api.verificarIngredientes(receita.iditem); // Função que verifica se o jogador tem os ingredientes
+                if (possuiIngredientes) {
+                  await api.craftarItem(receita); // Função que realiza o crafting
+                  console.log(`Receita ${receita.nomereceita} realizada com sucesso!`);
+                } else {
+                  console.log("Você não possui todos os ingredientes necessários para esta receita.");
+                }*/
+              } catch (error) {
+                console.error("Erro ao realizar a receita:", error.message || error);
+              }
+            }
+            
+
+
+
+
+
+
+
+          }
+
+          // Atualiza a sala do jogador
           const query = 'UPDATE PC SET Sala = $1 WHERE IdPersonagem = $2'; // Adapte o WHERE conforme necessário
-          const values = [escolhaSala, 1]; // para o id do personagem sendo 1, o joel
+          const values = [escolhaSalaOuCraft, 1]; // para o id do personagem sendo 1, o joel
 
           await api.client.query(query, values);
 
-          if (escolhaSala == 1) {
-            await api.mostrarNPCsDaSala(escolhaSala);
+          if (escolhaSalaOuCraft == 1) {
+            await api.mostrarNPCsDaSala(escolhaSalaOuCraft);
             const DialogoInicio = 1;
             const DialogoFim = 6;
             await api.mostrarDialogo(DialogoInicio, DialogoFim);
-            await api.evento(escolhaSala);
-            await api.mostrarItensDaSala(escolhaSala);
+            await api.evento(escolhaSalaOuCraft);
+            await api.mostrarItensDaSala(escolhaSalaOuCraft);
 
             console.log("\nVocê encontrou alguns itens! Deseja pegá-los?");
             let choose = askAndReturn("S/N\n");
@@ -133,19 +209,19 @@ async function primeiraTela() {
             }
             console.log("\n\nVocê irá agora para sala 2, aguarde...");
 
-            escolhaSala = 2;
+            escolhaSalaOuCraft = 2;
             await sleep(4);
             console.clear();
           }
 
-          if (escolhaSala == 2) {
-            // await api.mostrarNPCsDaSala(escolhaSala);
+          if (escolhaSalaOuCraft == 2) {
+            // await api.mostrarNPCsDaSala(escolhaSalaOuCraft);
 
             const DialogoInicio = 7;
             const DialogoFim = 8;
             await api.mostrarDialogo(DialogoInicio, DialogoFim);
 
-            await api.missaoExploracao(escolhaSala);
+            await api.missaoExploracao(escolhaSalaOuCraft);
 
             var mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
 
@@ -169,6 +245,7 @@ async function primeiraTela() {
       }
 
     }
+  }
   } catch (error) {
     console.error("Erro ao executar o início do jogo:", error.message || error);
   }
