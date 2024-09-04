@@ -167,7 +167,7 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, d
 (14, 'Garrafa de Água', 'Hidratante', 25,  false, 'Restaura a hidratação e aumenta a resistência.', NULL),
 (15, 'Pacote de Salgadinhos', 'Salgado', 1, false, 'Aumenta a vitalidade com um toque salgado.', NULL),
 (16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', NULL),
-(17, 'Kit de Primeiros Socorros', 'Cura', 20, false, 'Kit essencial para tratar ferimentos e restaurar saúde.', NULL),
+(17, 'Kit de Primeiros Socorros', 'Kit básico para curativos', 50, false, 'Combinação de álcool e trapos para aumentar vida', NULL);
 (18, 'Munição', 'Projétil', NULL, true, 'Munição para uso em armas de fogo.', NULL),
 (19, 'Álcool', 'Reagente', NULL, false, 'Reagente útil para criação e improvisação.', NULL),
 (20, 'Trapos', 'Material', NULL,false, 'Material básico para reparos e construção.', NULL),
@@ -175,42 +175,40 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, d
 (22, 'Explosivo', 'Reagente', NULL, true, 'Reagente perigoso para criar explosivos e destruição.', NULL),
 (23, 'Fita', 'Material', NULL,false, 'Material adesivo útil para reparos rápidos.', NULL),
 (24, 'Lâmina', 'Material', NULL, true, 'Lâmina cortante para combate ou uso em ferramentas.', NULL);
-(25, 'Kit de Primeiros Socorros', 'Kit básico para curativos', 50, false, 'Combinação de álcool e trapos para aumentar vida', NULL);
-(26, 'Bomba de Fumaça', 'Bomba', NULL, true, 'Bomba que cria uma cortina de fumaça para cobertura.', 25),
-(27, 'Mina de Proximidade', 'Granada fixa', NULL, true, 'Mina explosiva que explode ao primeiro contato', 25 ),
-(28, 'Coquetel Molotov', 'Projétil explosivo.', NULL, true, 'Garrafa incendiária utilizada para causar danos de fogo em área.', 15),
-(29, 'Bomba de Pregos', 'Projétil explosivo', NULL, true, 'Bomba que detona ao contato, causando dano em área com fragmentos de pregos.', 30),
-(30, 'Bomba Incendiária', 'Projétil explosivo', NULL, true, 'Bomba que causa uma explosão de fogo ao ser lançada.', 25),
-(31, 'Flechas', 'Munição', NULL, true, 'Munição para arco.', NULL);
+(25, 'Bomba de Fumaça', 'Bomba', NULL, true, 'Bomba que cria uma cortina de fumaça para cobertura.', 25),
+(26, 'Mina de Proximidade', 'Granada fixa', NULL, true, 'Mina explosiva que explode ao primeiro contato', 25 ),
+(27, 'Coquetel Molotov', 'Projétil explosivo.', NULL, true, 'Garrafa incendiária utilizada para causar danos de fogo em área.', 15),
+(28, 'Bomba de Pregos', 'Projétil explosivo', NULL, true, 'Bomba que detona ao contato, causando dano em área com fragmentos de pregos.', 30),
+(29, 'Bomba Incendiária', 'Projétil explosivo', NULL, true, 'Bomba que causa uma explosão de fogo ao ser lançada.', 25),
+(30, 'Flechas', 'Munição', NULL, true, 'Munição para arco.', NULL);
 
-
-INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
-(1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 3),
-(2, 'Bomba de Fumaça', 'Bomba que cria uma cortina de fumaça para cobertura.', 4, 3),
-(3, 'Mina de Proximidade', 'Granada explosiva que causa dano em área.', 5, 3),
-(4, 'Coquetel Molotov', 'Garrafa incendiária utilizada para causar danos de fogo em área.', 7, 3),
-(5, 'Faca', 'Ferramenta improvisada que pode ser usada para ataques furtivos e abrir portas trancadas.', 2, 3),
-(6, 'Bomba de Pregos', 'Explosivo improvisado que detona ao contato, causando dano em área com fragmentos de pregos.', 5, 3),
-(7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 3),
-(8, 'Flechas', 'Munição para arco, pode ser craftada utilizando materiais encontrados.', 2, 3);
+INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem, juncao) VALUES
+(1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 17, 'Álcool + Trapos'),
+(2, 'Bomba de Fumaça', 'Bomba que cria uma cortina de fumaça para cobertura.', 4, 25, 'Recipiente + Explosivo'),
+(3, 'Mina de Proximidade', 'Granada explosiva que causa dano em área.', 5, 26, 'Recipiente + Explosivo'),
+(4, 'Coquetel Molotov', 'Garrafa incendiária utilizada para causar danos de fogo em área.', 7, 27, 'Álcool + Trapos'), 
+(5, 'Faca', 'Ferramenta improvisada que pode ser usada para ataques furtivos e abrir portas trancadas.', 2, 6, 'Lâmina + Trapos'),
+(6, 'Bomba de Pregos', 'Explosivo improvisado que detona ao contato, causando dano em área com fragmentos de pregos.', 5, 28, 'Explosivo + Lâmina'),
+(7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 29, 'Álcool + Explosivo')
+(8, 'Flechas', 'Munição para arco, pode ser craftada utilizando materiais encontrados.', 2, 30, 'Fita + Lâmina');
 
 INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUES
-(1, 1, 3, 1),
-(2, 1, 3, 1),
-(3, 2, 3, 1),
-(4, 2, 3, 1),
-(5, 3, 3, 1),
-(6, 3, 3, 1),
-(7, 4, 3, 1),
-(8, 4, 3, 1),
-(9, 5, 3, 1),
-(10, 5, 3, 1),
-(11, 6, 3, 1),
-(12, 6, 3, 1),
-(13, 7, 3, 1),
-(14, 7, 3, 1),
-(15, 8, 3, 1),
-(16, 8, 3, 1);
+(1, 1, 19, 1),
+(2, 1, 20, 1),
+(3, 2, 21, 1),
+(4, 2, 22, 1),
+(5, 3, 21, 1),
+(6, 3, 22, 1),
+(7, 4, 19, 1),
+(8, 4, 20, 1),
+(9, 5, 24, 1),
+(10, 5, 20, 1),
+(11, 6, 22, 1),
+(12, 6, 24, 1),
+(13, 7, 19, 1),
+(14, 7, 22, 1),
+(15, 8, 23, 1),
+(16, 8, 24, 1);
 
 INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 (1, 5, 100),
