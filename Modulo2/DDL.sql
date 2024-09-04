@@ -282,19 +282,20 @@ CREATE TABLE IF NOT EXISTS Dialoga (
 
 CREATE TABLE IF NOT EXISTS InstNPC (
     IdInstNPC SERIAL NOT NULL,
-    tipoNPC INT NOT NULL,
+    tipoNPC VARCHAR(1) NOT NULL,
+    IdNPC INT NOT NULL,
     Sala INT,
 
+    CONSTRAINT idNPC_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem),
     CONSTRAINT sala_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala),
-    CONSTRAINT instNPC_pk PRIMARY KEY (IdInstNPC),
-    CONSTRAINT npc_inst_fk FOREIGN KEY (tipoNPC) REFERENCES NPC (IdPersonagem) 
+    CONSTRAINT instNPC_pk PRIMARY KEY (IdInstNPC)
 );
 
 CREATE TABLE IF NOT EXISTS Infectado (
     IdNPC INT NOT NULL,
     comportamentoInfec VARCHAR (400) NOT NULL,
     velocidade INT NOT NULL, 
-    danoInfec INT NOT NULL,
+    danoInfectado INT NOT NULL,
 
     CONSTRAINT infectado_pk PRIMARY KEY (IdNPC),
     CONSTRAINT npc_infec_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)

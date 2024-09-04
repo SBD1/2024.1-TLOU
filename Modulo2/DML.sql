@@ -98,7 +98,14 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (21, 'C'),
 (22, 'C'),
 (23, 'C'),
-(24, 'C');
+(24, 'C'),
+(25, 'C'),
+(26, 'C'),
+(27, 'C'),
+(28, 'C'),
+(29, 'C'),
+(30, 'C'),
+(31, 'C');
 
 
 INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
@@ -174,7 +181,7 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, d
 (21, 'Recipiente', 'Contêiner', NULL, false, 'Contêiner versátil para armazenar itens e líquidos.', NULL ),
 (22, 'Explosivo', 'Reagente', NULL, true, 'Reagente perigoso para criar explosivos e destruição.', NULL),
 (23, 'Fita', 'Material', NULL,false, 'Material adesivo útil para reparos rápidos.', NULL),
-(24, 'Lâmina', 'Material', NULL, true, 'Lâmina cortante para combate ou uso em ferramentas.', NULL);
+(24, 'Lâmina', 'Material', NULL, true, 'Lâmina cortante para combate ou uso em ferramentas.', NULL),
 (25, 'Bomba de Fumaça', 'Bomba', NULL, true, 'Bomba que cria uma cortina de fumaça para cobertura.', 25),
 (26, 'Mina de Proximidade', 'Granada fixa', NULL, true, 'Mina explosiva que explode ao primeiro contato', 25 ),
 (27, 'Coquetel Molotov', 'Projétil explosivo.', NULL, true, 'Garrafa incendiária utilizada para causar danos de fogo em área.', 15),
@@ -337,20 +344,19 @@ INSERT INTO Dialoga (idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) 
 (37, 2, 1, 'Ellie: "Eu só quero acreditar que você está dizendo a verdade..."', 10);
 
 INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
-(1, 1, 1, 1),
-(2, 2, 3, 1),
-(3, 3, 4, 1),
-(4, 4, 1, 1),
-(5, 5, 1, 1),
-(6, 6, 1, 1),
-(7, 7, 1, 1),
-(8, 8, 1, 2),
-(9, 9, 1, 2),
-(10, 10, 1, 3),
-(11, 11, 1, 4),
-(11, 12, 1, 4),
-(11, 13, 1, 4),
-(11, 14, 1, 4);
+(2, 2, 'F', 1),
+(3, 3, 'F', 1),
+(4, 4, 'F', 1),
+(5, 5, 'F', 1),
+(6, 6, 'F', 1),
+(7, 7, 'F', 1),
+(8, 8, 'I', 2),
+(9, 9, 'I', 2),
+(10, 10, 'I', 3),
+(11, 11, 'I', 1),
+(12, 12, 'A', 2),
+(13, 13, 'A', 1),
+(14, 14, 'A', 1);
 
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade, danoInfectado) VALUES
 (14, 'Corredor', 2, 7),
