@@ -1,3 +1,14 @@
+-- Removendo tabelas existentes
+DROP TABLE IF EXISTS 
+      Participacao, Animal, FaccaoHumana, Infectado, InstNPC, Dialoga, Concede, 
+      MissaoExploracaoObterItem, MissaoPatrulha, Habilidade, Itinerario, Evento, 
+      PC, Evolucao, Ingrediente, Receita, Consumivel, Vestimenta, Arma, NPC, Itens, 
+      InstItem, Item, Missao, Inventario, Personagem, Sala, Regiao 
+      CASCADE;
+    
+-- Início da transação
+BEGIN TRANSACTION;
+
 CREATE TABLE IF NOT EXISTS Regiao (
     idRegiao SERIAL NOT NULL,
     descricaoRegiao VARCHAR (400) NOT NULL,
@@ -135,6 +146,7 @@ CREATE TABLE IF NOT EXISTS Receita (
     descricaoReceita VARCHAR (400) NOT NULL,
     tempoCraft INT NOT NULL, 
     IdItem INT NOT NULL,
+    juncao VARCHAR (100) NOT NULL,
 
     CONSTRAINT receita_pk PRIMARY KEY (idReceita),
     CONSTRAINT item_receita_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
@@ -316,3 +328,5 @@ CREATE TABLE IF NOT EXISTS Participacao (
     CONSTRAINT evento_part_fk FOREIGN KEY (Evento) REFERENCES Evento (idEvento),
     CONSTRAINT missao_part_fk FOREIGN KEY (Missao) REFERENCES Missao (idMissao)
 );
+
+COMMIT;
