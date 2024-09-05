@@ -17,7 +17,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        A história segue Joel, um sobrevivente endurecido, e Ellie, uma jovem imune ao fungo, enquanto viajam pelos Estados Unidos em busca de uma possível cura.<code>docs</code> directory.
+        A história segue Joel, um sobrevivente endurecido, e Ellie, uma jovem imune ao fungo, enquanto viajam pelos Estados Unidos em busca de uma possível cura.
       </>
     ),
   },
