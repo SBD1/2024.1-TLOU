@@ -31,7 +31,7 @@ async function primeiraTela() {
     console.log("Bem-vindo ao The Last of Us - MUD!\n");
     separador();
 
-    const api = new Api();
+    var api = new Api();
 
     let r = askAndReturn(
       "1- Jogar\n2- Sair\n3- Criar e Popular Tabelas\n"
@@ -96,13 +96,7 @@ async function primeiraTela() {
             // VAI DA PROBLEMA SE TIVER MAIS Q 2 SALAS RS
             // while (!['V', 'v'].includes(escolhaReceita) && (isNaN(escolhaReceita) || escolhaReceita < 1 || escolhaReceita > receitas.rows.length));
             let escolhaSalaOuCraft;
-            do {
-              escolhaSalaOuCraft = askAndReturn("\nEscolha uma sala para explorar ou pressione 'C' para Craft: ");
-            } while (!['1', '2', 'C', 'c'].includes(escolhaSalaOuCraft));
-
-
-
-
+            escolhaSalaOuCraft = askAndReturn("\nPressione 'C' para Craft: ");
 
             if (escolhaSalaOuCraft.toLowerCase() === 'c') {
               await mostrarReceitas();
@@ -147,9 +141,9 @@ async function primeiraTela() {
 
                   // Aqui vai a lógica para verificar ingredientes, atualizar inventário, etc.
                   // Exemplo:
-                  /*const possuiIngredientes = await api.verificarIngredientes(receita.iditem); // Função que verifica se o jogador tem os ingredientes
+                  /*const possuiIngredientes = await api.verificarIngredientes(receita.iditem);  Função que verifica se o jogador tem os ingredientes
                   if (possuiIngredientes) {
-                    await api.craftarItem(receita); // Função que realiza o crafting
+                    await api.craftarItem(receita);  //Função que realiza o crafting
                     console.log(`Receita ${receita.nomereceita} realizada com sucesso!`);
                   } else {
                     console.log("Você não possui todos os ingredientes necessários para esta receita.");
@@ -158,33 +152,23 @@ async function primeiraTela() {
                   console.error("Erro ao realizar a receita:", error.message || error);
                 }
               }
-
-
-
-
-
-
-
-
             }
 
-            // Atualiza a sala do jogador
-            const query = 'UPDATE PC SET Sala = $1 WHERE IdPersonagem = $2'; // Adapte o WHERE conforme necessário
-            const values = [escolhaSalaOuCraft, 1]; // para o id do personagem sendo 1, o joel
 
-            await api.client.query(query, values);
+            // Atualiza a sala do jogador para a escolhida
+            var sala = await api.getSalaAtual();
+            //await sleep(5);
+            //console.clear();
 
-            if (escolhaSalaOuCraft == 1) {
-              await api.mostrarNPCsDaSala(escolhaSalaOuCraft);
+            if (sala == 1) {
+              await api.mostrarNPCsDaSala(sala);
+              await api.evento(sala);
               const DialogoInicio = 1;
               const DialogoFim = 6;
               await api.mostrarDialogo(DialogoInicio, DialogoFim);
-              await api.evento(escolhaSalaOuCraft);
-              await api.mostrarItensDaSala(escolhaSalaOuCraft);
+              await api.mostrarItensDaSala(sala);
 
-              console.log("\nVocê encontrou alguns itens! Deseja pegá-los?");
-              let choose = askAndReturn("S/N\n");
-
+              let choose = askAndReturn("Você encontrou alguns itens na sala. Deseja pegá-los\nS/N\n");
               if (choose.toLowerCase() == 's') {
                 await api.adicionarItemAoInventario(1, 1, 18);
                 await api.adicionarItemAoInventario(2, 1, 18);
@@ -198,52 +182,46 @@ async function primeiraTela() {
                 await api.updateCapacidadeInventario(1);
 
                 console.log("\nItens adicionados ao inventário com sucesso!\n");
-              } else {
-                console.log("\nVocê não quis os itens.\n");
               }
-
               let escolha = askAndReturn("Deseja ver seu inventário?\nS/N\n");
               if (escolha.toLowerCase() == 's') {
                 console.log("Seu inventário atual é:");
                 await api.mostrarInventario();
               }
               console.log("\n\nVocê irá agora para sala 2, aguarde...");
-
-              escolhaSalaOuCraft = 2;
-              await sleep(4);
+              await api.updateSala(sala + 1);
+              await sleep(5);
               console.clear();
             }
-
-            if (escolhaSalaOuCraft == 2) {
-              // await api.mostrarNPCsDaSala(escolhaSalaOuCraft);
-
+            sala = await api.getSalaAtual();
+            if (sala == 2) {
+              await api.mostrarNPCsDaSala(sala);
               const DialogoInicio = 7;
               const DialogoFim = 8;
               await api.mostrarDialogo(DialogoInicio, DialogoFim);
+              await api.objetivoExploracao(sala);
 
-              await api.missaoExploracao(escolhaSalaOuCraft);
-
-              var mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
-
+              const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
               if (mis.toLowerCase() == 's') {
                 console.log("Missão aceita!");
-                console.log("Você está saindo da zona de quarentena");
 
-              } else {
-                console.log("Missão recusada!");
+                await api.mostrarInimigoNPC(sala);
+                console.log("Proteja Ellie e Tess!");
+                await api.mostrarArmas();
+
+
               }
 
               //update no xp(ja ta pronto)
               //matar inimigo
+              await api.updateSala(sala + 1);
+              await sleep(5);
+              console.clear();
             }
-          } else {
-            console.log("Nenhuma sala disponível na região atual.");
+            sala = await api.getSalaAtual();
+            console.log(sala);
           }
-
-        } else {
-          console.log("Nenhuma região encontrada para o jogador.");
         }
-
       }
     }
   } catch (error) {
@@ -252,6 +230,7 @@ async function primeiraTela() {
   finally {
     console.log("Fechando a conexão com o banco de dados...");
     console.log("Banco desconectado com sucesso!");
+    await api.updateSala(1);
     process.exit();
   }
 }

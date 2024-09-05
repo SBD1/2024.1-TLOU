@@ -26,7 +26,7 @@ class Api {
   createTables = async () => {
     let response = false;
     console.log(sqlTables);
-    await this.client.query(sqlTables).then((results) => {
+    await this.client.query(sqlTables).then(() => {
       response = true;
     });
     return response;
@@ -34,28 +34,78 @@ class Api {
 
   populateTables = async () => {
     let response = false;
-    await this.client.query(sqlData).then((results) => {
+    await this.client.query(sqlData).then(() => {
       response = true;
     });
     return response;
   };
 
+  getSalaAtual = async () => {
+    try {
+      const sala = await this.client.query(`
+      SELECT s.idsala
+      FROM Regiao r
+      JOIN Sala s ON s.idRegiao = r.idRegiao 
+      JOIN PC p ON p.sala = s.idSala`);
+      if (sala.rows.length === 0) {
+        console.log("Nenhuma sala encontrada.");
+      } else {
+        return sala.rows[0].idsala;
+      }
+    } catch (error) {
+      console.error("Erro ao obter a sala atual:", error.message || error);
+    }
+  }
+
+  updateSala = async (idSala) => {
+    try {
+      await this.client.query(`
+        UPDATE PC
+        SET Sala = $1
+        WHERE IdPersonagem = 1;
+      `, [idSala]);
+    } catch (error) {
+      console.error("Erro ao atualizar a sala:", error.message || error);
+    }
+  }
+
   // Função para exibir os NPCs da sala atual
   mostrarNPCsDaSala = async (idSala) => {
     try {
       const npcs = await this.client.query(`
-            SELECT nomePersonagem, tipoNPC, eAliado 
-            FROM NPC 
-            WHERE Sala = $1
+        SELECT n.nomePersonagem
+        FROM NPC n
+        join instnpc i on n.idpersonagem = i.idnpc
+        where i.sala = $1
         `, [idSala]);
-
       if (npcs.rows.length === 0) {
         console.log("Nenhum NPC encontrado nesta sala.");
       } else {
-        console.log("\nNPCs encontrados na sala atual:");
+        console.log("\nNPCs encontrados:");
         npcs.rows.forEach(npc => {
-          const tipo = npc.ealiado ? "Aliado" : "Inimigo";
-          console.log(`- ${npc.nomepersonagem}: ${tipo}`);
+          console.log(`- ${npc.nomepersonagem}`);
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao listar os NPCs da sala:", error.message || error);
+    }
+  }
+
+  mostrarInimigoNPC = async (idSala) => {
+    try {
+      const npcs = await this.client.query(`
+        SELECT n.nomePersonagem as nome, n.vidaatual as vida, ii.danoinfectado as dano
+        FROM NPC n
+        join instnpc i on n.idpersonagem = i.idnpc
+		    join infectado ii on ii.idnpc = i.idnpc
+		    where i.sala = $1 and i.tiponpc = 'I'
+        `, [idSala]);
+      if (npcs.rows.length === 0) {
+        console.log("Nenhum Infectado encontrado nesta sala.");
+      } else {
+        console.log("\nInfectados encontrados:");
+        npcs.rows.forEach(npc => {
+          console.log(`| ${npc.nome} | Vida: ${npc.vida} | Dano: ${npc.dano}`);
         });
       }
     } catch (error) {
@@ -84,7 +134,7 @@ class Api {
       } else {
         console.log("\nItens encontrados na sala atual:");
         itens.rows.forEach(item => {
-          console.log(`${item.nomeitem}: ${item.quantidade}`);
+          console.log(`|${item.nomeitem}: ${item.quantidade}`);
         });
       }
     } catch (error) {
@@ -114,6 +164,27 @@ class Api {
       }
     } catch (error) {
       console.error("Erro ao mostrar inventario:", error.message || error);
+    }
+  }
+
+  mostrarArmas = async () => {
+    try {
+      const armas = await this.client.query(`
+        select a.nomeitem AS nome
+        from arma a 
+        join institem i on i.iditem = a.iditem
+        join inventario ii on ii.idinventario = i.idinventario
+        where ii.idinventario = 1`);
+      if (armas.rows.length === 0) {
+        console.log("Você não possui armas.");
+      } else { 
+        console.log("\nSuas armas:\n");
+        armas.rows.forEach(arma => {
+          console.log(`${arma.nome}`);
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao mostrar armas:", error.message || error);
     }
   }
 
@@ -169,24 +240,6 @@ class Api {
     }
   }
 
-  atualizarCapacidadeInventario = async (id_inventario) => {
-    try {
-      const result = await this.client.query(`
-        UPDATE Inventario
-        SET capacidade = capacidade - 1
-        WHERE idInventario = ${id_inventario}
-        RETURNING capacidade;
-      `);
-      if (result.rows.length === 0) {
-        console.log("Erro ao atualizar a capacidade do inventário.");
-      } else {
-        console.log("Capacidade do inventário atualizada para:", result.rows[0].capacidade);
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar a capacidade do inventário:", error.message || error);
-    }
-  }
-
   contarEAtualizarCapacidade = async (idinventario) => {
     try {
       // Contar quantas instâncias foram inseridas no inventário
@@ -206,7 +259,6 @@ class Api {
           WHERE idInventario = ${idinventario}
           RETURNING capacidade;
         `);
-
         console.log(`A capacidade do inventário foi atualizada para: ${updateResult.rows[0].capacidade}`);
       } else {
         console.log("Nenhuma instância foi encontrada no inventário.");
@@ -216,23 +268,43 @@ class Api {
     }
   }
 
+  updateVidaVestimenta = async () => {
+    try {
+      const roupa = await this.client.query(`
+        SELECT COUNT(i.idInstItem) AS totalitens, v.nomeItem AS nomeItem  
+        FROM InstItem i
+        JOIN Vestimenta v ON i.IdItem = v.IdItem
+        GROUP BY  v.nomeItem
+        ORDER BY totalitens DESC;`);
+      if (roupa.rows.length > 0) {
+        await this.client.query(`
+            UPDATE pc SET vidaatual = vidaatual + (SELECT SUM(defesa) FROM vestimenta v 
+            JOIN institem i ON i.iditem = v.iditem
+            JOIN pc p ON p.idinventario = i.idinventario)`);
+        console.log("Sua vida foi atualizada");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar a vida:", error.message || error);
+    }
+  }
+
   evento = async (sala) => {
-  try {
-    const evento = await this.client.query(`
+    try {
+      const evento = await this.client.query(`
       SELECT descricao, nomeevento 
       FROM Evento 
       WHERE idEvento = $1`, [sala]);
-    console.log("\n");
-    console.log(evento.rows[0].nomeevento);
-    // console.log("\n");
-    console.log(evento.rows[0].descricao);
+      console.log("\n");
+      console.log(evento.rows[0].nomeevento);
+      // console.log("\n");
+      console.log(evento.rows[0].descricao);
     } catch (error) {
       console.error("Erro ao realizar evento:", error.message || error);
     }
   }
 
   //funcao para mostrar objetivo da missao exploracao
-  missaoExploracao = async (sala) => {
+  objetivoExploracao = async (sala) => {
     try {
       const objetivo = await this.client.query(`
         SELECT objetivo 
@@ -245,13 +317,13 @@ class Api {
     }
   }
 
-  atacarNPC = async (id_npc, id_arma) => {
+  atacarNPC = async (idnpc, idarma) => {
     try {
       // Obter os dados do NPC
       const npcResult = await this.client.query(`
         SELECT vidaAtual, vidaMax
         FROM NPC
-        WHERE IdPersonagem = ${id_npc};
+        WHERE IdPersonagem = ${idnpc};
       `);
 
       if (npcResult.rows.length === 0) {
@@ -265,7 +337,7 @@ class Api {
       const armaResult = await this.client.query(`
         SELECT dano, municaoAtual, municaoMax
         FROM Arma
-        WHERE IdItem = ${id_arma};
+        WHERE IdItem = ${idarma};
       `);
 
       if (armaResult.rows.length === 0) {
@@ -306,7 +378,7 @@ class Api {
       await this.client.query(`
         UPDATE Arma
         SET municaoAtual = ${municaoAtual}
-        WHERE IdItem = ${id_arma};
+        WHERE IdItem = ${idarma};
       `);
       console.log(`Munição da arma atualizada para: ${municaoAtual}`);
 
@@ -315,6 +387,128 @@ class Api {
     }
   }
 
+  atacarPCPorAnimal = async (idpc, idanimal) => {
+    try {
+      // Obter os dados do PC
+      const pcResult = await this.client.query(`
+        SELECT vidaAtual, vidaMax, Sala
+        FROM PC
+        WHERE IdPersonagem = ${idpc};
+        `);
+
+      if (pcResult.rows.length === 0) {
+        console.log("PC não encontrado.");
+        return;
+      }
+
+      let vidaAtualPC = pcResult.rows[0].vidaAtual;
+      let vidaMaxPC = pcResult.rows[0].vidaMax;
+
+
+      // Obter os dados do Animal
+      const animalResult = await this.client.query(`
+        SELECT danoAnimal
+        FROM Animal
+        WHERE IdNPC = ${idanimal};
+        `);
+
+      if (animalResult.rows.length === 0) {
+        console.log("Animal não encontrado.");
+        return;
+      }
+
+      let danoAnimal = animalResult.rows[0].danoanimal;
+      let salaAtual = pcResult.rows[0].sala;
+
+      // Decrementar a vida do PC
+      vidaAtualPC -= danoAnimal;
+
+      // Atualizar a vida do PC ou deletá-lo se a vida chegar a 0
+      if (vidaAtualPC <= 0) {
+        try {
+
+          if (vidaAtualPC <= 0) {
+            console.log("Você morreu, tente novamente.");
+            // Restaurar a vida do PC para o máximo e voltar para a sala anterior
+            await this.client.query(`
+              UPDATE PC
+              SET vidaAtual = ${vidaMaxPC}, Sala = ${salaAtual}
+              WHERE IdPersonagem = ${idpc};
+              `);
+
+            console.log(`PC retornou à sala ${salaAtual} com vida completa(${vidaMaxPC}).`);
+            console.log("PC eliminado.");
+          } else {
+            await this.client.query(`
+                UPDATE PC
+                SET vidaAtual = ${vidaAtualPC}
+                WHERE IdPersonagem = ${idpc};
+                `);
+            console.log(`Vida do PC atualizada para: ${vidaAtualPC}`);
+          }
+
+        } catch (error) {
+          console.error("Erro ao atacar PC por Animal:", error.message || error);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao atacar PC por Animal:", error.message || error);
+    }
+  };
+
+  atacarPCPorInfectado = async (idpc, idinfectado) => {
+    try {
+      // Obter os dados do PC
+      const pcResult = await this.client.query(`
+        SELECT vidaAtual, vidaMax
+        FROM PC
+        WHERE IdPersonagem = ${idpc};
+        `);
+
+      if (pcResult.rows.length === 0) {
+        console.log("PC não encontrado.");
+        return;
+      }
+
+      let vidaAtualPC = pcResult.rows[0].vidaAtual;
+
+      // Obter os dados do Infectado
+      const infectadoResult = await this.client.query(`
+        SELECT danoInfectado
+        FROM Infectado
+        WHERE IdNPC = ${idinfectado};
+        `);
+
+      if (infectadoResult.rows.length === 0) {
+        console.log("Infectado não encontrado.");
+        return;
+      }
+
+      let danoInfectado = infectadoResult.rows[0].danoinfectado;
+
+      // Decrementar a vida do PC
+      vidaAtualPC -= danoInfectado;
+
+      // Atualizar a vida do PC ou deletá-lo se a vida chegar a 0
+      if (vidaAtualPC <= 0) {
+        await this.client.query(`
+          DELETE FROM PC
+          WHERE IdPersonagem = ${idpc};
+          `);
+        console.log("PC eliminado.");
+      } else {
+        await this.client.query(`
+          UPDATE PC
+          SET vidaAtual = ${vidaAtualPC}
+          WHERE IdPersonagem = ${idpc};
+          `);
+        console.log(`Vida do PC atualizada para: ${vidaAtualPC}`);
+      }
+
+    } catch (error) {
+      console.error("Erro ao atacar PC por Infectado:", error.message || error);
+    }
+  };
 }
 
 export default Api;

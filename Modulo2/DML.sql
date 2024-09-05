@@ -3,7 +3,7 @@ BEGIN TRANSACTION;
 INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao,z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade) VALUES
 (1, 'Zona de quarentena fortemente vigiada, com muros altos e guardas armados.', 'Zona de Quarentena de Boston', 20, 'Z',5 , 10, NULL, NULL, NULL),
 (2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 'L', NULL, NULL, NULL, 'Cidade Abandonada', 8),
-(3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 'Z',5 , 10, NULL, NULL, NULL),
+(3, 'Cidade onde o Bill se encontra', 'Cidade do Bill', 10, 'Z',5 , 10, NULL, NULL, NULL),
 (4, 'Esgoto infestado de criaturas perigosas.','Esgoto Abandonado', 15, 'L', NULL, NULL, NULL, 'Esgoto', 5),
 (5, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 'A', NULL,NULL,12,NULL,NULL),
 (6, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 'R', NULL, NULL, NULL, NULL, NULL);
@@ -118,8 +118,10 @@ INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
 (7, 12, 1, NULL),
 (8, 17, 1, NULL),
 (9, 17, 1, NULL),
-(10, 3, 2, NULL),
-(11, 23, 3, NULL);
+(10, 3, 1, NULL),
+(11, 23, 1, NULL),
+(12, 2, NULL, 1),
+(13, 6, NULL, 1);
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),
@@ -149,8 +151,8 @@ INSERT INTO NPC (IdPersonagem, xp, vidaMax, vidaAtual, nomePersonagem, IdInventa
 (19, 10, 100, 100, 'Serafitas', NULL, false, 'F'),
 (20, 10, 30, 30, 'Lobo Selvagem', NULL, false, 'A'),
 (21, 10, 45, 45, 'Urso Pardo', NULL, false, 'A'),
-(22, 10, 20, 20, 'Peixes', NULL, true, 'A'),
-(23, 10, 15, 15, 'Insetos', NULL, false, 'A');
+(22, 10, 20, 20, 'Cobra', NULL, false, 'A'),
+(23, 10, 15, 15, 'Cervo', NULL, false, 'A');
 
 
 INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, descricaoItem) VALUES
@@ -252,7 +254,7 @@ INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
 (6, 08, '2024-08-14', 6),  
 (7, 20, '2024-08-14', 7),  
 (8, 22, '2024-08-14', 8),  
-(9, 19, '2024-08-14', 9);  
+(9, 19, '2024-08-14',  9);  
 
 INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, IdPersonagem) VALUES
 (1, 'Furtividade', 'Passiva', 'Aumenta a chance de passar despercebido pelos inimigos.', 10, 1),
@@ -350,13 +352,15 @@ INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (5, 5, 'F', 1),
 (6, 6, 'F', 1),
 (7, 7, 'F', 1),
-(8, 8, 'I', 2),
-(9, 9, 'I', 2),
+(8, 14, 'I', 2),
+(9, 14, 'I', 2),
 (10, 10, 'I', 3),
 (11, 11, 'I', 1),
 (12, 12, 'A', 2),
 (13, 13, 'A', 1),
-(14, 14, 'A', 1);
+(14, 14, 'A', 1),
+(15, 2, 'F', 2);
+
 
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade, danoInfectado) VALUES
 (14, 'Corredor', 2, 7),
@@ -371,8 +375,8 @@ INSERT INTO FaccaoHumana(IdNPC, nomeFaccao) VALUES
 INSERT INTO Animal(IdNPC, nomeAnimal, ameaca, danoAnimal) VALUES
 (20, 'Lobo Selvagem', 'Alta', 7),
 (21, 'Urso Pardo', 'Alta', 10),
-(22, 'Peixes', 'Alta', 1),
-(23, 'Insetos', 'Baixa', 2);
+(22, 'Cobra', 'Média', 5),
+(23, 'Cervo', 'Baixa', 4);
 
 INSERT INTO Participacao(IdNPC, Evento, Missao) VALUES
 (2, 1, 2),
