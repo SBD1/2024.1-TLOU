@@ -11,6 +11,10 @@ checar se municaoatual n chega no 0
 municaoAtual nunca pode passar da municalmax
 
 colocar os update de sala na main(cada vez que a missao for concluida)
+
+
 verificacao de dano(as palavras aleatorias. se for == 'acerto' '> 
 da o da dano e desconta na vida. se == 'errou' , so desconta a municao)
 97
+
+a logica do pc morrer(volta pro inicio da sala que ele estava antes e perde todos os itens)
