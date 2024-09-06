@@ -54,8 +54,8 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 (23,  'N');
 
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
-(1, 30, 'Inventário do Joel.'),
-(2, 30, 'Inventário do Ellie.'),
+(1, 100, 'Inventário do Joel.'),
+(2, 50, 'Inventário do Ellie.'),
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
 (5, 15, 'Inventário do Henry.');

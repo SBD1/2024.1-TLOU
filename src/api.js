@@ -15,7 +15,7 @@ class Api {
     host: "localhost",
     user: "postgres",
     password: "postgres",
-    port: 5432,
+    port: 5451,
     database: "tlou",
   });
 
@@ -126,7 +126,7 @@ class Api {
         LEFT JOIN Vestimenta v ON it.idItem = v.idItem
         WHERE it.Sala = $1
         GROUP BY COALESCE(a.nomeItem, v.nomeItem, c.nomeItem)
-        ORDER BY quantidade DESC;
+        ORDER BY nomeItem ASC;
         `, [idSala]);
 
       if (itens.rows.length === 0) {
@@ -153,7 +153,7 @@ class Api {
         LEFT JOIN Vestimenta v ON i.IdItem = v.IdItem
         LEFT JOIN Consumivel c ON i.IdItem = c.IdItem
         GROUP BY  a.nomeItem, v.nomeItem, c.nomeItem
-        ORDER BY totalitens DESC;`);
+        ORDER BY nomeItem;`);
       if (inventario.rows.length === 0) {
         console.log("Seu inventário está vazio");
       } else {
