@@ -15,7 +15,7 @@ class Api {
     host: "localhost",
     user: "postgres",
     password: "postgres",
-    port: 5451,
+    port: 5432,
     database: "tlou",
   });
 
@@ -240,6 +240,22 @@ class Api {
     }
   }
 
+  removerItemNoInventario = async (idinstitem, iditem) => {
+    try {
+      const result = await this.client.query(`
+        DELETE InstItem
+        WHERE idInstItem = ${idinstitem} AND IdItem = ${iditem}
+      `);
+      if (result.rows.length === 0) {
+        console.log("Erro ao remover item ao inventário.");
+      } else {
+        return result.rows[0]; 
+      }
+    } catch (error) {
+      console.error("Erro ao remover o item ao inventário:", error.message || error);
+    }
+  }
+
   contarEAtualizarCapacidade = async (idinventario) => {
     try {
       // Contar quantas instâncias foram inseridas no inventário
@@ -440,9 +456,9 @@ class Api {
             console.log("PC eliminado.");
           } else {
             await this.client.query(`
-                UPDATE PC
-                SET vidaAtual = ${vidaAtualPC}
-                WHERE IdPersonagem = ${idpc};
+              UPDATE PC
+              SET vidaAtual = ${vidaAtualPC}
+              WHERE IdPersonagem = ${idpc};
                 `);
             console.log(`Vida do PC atualizada para: ${vidaAtualPC}`);
           }

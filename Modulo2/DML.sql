@@ -128,7 +128,8 @@ INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
 (16, 21, NULL, 1),
 (17, 22, NULL, 1),
 (18, 23, NULL, 1),
-(19, 24, NULL, 1);
+(19, 24, NULL, 1),
+(20, 19, NULL, 1);
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),

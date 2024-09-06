@@ -103,7 +103,7 @@ async function primeiraTela() {
               } else if (!isNaN(escolhaOp) && escolhaOp >= 1 && escolhaOp <= salasDaReg.rows.length) {
                 const salaEscolhida = salasDaReg.rows[parseInt(escolhaOp) - 1];
                 console.log(`Você escolheu a Sala: ${salaEscolhida.idsala}`);
-                
+
                 await moverParaSala(salaEscolhida.idsala);
 
                 break; // Sai do loop quando uma sala válida é escolhida //necessário??
@@ -164,20 +164,138 @@ async function primeiraTela() {
     async function realizarReceita(receita) {
       try {
         console.log(`Realizando a receita: ${receita.nomereceita}`);
+        const idReceitaNovo = receita.idreceita;
 
-        // Implementar lógica de crafting aqui
-        // Exemplo:
-        /*
-        const possuiIngredientes = await api.verificarIngredientes(receita.iditem);  
-        if (possuiIngredientes) {
-          await api.craftarItem(receita); 
-          console.log(`Receita ${receita.nomereceita} realizada com sucesso!`);
+        const itemRecebido = await api.client.query(`
+          SELECT idItem
+          FROM Receita
+          WHERE idReceita = $1`, [idReceitaNovo]
+        );
+        // const ac = itemRecebido.rows[0].idItem;
+        // if(!ac){
+        //   console.log("here" + ac);
+        // }
+        if (itemRecebido === 0) {
+          console.log("nao recebeu item");
         } else {
-          console.log("Você não possui todos os ingredientes necessários para esta receita.");
+          itemRecebido.rows.forEach(item => {
+            console.log(`id correto do item: ${item.iditem}`);
+          });
         }
-        */
+        const itemRecebidoCount = parseInt(itemRecebido.rows[0].iditem, 10);
+
+        if (!itemRecebido) {
+          console.log("Não foi possível encontrar o idItem para a receita fornecida.");
+        } else {
+          console.log("ID do item escolhido:", itemRecebidoCount);
+        }
+
+        // Verifica se o jogador tem todos os ingredientes necessários
+        const temIngredientes = await verificarIngredientes(idReceitaNovo);
+
+        if (!temIngredientes) {
+          console.log("Você não tem todos os ingredientes necessários para esta receita.");
+          return;
+        }
+
+        // Vê quais ingredientes foram usados na receita para revomer depois
+        const ingredientes = await api.client.query(`
+          SELECT IdItem, quantidadeIngre
+          FROM Ingrediente
+          WHERE IdReceita = $1;
+          `, [idReceitaNovo]);
+
+        api.mostrarInventario();
+
+
+        // Remove os ingredientes entes.rows) {
+         for(const ingr of ingredientes.rows){
+           await api.client.query(`
+             UPDATE Inventario
+             SET capacidade = capacidade + 2 
+             WHERE idInventario = 1;
+           `);
+
+            //ta apagando tudo tem q apagar só uma unidade idInstItem
+            await api.client.query(`
+              WITH item_to_delete AS (
+                SELECT idInstItem
+                FROM InstItem
+                WHERE idItem = $1 AND IdInventario = 1
+                LIMIT 1
+              )
+              DELETE FROM InstItem
+              USING item_to_delete
+              WHERE InstItem.idInstItem = item_to_delete.idInstItem;
+            `, [ingr.iditem]);
+         }
+
+        // Chama a função para executar a consulta
+        const instanciaItem = await api.client.query(`
+          SELECT MAX(idInstItem) as total
+          FROM InstItem
+        `);
+
+        const itemnovo1 = parseInt(instanciaItem.rows[0].total, 10);
+        const idItemMaisNovo = itemnovo1 + 1;
+
+        await api.client.query(`
+          INSERT INTO InstItem (idInstItem, IdItem, Sala, IdInventario)
+          VALUES ($1, $2, null, 1);`, [idItemMaisNovo, itemRecebidoCount]);
+  
+        api.mostrarInventario();
+        console.log("EUASODUFHAISDUF");
+
+        console.log("\n\nverificar se entrou o kit no inventário:\n\n");
+
+        await api.client.query(`
+          UPDATE Inventario
+          SET capacidade = GREATEST(capacidade - 1, 0)
+          WHERE idInventario = 1;
+          `);
+
+        console.log(`Você criou com sucesso: ${receita.nomereceita}`);
+
       } catch (error) {
         console.error("Erro ao realizar a receita:", error.message || error);
+      }
+    }
+
+    async function verificarIngredientes(idReceita) {
+      try {
+        // Consulta os ingredientes necessários para a receita escolhida
+        const ingredientes = await api.client.query(`
+          SELECT i.IdItem, i.quantidadeIngre
+          FROM Ingrediente i
+          WHERE i.IdReceita = $1
+      `, [idReceita]);
+
+        // Consulta o inventário do jogador igual está na função de inventário
+        const inventario = await api.client.query(`
+        SELECT COUNT(i.idInstItem) AS totalitens, COALESCE(a.nomeItem,
+        v.nomeItem, c.nomeItem) AS nomeItem  
+        FROM InstItem i
+        JOIN Inventario ii ON i.IdInventario = ii.idInventario
+        LEFT JOIN Arma a ON i.IdItem = a.IdItem
+        LEFT JOIN Vestimenta v ON i.IdItem = v.IdItem
+        LEFT JOIN Consumivel c ON i.IdItem = c.IdItem
+        GROUP BY  a.nomeItem, v.nomeItem, c.nomeItem
+        ORDER BY totalitens DESC;
+      `);
+
+        // Verifica se o jogador tem todos os ingredientes necessários
+        for (const ingr of ingredientes.rows) {
+          const itemInventario = inventario.rows.find(item => item.nomeItem === ingr.nomeItem);
+          if (!itemInventario || itemInventario.totalitens < ingr.quantidadeIngre) {
+            console.log("Ingrediente faltando ou quantidade insuficiente");
+            return false;
+          }
+        }
+        return true; // Todos os ingredientes estão presentes
+
+      } catch (error) {
+        console.error('Erro ao verificar ingredientes:', error);
+        throw error;
       }
     }
 
@@ -224,7 +342,8 @@ async function primeiraTela() {
           await sleep(5);
           console.clear();
 
-        } else if (salaAtual == 2) {
+        }
+        if (salaAtual == 2) {
           console.log("Você está na Sala 2.");
           await api.mostrarNPCsDaSala(salaAtual);
           const DialogoInicio = 7;
@@ -244,8 +363,6 @@ async function primeiraTela() {
           await sleep(5);
           console.clear();
 
-        } else {
-          console.log("Você está em uma sala desconhecida.");
         }
       } catch (error) {
         console.error("Erro ao mover para a sala:", error.message || error);
