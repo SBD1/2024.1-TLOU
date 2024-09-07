@@ -116,7 +116,7 @@ class Api {
     }
   }
 
-  
+
 
   adicionarItemAoInventario = async (idInstItem, idItem) => {
     try {
@@ -126,7 +126,7 @@ class Api {
         WHERE idInstItem = $1 AND IdItem = $2
         RETURNING *;
       `, [idInstItem, idItem]);
-      
+
     } catch (error) {
       console.error("Erro ao adicionar o item ao inventário:", error.message || error);
     }
@@ -149,26 +149,25 @@ class Api {
         GROUP BY it.idinstitem, it.idItem, COALESCE(a.nomeItem, v.nomeItem, c.nomeItem)
         ORDER BY it.idinstitem ASC;  -- Ordenar por idinstitem
       `, [idSala]);
-  
+
       if (itens.rows.length === 0) {
         console.log("Nenhum item encontrado nesta sala.");
         return;
       }
-  
+
       console.log("\nItens encontrados na sala atual:");
       itens.rows.forEach((item) => {
         console.log(`| ${item.idinstitem} - ${item.nomeitem}`);
       });
-  
+
       let choose = readlineSync.question(
         "\nVocê encontrou alguns itens na sala.\nDeseja pegá-los?\n(1 - Todos, 2 - Nenhum, 3 - Especificar)\n"
       );
-  
+
       switch (choose) {
         case '1': // Pegar todos os itens
           for (const item of itens.rows) {
             await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
-  
             // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
             await this.client.query(`
               UPDATE InstItem
@@ -176,33 +175,34 @@ class Api {
               WHERE idinstitem = $1
             `, [item.idinstitem]);
           }
+          await this.updateCapacidadeInventario(1);
           console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
           break;
-  
+
         case '2': // Não pegar nenhum item
           console.log("\nVocê decidiu não pegar nenhum item.\n");
           break;
-  
+
         case '3': // Pegar itens específicos
           let idItem;
           let itensSelecionados = new Set();  // Usar um Set para manter os IDs únicos
-  
+
           do {
             idItem = readlineSync.question("Digite o ID do item que deseja pegar ou '0' para sair: ");
             if (idItem === '0') break;
-  
+
             const itemEncontrado = itens.rows.find((item) => item.idinstitem === parseInt(idItem));
-  
+
             if (!itemEncontrado) {
               console.log("ID do item inválido. Tente novamente.");
               continue;
             }
-  
+
             if (itensSelecionados.has(idItem)) {
               console.log("Este item já foi selecionado. Tente outro.");
               continue;
             }
-  
+
             // Adicionar o item ao inventário
             await this.adicionarItemAoInventario(itemEncontrado.idinstitem, itemEncontrado.idItem);
             await this.updateCapacidadeInventario(1);
@@ -212,16 +212,16 @@ class Api {
               SET Sala = NULL, IdInventario = 1
               WHERE idinstitem = $1
             `, [itemEncontrado.idinstitem]);
-  
+
             // Adicionar o ID do item ao Set de itens selecionados
             itensSelecionados.add(idItem);
-  
+
             console.log(`O item '${itemEncontrado.nomeitem}' foi adicionado ao inventário!\n`);
-  
+
           } while (idItem !== '0');
-  
+
           break;
-  
+
         default:
           console.log("\nOpção inválida.\n");
       }
@@ -670,7 +670,7 @@ class Api {
 
     } catch (error) {
       console.error("Erro ao atualizar a munição da arma:", error.message || error);
-    }  
+    }
   }
 
   updateVidaNPC = async (id) => {
@@ -722,8 +722,8 @@ class Api {
         UPDATE PC SET xp = xp + (SELECT xp FROM NPC WHERE idPersonagem = $1)
         WHERE IdPersonagem = 1
         `, [idnpc]);
-        
-        console.log("XP de NPC atualizado com sucesso!");
+
+      console.log("XP de NPC atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar o XP:", error.message || error);
     }

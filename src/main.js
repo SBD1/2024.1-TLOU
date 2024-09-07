@@ -356,7 +356,7 @@ async function primeiraTela() {
             await api.atacarNPC(14, armaUsada, salaAtual);
             await api.updateVidaNPC(14);
 
-            console.log("\nParabéns você salvou a Ellie e a Tess, concluindo a missão, você ganhará XP por matar os infectados e concluir a missão\n!");
+            console.log("\nParabéns você salvou a Ellie e a Tess, concluindo a missão, você ganhará XP por matar os infectados e concluir a missão!\n");
             await api.updateXPMisJoelExp(1);
             await api.updateXPInfec(14);
 
@@ -423,19 +423,19 @@ async function primeiraTela() {
           await api.mostrarInimigoNPC(salaAtual);
           await api.atacarNPC(14, armaUsada, salaAtual);
           await api.updateVidaNPC(14);
-          console.log("\nVocê matou um Corredor\n!");
+          console.log("\nVocê matou um Corredor!\n");
 
           await api.atacarNPC(14, armaUsada, salaAtual);
           await api.updateVidaNPC(14);
-          console.log("\nVocê matou outro Corredor\n!");
+          console.log("\nVocê matou outro Corredor!\n");
 
           await api.atacarNPC(14, armaUsada, salaAtual);
           await api.updateVidaNPC(14);
-          console.log("\nVocê matou mais um Corredor\n!");
+          console.log("\nVocê matou mais um Corredor!\n");
 
           await api.atacarNPC(15, armaUsada, salaAtual);
           await api.updateVidaNPC(15);
-          console.log("\nVocê matou um Corredor\n!");
+          console.log("\nVocê matou um Corredor!\n");
 
           console.log("\nEsses são ESTALADORES, são mais perigosos\n")
 
@@ -447,7 +447,7 @@ async function primeiraTela() {
           await api.updateVidaNPC(15);
           console.log("\nVocê matou mais um Estalador\n!");
 
-          console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão\n!");
+          console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
           await api.mostrarInventario();
           await api.updateXPMisJoelPatr(1);
           await api.updateXPInfec(14);
