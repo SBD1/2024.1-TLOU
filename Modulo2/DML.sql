@@ -13,20 +13,15 @@ INSERT INTO Sala (idSala, IdRegiao) VALUES
 (2, 1),
 (3, 2),
 (4, 2),
-(5, 2),
+(5, 3),
 (6, 3),
-(7, 3),
-(8, 3),
-(9, 4),
-(10, 4),
-(11, 4),
-(12, 5),
-(13, 5),
-(14, 5),
-(15, 5),
-(16, 6),
-(17, 6),
-(18, 6);
+(7, 4),
+(8, 4),
+(9, 5),
+(10, 5),
+(11, 6),
+(12, 6),
+(13, 5);
 
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
 (1, 'P'),
@@ -54,7 +49,7 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 (23,  'N');
 
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
-(1, 100, 'Inventário do Joel.'),
+(1, 150, 'Inventário do Joel.'),
 (2, 50, 'Inventário do Ellie.'),
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
@@ -109,27 +104,53 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 
 
 INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
-(1, 18, 1, NULL),
-(2, 18, 1, NULL),
-(3, 18, 1, NULL),
-(4, 18, 1, NULL),
-(5, 18, 1, NULL),
-(6, 12, 1, NULL),
-(7, 12, 1, NULL),
-(8, 17, 1, NULL),
-(9, 17, 1, NULL),
-(10, 3, 1, NULL),
-(11, 23, 1, NULL),
-(12, 2, NULL, 1),
-(13, 6, NULL, 1),
+(1, 31, NULL, 1),
+(2, 6, NULL, 1),
+(3, 2, NULL, 1),
+(4, 18, NULL, 1),
+(5, 18, NULL, 1),
+(6, 18, NULL, 1),
+(7, 18, NULL, 1),
+(8, 18, NULL, 1),
+(9, 18, 1, NULL),
+(10, 18, 1, NULL),
+(11, 18, 1, NULL),
+(12, 18, 1, NULL),
+(13, 18, 1, NULL),
+(14, 12, 1, NULL),
+(15, 12, 1, NULL),
+(16, 17, 1, NULL),
+(17, 17, 1, NULL),
+(18, 19, 1, NULL),
+(19, 20, 1, NULL),
+(20, 2, NULL, NULL),
+(21, 6, NULL, NULL),
+(22, 19, NULL, NULL),
+(23, 20, NULL, NULL),
+(24, 21, NULL, NULL),
+(25, 22, NULL, NULL),
+(26, 23, NULL, NULL),
+(27, 24, NULL, NULL),
+(28, 18, 3, NULL),
+(29, 7, 3, NULL),
+(30, 18, 3, NULL),
+(31, 21, 3, NULL),
+(32, 22, 3, NULL),
+(33, 5, 3, NULL),
+(34, 30, 3, NULL),
+(35, 18, 3, NULL),
+(36, 18, 3, NULL),
+(37, 18, 3, NULL),
+(38, 18, 3, NULL),
+(39, 18, 3, NULL),
+(40, 18, 3, NULL),
+(41, 18, 3, NULL),
+(42, 18, 3, NULL),
+(43, 18, 3, NULL),
+(44, 18, 3, NULL),
+(45, 18, 3, NULL),
+(46, 18, 3, NULL);
 
-(14, 19, NULL, 1),
-(15, 20, NULL, 1),
-(16, 21, NULL, 1),
-(17, 22, NULL, 1),
-(18, 23, NULL, 1),
-(19, 24, NULL, 1),
-(20, 19, NULL, 1);
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
 (1, 2),
@@ -169,7 +190,8 @@ INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, desc
 (3, 'Rifle', 30, 7, 7, true, 'Alto impacto para disparos de longa distância.'),
 (4, 'Escopeta', 25, 4, 4, true, 'Poder de fogo considerável a curta distância.'),
 (5, 'Arco', 15, 20, 20, true, 'Silencioso e eficaz para ataques de longo alcance.'),
-(6, 'Faca', 8, NULL, 3, true, 'Afiada e versátil para combate corpo a corpo.');
+(6, 'Faca', 8, 200, 200, true, 'Afiada e versátil para combate corpo a corpo.'),
+(31, 'Socão', 5, 200, 200, true, 'Joel usa força bruta ');
 
 INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, eAtaque, defesa) VALUES
 (7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', false, 7),
@@ -240,18 +262,18 @@ INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 (10, 14, 550);
 
 INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario) VALUES
-(1, 1, 70, 100, 100, 'Joel', 'saudável', 5, 1);
+(1, 1, 50, 200, 100, 'Joel', 'saudável', 5, 1);
 
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (1, 'Primeiro contato com Ellie', 'Ellie é encontrada pela primeira vez, trazida por Marlene na Zona de Quarentena.', 1, 1),
 (2, 'Morte de Tess', 'Tess sacrifica sua vida para garantir a segurança do grupo, enfrentando os infectados com coragem e determinação.', 3, 1),
 (3, 'Joel descobre que Ellie é imune', 'Joel descobre que Ellie é imune ao vírus após uma conversa com Marlene.', 6, 1),
 (4, 'Encontro com Bill', 'Durante a busca por suprimentos, Joel e Ellie encontram Bill, que os ajuda a montar um veículo para continuar a viagem.', 8, 1),
-(5, 'Sam se infecta e Henry tira sua própria vida', 'Sam é infectado, e, incapaz de lidar com a perda, Henry tira sua própria vida.', 12, 1),
-(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 14, 1),
-(7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 15, 1),
-(8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 16, 1),
-(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 18, 1);
+(5, 'Sam se infecta e Henry tira sua própria vida', 'Sam é infectado, e, incapaz de lidar com a perda, Henry tira sua própria vida.', 9, 1),
+(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 10, 1),
+(7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 11, 1),
+(8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 12, 1),
+(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 13, 1);
 
 INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
 (1, 10, '2024-01-23', 1),  
@@ -281,15 +303,14 @@ INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis,
 (4, 3, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 35, false, 8),
 (5, 4, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 55, false, 11),
 (7, 6, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 60, false, 13),
-(9, 8, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 30, false, 17),
-(12, 11, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 30, false, 16);
+(9, 8, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 30, false, 13),
+(11, 10, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 30, false, 13);
 
 INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao, Sala) VALUES
 (2, 1, 'Patrulhar a àrea devastada em busca de ameaças.', 'Segurança', 5, 1, 150, false, 4),
 (6, 5, 'Neutralizar os infectados próximos ao esgoto.', 'Segurança do Acampamento', 8, 1, 250, false, 12),
-(8, 7, 'Resgatar Ellie de David.', 'Operação de Reconhecimento', 9, 1, 400, false, 14),
-(10, 9, 'Mate todos os vagalumes do Hospital Saint Mary.', 'Defesa do Assentamento', 8, 1, 450, false, 18),
-(11, 10, 'Limpe o caminho para chegar até Jackson.', 'Proteção das Fronteiras', 5, 1, 350, false, 15);
+(8, 7, 'Resgatar Ellie de David.', 'Operação de Reconhecimento', 9, 1, 400, false, 13),
+(10, 9, 'Mate todos os vagalumes do Hospital Saint Mary.', 'Defesa do Assentamento', 8, 1, 450, false, 13);
 
 
 INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
@@ -351,7 +372,23 @@ INSERT INTO Dialoga (idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) 
 
 (35, 2, 1, 'Ellie: "Joel... O que aconteceu lá no hospital?"', 8),
 (36, 1, 2, 'Joel: "Eu... Eu fiz o que precisava ser feito. Agora estamos a salvo. É tudo o que importa."', 10),
-(37, 2, 1, 'Ellie: "Eu só quero acreditar que você está dizendo a verdade..."', 10);
+(37, 2, 1, 'Ellie: "Eu só quero acreditar que você está dizendo a verdade..."', 10),
+
+(38, 5, 1, 'Tess: "Joel... escute. Eu... eu fui mordida."', 10),
+(39, 1, 5, 'Joel: "Não... não pode ser. Isso não está acontecendo."', 10),
+(40, 5, 1, 'Tess: "Temos que levar a garota, Joel. É a nossa única chance. Faça isso por mim."', 10),
+-- Diálogo entre Joel e Tess sobre o sacrifício dela
+(41, 5, 1, 'Tess: "Não estou pedindo. Eu já estou morta. Só... leve ela até os Vagalumes."', 10),
+(42, 1, 5, 'Joel: "Não posso te deixar aqui, Tess."', 10),
+(43, 5, 1, 'Tess: "Você não tem escolha, Joel. Vá agora, antes que seja tarde demais."', 10),
+-- Ellie e Tess
+(44, 2, 5, 'Ellie: "Tess... você... foi mordida?"', 10),
+(45, 5, 2, 'Tess: "Ellie, ouça. Você tem que ser importante. Você precisa sobreviver. Faça isso valer a pena."', 10),
+(46, 2, 5, 'Ellie: "Eu... sinto muito."', 5),
+-- Joel se despedindo de Tess
+(47, 1, 5, 'Joel: "Adeus, Tess..."', 5),
+-- Tess enfrentando os soldados no Capitólio (off-screen)
+(48, 5, 1, 'Tess: "Eles estão aqui. Vão, agora!"', 5);
 
 INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (2, 2, 'F', 1),
@@ -364,11 +401,16 @@ INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (9, 14, 'I', 2),
 (10, 10, 'I', 3),
 (11, 11, 'I', 1),
-(12, 12, 'A', 2),
+(12, 12, 'F', 2),
 (13, 13, 'A', 1),
-(14, 14, 'A', 1),
-(15, 2, 'F', 2);
-
+(14, 14, 'I', 1),
+(15, 2, 'F', 2),
+(16, 14, 'I', 4),
+(17, 14, 'I', 4),
+(18, 14, 'I', 4),
+(19, 15, 'I', 4),
+(20, 15, 'I', 4),
+(21, 15, 'I', 4);
 
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade, danoInfectado) VALUES
 (14, 'Corredor', 2, 7),
