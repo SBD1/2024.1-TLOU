@@ -1,6 +1,6 @@
 Região id 1 - Zona de Quarentena
-Sala 1: encontro e diálogos entre Joel, Tess, Ellie e Marlene e  municoes e alimentos(sala de suprimentos dentro da Zona dos Vagalumes) 
-Sala 2: MissaoExploracaoObterItem id 1 -> ainda nessa missao, aparecem tres. corredores
+Sala 1: encontro e diálogos entre Joel, Tess, Ellie e Marlene e  municoes e alimentos(sala de suprimentos dentro da Zona dos Vagalumes) (ok)
+Sala 2: MissaoExploracaoObterItem id 1 -> ainda nessa missao, aparecem tres. corredores(ok)
 e um deles infecta e mata tess. Depois da morte da tess, eles saem da cidade emissao. concluida
 
 Evento: Morte de Tess
@@ -10,37 +10,39 @@ para suprimentos e ajuda. mas no meio do caminho eles passsam por essa area deva
 
 
 Regiao id2 - Area Devastada...
-Sala 1: MissaoPatrulha Id 1 e encontro de suprimentos e dialogos entre Ellie e Joel
-Sala 2: MissaoExploracaoObterItem id 2
+Sala 3: MissaoPatrulha Id 1 e encontro de suprimentos e dialogos entre Ellie e Joel(ok)
+Sala 4: MissaoExploracaoObterItem id 2(ok)
 
 Evento: Joel descobre que Ellie é imune
 
 Regiao id3 - Cidade de Bill
-Sala 1: Encontro com o NPC- Lider de Facção e um pequeno combate
-Sala 2: MissaoExploracaoObterItem id 3 e suprimentos e diálogos entre Joel,Ellie e Bill
+Sala 5: Encontro com o NPC- Lider dos Serafitas e um pequeno combate(ok)
+Sala 6: MissaoExploracaoObterItem id 3 e suprimentos e diálogos entre Joel,Ellie e Bill(ok)
 
 Regiao id4- Esgoto
-Sala 1: Encontro com Henry e Sam -> diálogos e suprimentos e  MissaoExploracaoObterItem id 4
-Sala 3: MissaoPatrulha id 2
-
+Sala 7: Encontro com Henry e Sam -> diálogos e suprimentos e  MissaoExploracaoObterItem id 4(ok)
 Evento: Sam se infecta e Henry se mata
 
+Sala 8: MissaoPatrulha id 2(ok)
+
+
+
 Regiao id5 - Jackson
-Sala 1: Chegada a Jackson e encontro com Tommy (MissaoExploracaoObterItem id 5)
+Sala 9: Chegada a Jackson e encontro com Tommy (MissaoExploracaoObterItem id 5)
 
 Evento: Após discussão, Ellie foge e é sequestrada por David
 
-Sala 2: MissaoPatrulha id3 - Encontrar Ellie
-
-Evento: Ellie mata David após tentativa de abusp
+Sala 10: MissaoPatrulha id3 - Encontrar Ellie
+Evento: Ellie mata David após tentativa de abuso
+Evento
 
 Regiao id 7 - Hospital Saint Mary
-Sala 1: Reencontro com Marlene(explicacao de tudo)e encontro de suprimentos E MissaoExploracaoObterItem id 6
+Sala 11: Reencontro com Marlene(explicacao de tudo)e encontro de suprimentos E MissaoExploracaoObterItem id 6
 
 Evento: Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la. 
 
-Sala 2: MissaoPatrulha id 4
+Sala 12: MissaoPatrulha id 4
 
 FINAL DO JOGO
 Volta para Jackson
-Sala 4: MissaoExploracaoObterItem id 7 e diálogos finais
+Sala 13: MissaoExploracaoObterItem id 7 e diálogos finais

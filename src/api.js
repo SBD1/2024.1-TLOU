@@ -1,6 +1,7 @@
 import pg from "pg";
 import { readFileSync } from "fs";
 import readlineSync from 'readline-sync';
+import { question } from "readline-sync";
 import { Console } from "console";
 
 const { Client } = pg;
@@ -100,7 +101,9 @@ class Api {
         FROM NPC n
         JOIN instnpc i ON n.idpersonagem = i.idnpc
 		    JOIN infectado ii ON ii.idnpc = i.idnpc
-		    WHERE i.sala = $1 AND i.tiponpc = 'I' OR i.tiponpc = 'A' AND ealiado = false
+        JOIN faccaohumana h ON h.idnpc = i.idnpc
+        JOIN animal a ON a.idnpc = i.idnpc
+		    WHERE i.sala = $1 AND i.tiponpc = 'I' OR i.tiponpc = 'A' OR i.tiponpc = 'F' AND ealiado = false
         ORDER BY idinstancia;
         `, [idSala]);
       if (npcs.rows.length === 0) {
@@ -115,8 +118,6 @@ class Api {
       console.error("Erro ao listar os NPCs da sala:", error.message || error);
     }
   }
-
-
 
   adicionarItemAoInventario = async (idInstItem, idItem) => {
     try {
@@ -716,7 +717,7 @@ class Api {
     }
   };
 
-  updateXPInfec = async (idnpc) => {
+  updateXPNPC = async (idnpc) => {
     try {
       await this.client.query(`
         UPDATE PC SET xp = xp + (SELECT xp FROM NPC WHERE idPersonagem = $1)
@@ -728,6 +729,91 @@ class Api {
       console.error("Erro ao atualizar o XP:", error.message || error);
     }
   }
+
+  adquireItemNPC = async (idinventarioNPC) => {
+    try {
+      // Consulta para obter as instâncias de itens do inventário do NPC
+      const institemnpcResult = await this.client.query(`
+        SELECT idInstItem    
+        FROM InstItem
+        WHERE IdInventario = $1`, [idinventarioNPC]);
+  
+      // Consulta para obter os itens correspondentes às instâncias no inventário do NPC
+      const itemnpcResult = await this.client.query(`
+        SELECT i.idItem
+        FROM InstItem inst
+        JOIN Item i ON inst.IdItem = i.idItem
+        WHERE inst.IdInventario = $1`, [idinventarioNPC]);
+  
+      
+      const institemnpc = institemnpcResult.rows;
+      const itemnpc = itemnpcResult.rows;
+
+      this.adicionarItemAoInventario(institemnpc, itemnpc);
+  
+      // Mensagem de sucesso
+      console.log("Você adquiriu os itens com sucesso!");
+    }
+    catch (error) {
+      // Tratamento de erro
+      console.log("Erro ao adquirir item de NPC:", error.message || error);
+    }
+  }
+  
+
+  infos = async (salaAtual) => {
+    try {
+      // Obtém a sala atual (ou use o valor passado como parâmetro)
+      salaAtual = await this.getSalaAtual(); // se necessário
+      console.log("CHEGOU NA SALA " + salaAtual);
+  
+      // Consulta a região atual com base na sala
+      const regiaoAtual = await this.client.query(`
+        SELECT r.nomeRegiao, r.descricaoRegiao
+        FROM Regiao r 
+        JOIN Sala s ON s.idRegiao = r.idRegiao 
+        JOIN PC p ON p.sala = s.idSala
+        WHERE s.idSala = $1
+      `, [salaAtual]);
+  
+      // Verifica se a consulta retornou resultados
+      if (regiaoAtual.rows.length > 0) {
+        const regiao = regiaoAtual.rows[0];
+        console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
+        console.log(`Descrição: ${regiao.descricaoregiao}\n`);
+        return regiao; // Retorna as informações da região
+      } else {
+        console.log("Nenhuma informação encontrada para a sala atual.");
+        return null; // Retorna null se não houver informações
+      }
+    } catch (error) {
+      console.log("Erro ao mostrar as infos:", error.message);
+      return null; // Retorna null em caso de erro
+    }
+  };
+
+  askAndReturn = async (texto) => {
+    return question(texto);
+  }
+  
+  // Função para perguntar e mostrar o inventário
+  verInventario = async () => {
+    try {
+      let escolha = String(this.askAndReturn("\nDeseja ver seu inventário?\nS/N\n"));
+  
+      if (escolha.toLowerCase() === 's') {
+        console.log("Seu inventário atual é:");
+        this.mostrarInventario();
+      }
+    } catch (error) {
+      console.error("Erro ao exibir o inventário:", error);
+    }
+  };
+  
+
+
+
+
 }// fechando a api
 
 export default Api;

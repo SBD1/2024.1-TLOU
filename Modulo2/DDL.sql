@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS Evolucao (
 CREATE TABLE IF NOT EXISTS PC (
     IdPersonagem SERIAL NOT NULL,
     Sala INT NOT NULL,
-    xp INT NOT NULL,
+    xp INT,
     vidaMax INT NOT NULL,
     vidaAtual INT,
     nomePersonagem VARCHAR (50) NOT NULL,
@@ -202,6 +202,8 @@ CREATE TABLE IF NOT EXISTS Evento (
     CONSTRAINT evento_pk PRIMARY KEY (idEvento),
     CONSTRAINT personagem_evento_fk FOREIGN KEY (IdPersonagem) REFERENCES PC (IdPersonagem),
     CONSTRAINT sala_evento_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Itinerario (

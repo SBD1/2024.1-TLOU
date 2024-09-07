@@ -13,3 +13,34 @@ quando a municao da arma escolhida acabar aparece as opcoes novamente
 pra ele poder mudar de arma
 
 arrumar DML
+
+perguntar se ele quer ir pra proxima sala
+
+dar update na missao 3, pegar seus xp e mostrar objetivo
+
+Erro ao atacar PC por Infectado: update or delete on table "pc" violates foreign key constraint "personagem_evento_fk" on table "evento"
+
+A partir 3 sistema craft
+
+Perguntar pro joel se ele quer usar os itens dele (bomba, saúde...)
+
+Opção de remover ao vizualizar o inventário
+
+Quando matar o mostro dropar itens
+
+Erro ao adquirir item de NPC: syntax error at or near "Item"(sala 5)
+
+Erro ao mover para a sala: Cannot read property 'askAndReturn' of undefined
+
+Opção inválida no aceitar missão
+
+Erro ao adicionar o item ao inventário: invalid input syntax for type integer: "{"{\"idinstitem\":47}","{\"idinstitem\":48}","{\"idinstitem\":49}"}" (Sala 6 - mas ta adicionando no inventário)
+
+Erro ao atualizar a capacidade: new row for relation "inventario" violates check constraint "inventario_capacidade_check"(sala 7)
+
+depois do dialogo da marlene
+Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 11)
+
+Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 12)
+
+Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 13)

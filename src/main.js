@@ -16,7 +16,7 @@ function separador() {
 
 async function primeiraTela() {
   try {
-    console.clear();
+    //console.clear();
 
     console.log(` 
             ████████ ██   ██ ███████     ██       █████  ███████ ████████      ██████  ███████     ██    ██ ███████ 
@@ -42,7 +42,7 @@ async function primeiraTela() {
         let table = await api.createTables();
         let popu = await api.populateTables();
         await sleep(1);
-        console.clear();
+        //console.clear();
         if (table && popu) {
           console.log("\n\nTabelas criadas e populadas com sucesso");
           separador();
@@ -66,7 +66,7 @@ async function primeiraTela() {
         const infoJogador = await api.client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
         if (infoJogador.rows.length > 0) {
           const jogador = infoJogador.rows[0];
-          console.clear();
+          //console.clear();
           console.log(`Seu nome é: ${jogador.nomepersonagem}, Estado: ${jogador.estado}\nVida Atual: ${jogador.vidaatual}, Experiência: ${jogador.xp}`);
         }
 
@@ -298,6 +298,46 @@ async function primeiraTela() {
         let salaAtual = await api.getSalaAtual();
 
         if (salaAtual == 1) {
+          await processarSala1(salaAtual);
+        }
+        else if (salaAtual == 2) {
+          await processarSala2(salaAtual);
+        }
+        else if (salaAtual == 3) {
+          await processarSala3(salaAtual);
+        }
+        else if (salaAtual == 4) {
+          await processarSala4(salaAtual);
+        }
+        else if (salaAtual == 5) {
+          await processarSala5(salaAtual);
+        }
+        else if (salaAtual == 6) {
+          await processarSala6(salaAtual);
+        }
+        else if (salaAtual == 7) {
+          await processarSala7(salaAtual);
+        }
+        else if (salaAtual == 8) {
+          await processarSala8(salaAtual);
+        }
+        else if (salaAtual == 9) {
+          await processarSala9(salaAtual);
+        }
+        else if (salaAtual == 10) {
+          await processarSala10(salaAtual);
+        }
+        else if (salaAtual == 11) {
+          await processarSala11(salaAtual);
+        }
+        else if (salaAtual == 12) {
+          await processarSala12(salaAtual);
+        }
+        else if (salaAtual == 13) {
+          await processarSala13(salaAtual);
+        }
+
+        async function processarSala1(salaAtual) {
           await api.mostrarInventario();
           await api.mostrarNPCsDaSala(salaAtual);
           await api.evento(salaAtual);
@@ -306,36 +346,26 @@ async function primeiraTela() {
           await api.mostrarDialogo(DialogoInicio, DialogoFim);
           await api.mostrarItensDaSala(salaAtual);
 
-          // let choose = askAndReturn("Você encontrou alguns itens na sala. Deseja pegá-los\nS/N\n");
-          // if (choose.toLowerCase() == 's') {
-          //   await api.adicionarItemAoInventario(1, 1, 18);
-          //   await api.adicionarItemAoInventario(2, 1, 18);
-          //   await api.adicionarItemAoInventario(3, 1, 18);
-          //   await api.adicionarItemAoInventario(4, 1, 18);
-          //   await api.adicionarItemAoInventario(5, 1, 18);
-          //   await api.adicionarItemAoInventario(6, 1, 12);
-          //   await api.adicionarItemAoInventario(7, 1, 12);
-          //   await api.adicionarItemAoInventario(8, 1, 17);
-          //   await api.adicionarItemAoInventario(9, 1, 17);
-          //   await api.updateCapacidadeInventario(1);
-
-          //   console.log("\nItens adicionados ao inventário com sucesso!\n");
-          // }
-
           let escolha = askAndReturn("Deseja ver seu inventário?\nS/N\n");
           if (escolha.toLowerCase() == 's') {
             console.log("Seu inventário atual é:");
             await api.mostrarInventario();
           }
+
           console.log("\n\nVocê irá agora para sala 2, aguarde...");
-          await api.updateSala(salaAtual + 1);
-          await sleep(2);
-          console.clear();
-        }
 
-        salaAtual = await api.getSalaAtual();
+          // Atualiza para a próxima sala
+          await api.updateSala(2);
 
-        if (salaAtual == 2) {
+          console.log("Sala atualizada, esperando 2 segundos...");
+          //console.clear();
+
+
+          let novaSala = await api.getSalaAtual();
+          await processarSala2(novaSala); // Chama processarSala2 diretamente
+        };
+
+        async function processarSala2(salaAtual) {
           console.log("Você está na Sala 2.");
           await api.mostrarNPCsDaSala(salaAtual);
           await api.mostrarDialogo(7, 8);
@@ -358,123 +388,779 @@ async function primeiraTela() {
 
             console.log("\nParabéns você salvou a Ellie e a Tess, concluindo a missão, você ganhará XP por matar os infectados e concluir a missão!\n");
             await api.updateXPMisJoelExp(1);
-            await api.updateXPInfec(14);
+            await api.updateXPNPC(14);
 
             console.log("\nVocê conseguiu sair da Zona de Quarentena");
             await api.mostrarDialogo(38, 48);
             console.log("\nApós a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo.");
 
+            console.log("\n\nVocê irá agora para sala 3, aguarde...");
+            // Atualiza para a próxima sala
+            await api.updateSala(3);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            //console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala3(novaSala);
+
           } else if (mis.toLowerCase() == 'n') {
             console.log("Você tem que aceitar a missão para continuar jogando :)");
-            console.log("Banco desconectado com sucesso!");
-            process.exit();
+            // REMOVA O process.exit() AQUI
+            console.log("Reiniciando a missão...");
+            await processarSala2(salaAtual); // Reiniciar a missão se o jogador recusar
+          }
+        };
+
+        async function processarSala3(salaAtual) {
+          console.log("Você está na Sala 3.");
+          salaAtual = await api.getSalaAtual();
+
+          const regiaoAtual = await api.client.query(`
+            SELECT r.nomeRegiao, r.descricaoRegiao
+            FROM Regiao r 
+            JOIN Sala s ON s.idRegiao = r.idRegiao 
+            JOIN PC p ON p.sala = s.idSala`);
+
+          if (regiaoAtual.rows.length > 0) {
+            const regiao = regiaoAtual.rows[0];
+            console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
+            console.log(`Descrição: ${regiao.descricaoregiao}\n`);
           }
 
-          await api.updateSala(salaAtual + 1);
-          await sleep(4);
-        }
-        console.clear();
-        //sala 3
-        salaAtual = await api.getSalaAtual();
+          await api.mostrarDialogo(9, 11);
+          await api.mostrarItensDaSala(salaAtual);
+          await api.updateVidaVestimenta();
 
-        const regiaoAtual = await api.client.query(`
-          SELECT r.nomeRegiao, r.descricaoRegiao
-          FROM Regiao r 
-          JOIN Sala s ON s.idRegiao = r.idRegiao 
-          JOIN PC p ON p.sala = s.idSala`);
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
 
-        if (regiaoAtual.rows.length > 0) {
-          const regiao = regiaoAtual.rows[0];
-          console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
-          console.log(`Descrição: ${regiao.descricaoregiao}\n`);
-        }
+          console.log("\n\nVocê irá agora para sala 4, aguarde...");
 
-        await api.mostrarDialogo(9, 11);
-        await api.mostrarItensDaSala(salaAtual);
-        await api.updateVidaVestimenta();
+          // Atualiza para a próxima sala
+          await api.updateSala(4);
 
-        let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-        if (escolha.toLowerCase() == 's') {
-          console.log("Seu inventário atual é:");
-          await api.mostrarInventario();
-        }
+          console.log("Sala atualizada, esperando 2 segundos...");
+          //await sleep(2000);
+          //console.clear();
 
-        await api.updateSala(salaAtual + 1);
-        await sleep(4);
-        console.clear();
+          // Agora continue para a próxima sala
+          let novaSala = await api.getSalaAtual();
+          console.log("Nova sala recebida:", novaSala);
 
-        salaAtual = await api.getSalaAtual();
-        //sala4
-        console.log("Você está na Sala 4.");
+          await processarSala4(novaSala);
+        };
 
-        console.log("Depois de pegar alguns itens na sala, você encontra uma missão.");
+        async function processarSala4(salaAtual) {
+          console.log("Você está na Sala 4.");
 
-        const misprat1 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
-        if (misprat1.toLowerCase() == 's') {
-          console.log("Missão aceita!");
-          await api.objetivoPatrulha(salaAtual);
+          console.log("Depois de pegar alguns itens na sala, você encontra uma missão.");
 
-          await api.mostrarInimigoNPC(salaAtual);
+          const misprat1 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+          if (misprat1.toLowerCase() == 's') {
+            console.log("Missão aceita!");
+            await api.objetivoPatrulha(salaAtual);
 
-          console.log("\nMate todos seus inimigos");
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("\nMate todos seus inimigos");
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou um Corredor!\n");
+
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou outro Corredor!\n");
+
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou mais um Corredor!\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Corredor!\n");
+
+            console.log("\nEsses são ESTALADORES, são mais perigosos\n")
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador\n!");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou mais um Estalador\n!");
+
+            console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
+            await api.mostrarInventario();
+            await api.updateXPMisJoelPatr(1);
+            await api.updateXPNPC(14);
+            await api.updateXPNPC(15);
+
+            console.log("Você conseguiu sair da Cidade Infestada");
+            await api.mostrarDialogo(12, 13);
+            console.log("Após a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo!");
+
+            console.log("\n\nVocê irá agora para sala 5, aguarde...");
+
+            const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+            if (mis.toLowerCase() == 's') {
+              // Atualiza para a próxima sala
+              await api.updateSala(5);
+
+              console.log("Sala atualizada, esperando 2 segundos...");
+              //await sleep(1000);  
+              //console.clear();
+
+              // Agora continue para a próxima sala
+              let novaSala = await api.getSalaAtual();
+              console.log("Nova sala recebida:", novaSala);
+              await processarSala5(salaAtual);
+            }
+          } else if (mis.toLowerCase() == 'n') {
+            console.log("Você tem que aceitar a missão para continuar jogando :)");
+            // REMOVA O process.exit() AQUI
+            console.log("Reiniciando a missão...");
+            await processarSala4(salaAtual); // Reiniciar a missão se o jogador recusar
+          }
+        };
+
+        async function processarSala5(salaAtual) {
+          salaAtual = await api.getSalaAtual();
+          console.log("CHEGOU NA SALA 5!!!!!!!!!!");
+          //Mostrar a região
+          const regiaoAtual = await api.client.query(`
+            SELECT r.nomeRegiao, r.descricaoRegiao
+            FROM Regiao r 
+            JOIN Sala s ON s.idRegiao = r.idRegiao 
+            JOIN PC p ON p.sala = s.idSala`);
+
+          if (regiaoAtual.rows.length > 0) {
+            const regiao = regiaoAtual.rows[0];
+            console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
+            console.log(`Descrição: ${regiao.descricaoregiao}\n`);
+          }
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+          //Combate
+          console.log("No meio do caminho para a Cidade de Bill, você encontra dois seres desconhecidos na floresta!");
+          //mostra os npcs 
+          await api.mostrarInimigoNPC(5);
+          //Mostra diálogos
+          await api.mostrarDialogo(49, 54);
+
           await api.mostrarArmas();
           let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
 
-          await api.mostrarInimigoNPC(salaAtual);
-          await api.atacarNPC(14, armaUsada, salaAtual);
-          await api.updateVidaNPC(14);
-          console.log("\nVocê matou um Corredor!\n");
+          await api.atacarNPC(3, armaUsada, salaAtual);
+          await api.updateVidaNPC(3);
 
-          await api.atacarNPC(14, armaUsada, salaAtual);
-          await api.updateVidaNPC(14);
-          console.log("\nVocê matou outro Corredor!\n");
+          await api.atacarNPC(4, armaUsada, salaAtual);
+          await api.updateVidaNPC(4);
 
-          await api.atacarNPC(14, armaUsada, salaAtual);
-          await api.updateVidaNPC(14);
-          console.log("\nVocê matou mais um Corredor!\n");
-
-          await api.atacarNPC(15, armaUsada, salaAtual);
-          await api.updateVidaNPC(15);
-          console.log("\nVocê matou um Corredor!\n");
-
-          console.log("\nEsses são ESTALADORES, são mais perigosos\n")
-
-          await api.atacarNPC(15, armaUsada, salaAtual);
-          await api.updateVidaNPC(15);
-          console.log("\nVocê matou um Estalador\n!");
-
-          await api.atacarNPC(15, armaUsada, salaAtual);
-          await api.updateVidaNPC(15);
-          console.log("\nVocê matou mais um Estalador\n!");
-
-          console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
+          console.log("Parabéns você matou todos os inimigos\n");
           await api.mostrarInventario();
-          await api.updateXPMisJoelPatr(1);
-          await api.updateXPInfec(14);
-          await api.updateXPInfec(15);
+          await api.updateXPNPC(3);
+          await api.updateXPNPC(4);
 
-          console.log("Você conseguiu sair da Zona de Quarentena");
-          await api.mostrarDialogo(12, 13);
-          console.log("Após a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo!");
+          await api.adquireItemNPC(6);
+          await api.mostrarDialogo(55, 56);
+
+          console.log("\n\nVocê irá agora para sala 6, aguarde...");
+
+          // Atualiza para a próxima sala
+          await api.updateSala(6);
+
+          console.log("Sala atualizada, esperando 2 segundos...");
+          //await sleep(2000);
+          //console.clear();
+
+          // Agora continue para a próxima sala
+          let novaSala = await api.getSalaAtual();
+          console.log("Nova sala recebida:", novaSala);
+
+          await processarSala6(novaSala);
+        };
+
+        async function processarSala6(salaAtual) {
+          await api.infos(salaAtual);
+          //await api.verInventario ();
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+          await api.mostrarItensDaSala(salaAtual);
+          await api.mostrarDialogo(14, 16);
+          await api.objetivoExploracao(salaAtual);
+          await api.evento(salaAtual);
+
+
+          //missao id4
+          const misEXP3 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+          if (misEXP3.toLowerCase() == 's') {
+            console.log("Missão aceita!");
+            await api.objetivoExploracao(salaAtual);
+
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("No meio do caminho por suprimentos, Joel, Ellie e Bill se deparam com uma escola completa de inimigos!")
+            console.log("\nMate todos seus inimigos");
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou um Corredor!\n");
+
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou outro Corredor!\n");
+
+            console.log("\nEsses são ESTALADORES, são mais perigosos\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador!\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador\n!");
+
+            console.log("Parece não ter mais nada a se preocupar. A sala está limpa e agora está livre para explorar a sala");
+            await api.mostrarItensDaSala(salaAtual);
+
+            console.log("Quando você está próximo de sair da escola, é possível ouvir um barulho estrondoso.\nUma criatura ENORME sai de uma salaa das escolas, e ela quer te atacar");
+            //Baiacu
+            await api.atacarNPC(16, armaUsada, salaAtual);
+            await api.updateVidaNPC(16);
+            console.log("\nVocê matou  um Baiacu\n!");
+
+            console.log("Parabéns, você acabou de lidar com um Baiacu, uma espécie de infectado rara e muito difícil de abater!\n");
+            await api.mostrarInventario();
+            await api.updateXPMisJoelExp(4);
+            await api.updateXPNPC(14);
+            await api.updateXPNPC(15);
+            await api.updateXPNPC(16);
+
+            console.log("Você conseguiu sair da escola");
+            console.log("Após obter o carro, vocês seguem o caminho até Tommy");
+            
+          }
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 7, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(7);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            //console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala7(novaSala);
+          }
         }
 
 
-        // sala 3 
+
+        async function processarSala7(salaAtual) {
+          await api.infos(salaAtual);
+
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+          await api.mostrarItensDaSala(salaAtual);
+          await api.objetivoExploracao(salaAtual);
+
+          //missao id5
+          const misEXP3 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+          if (misEXP3.toLowerCase() == 's') {
+            console.log("Missão aceita!");
+            await api.objetivoExploracao(salaAtual);
+
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("\nApós a Perca Total do carro, Joel e Ellie seguem vagando pela cidade de Pittsburgh");
+            console.log("Após entrar numa casa para passar a noite, vocês percebem aqui ali também era o abrigo de outras duas pessoas");
+            await api.mostrarDialogo(17, 19);
+
+            console.log("\nVocês estão decidem se juntar para passar pelo Esgoto a fim de sair da cidade.E nele vocês encontram alguns inimigos!")
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou um Corredor!\n");
+
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou outro Corredor!\n");
+
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou outro Corredor!\n");
+
+            console.log("\nEsse ESTALADOR, é mais perigoso\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador!\n");
+
+            console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
+            await api.mostrarItensDaSala(salaAtual);
+            await api.mostrarInventario();
+            await api.updateXPMisJoelPatr(1);
+            await api.updateXPNPC(14);
+            await api.updateXPNPC(15);
+            await api.evento(salaAtual);
+            await api.mostrarDialogo(20, 22);
+          }
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 8, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(8);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            //console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala8(novaSala);
+          }
+        };
+
+        async function processarSala8(salaAtual) {
+          await api.infos(salaAtual);
+
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+          console.log("\nApós a morte de Henry e Sam, vocês se encontram sozinhos novamente.");
+          await api.objetivoPatrulha(6);
+
+          //missao patrulha id6
+          const misPatr2 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+          if (misPatr2.toLowerCase() == 's') {
+            console.log("Missão aceita!");
+
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou um Corredor!\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador!\n");
+
+            console.log("Agora você se depara com uma criatura também nunca antes vista. Parece um estalador mal formado. Mate-o")
+
+            await api.atacarNPC(17, armaUsada, salaAtual);
+            await api.updateVidaNPC(17);
+            console.log("\nVocê matou um Espreitador!\n");
+
+            await api.atacarNPC(17, armaUsada, salaAtual);
+            await api.updateVidaNPC(17);
+            console.log("\nVocê matou outro Espreitador!\n");
+
+            console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
+            await api.updateXPMisJoelPatr(6);
+            await api.updateXPNPC(14);
+            await api.updateXPNPC(15);
+            await api.updateXPNPC(17);
+          }
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 9, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(9);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            //console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala9(novaSala);
+          }
+
+        };
+
+
+        async function processarSala9(salaAtual) {
+          await api.infos(salaAtual);
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+          //Sala 9: Chegada a Jackson e encontro com Tommy (MissaoExploracaoObterItem id 5)
+          //Missao(7, 6, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 60, false, 13),
+          //Evento:(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 10, 1),
+
+          console.log("Após uma viagem longa e cansativa, Joel e Ellie finalmente chegam a Jackson, onde seu irmão Tommy mora!");
+          await api.mostrarDialogo(23,25);
+          await api.evento(6);
+          await api.updateXPMisJoelExp(7);
+          await api.objetivoExploracao(7);
+
+          console.log("Após encontro com Tommy, Ellie e Joel decidem conversar!");
+
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 10, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(10);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            //console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala10(novaSala);
+          }
+
+        };
+
+        async function processarSala10(salaAtual) {
+          await api.infos(salaAtual);
+
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+          await api.mostrarDialogo(26,29);
+          await api.evento(7);
+
+          //Missao:(8, 7, 'Resgatar Ellie de David.', 'Operação de Reconhecimento', 9, 1, 400, false, 13),
+          //1 evento: (7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 11, 1),
+          const misPatr3 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+          if (misPatr3.toLowerCase() == 's') {
+            console.log("Missão aceita!Você deve resgatar Ellie");
+                 
+            await api.objetivoExploracao(8);
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+            await api.atacarNPC(14, armaUsada, salaAtual);
+            await api.updateVidaNPC(14);
+            console.log("\nVocê matou um Corredor!\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador!\n");
+
+            console.log("Joel escuta um barulho e decide ir atrás!");
+
+            await api.evento(8);
+            await api.updateXPMisJoelPatr(8);
+            await api.updateXPNPC(14);
+            await api.updateXPNPC(15);
+          }
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 11, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(11);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            //console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala11(novaSala);
+          }
+
+        };
+
+        async function processarSala11(salaAtual) {
+          await api.infos(salaAtual);
+
+          await api.mostrarItensDaSala(salaAtual);
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+          //Sala 11: Reencontro com Marlene(explicacao de tudo)e encontro de suprimentos E MissaoExploracaoObterItem id 6
+          // (9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 13, 1);
+          // (9, 8, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 30, false, 13),
+          //2 18 e 1 13 e 1 7
+          await api.mostrarDialogo(57,58);
+          await api.mostrarDialogo(32,34);
+          await api.objetivoExploracao(9);
+
+          const misPatr3 = askAndReturn("\nVocê vai salvar a Ellie?\nS/N\n");
+          if (misPatr3.toLowerCase() == 's') {
+            console.log("Missão aceita!Você deve salvar a vida de Ellie");
+            await api.evento(9);
+                 
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+
+            await api.atacarNPC(18, armaUsada, salaAtual);
+            await api.updateVidaNPC(18);
+            console.log("\nVocê matou um Vagalume que estava no hospital!\n");
+
+            await api.atacarNPC(18, armaUsada, salaAtual);
+            await api.updateVidaNPC(18);
+            console.log("\nVocê matou outro Vagalume que estava no hospital!\n");
+
+            await api.atacarNPC(13, armaUsada, salaAtual);
+            await api.updateVidaNPC(13);
+            console.log("\nVocê matou o médico que fazia a cirurgia em Ellie e agora ela se encontra desacordada nos seus braços!\n");
+
+            console.log("Você deve levar Ellie parra fora do hospital e voltar para Jackson!");
+            console.log("Na garagem do hospital, Marlene te intercepta");
+            await api.mostrarDialogo(58,65);
+
+            await api.atacarNPC(7, armaUsada, salaAtual);
+            await api.updateVidaNPC(7);
+            console.log("\nAcabou, Marlene está morta! n");
+
+           
+            await api.updateXPMisJoelPatr(8);
+            await api.updateXPNPC(18);
+            await api.updateXPNPC(13);
+            await api.updateXPNPC(7);
+          }
+
+          await api.evento(9);
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 12, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(12);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala12(novaSala);
+          }
+
+        };
+
+        async function processarSala12(salaAtual) {
+          await api.infos(salaAtual);
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+
+          // MissaoPatrulha
+          // (10, 9, 'Mate todos os infectados em volta de Jackson para entrar na cidade', 'Defesa do Assentamento', 8, 1, 450, false, 13);
+  
+          
+          const misPatr4 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
+          if (misPatr4.toLowerCase() == 's') {
+            console.log("Missão aceita!Você deve matar todos esses infectados");
+            await api.objetivoPatrulha(10);
+            await api.mostrarInimigoNPC(salaAtual);
+
+            console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
+            await api.mostrarArmas();
+            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+            await api.mostrarInimigoNPC(salaAtual);
+
+            await api.atacarNPC(17, armaUsada, salaAtual);
+            await api.updateVidaNPC(17);
+            console.log("\nVocê matou um Espreitador que estava rondando por Jackson!\n");
+
+            await api.atacarNPC(17, armaUsada, salaAtual);
+            await api.updateVidaNPC(17);
+            console.log("\nVocê matou outro Espreitador!\n");
+
+            await api.atacarNPC(17, armaUsada, salaAtual);
+            await api.updateVidaNPC(17);
+            console.log("\nVocê matou outro Espreitador!\n");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou um Estalador que estava ali também");
+
+            await api.atacarNPC(15, armaUsada, salaAtual);
+            await api.updateVidaNPC(15);
+            console.log("\nVocê matou outro Estalador ");
+
+
+            console.log("Combate finalizado. Você pode voltar para Jackson em segurança!");
+
+           
+            await api.updateXPMisJoelPatr(10);
+            await api.updateXPNPC(17);
+            await api.updateXPNPC(15);
+          }
+
+          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
+          if (mis.toLowerCase() == 's') {
+
+            console.log("\n\nVocê irá agora para sala 13, aguarde...");
+
+            // Atualiza para a próxima sala
+            await api.updateSala(13);
+
+            console.log("Sala atualizada, esperando 2 segundos...");
+            //await sleep(2000);
+            console.clear();
+
+            // Agora continue para a próxima sala
+            let novaSala = await api.getSalaAtual();
+            console.log("Nova sala recebida:", novaSala);
+
+            await processarSala13(novaSala);
+          }
+
+        };
+
+        async function processarSala13(salaAtual) {
+          await api.infos(salaAtual);
+
+          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
+          if (escolha.toLowerCase() == 's') {
+            console.log("Seu inventário atual é:");
+            await api.mostrarInventario();
+          }
+
+          //Aumenta  vida de acordo com a vestimenta escolhida
+          await api.updateVidaVestimenta();
+
+          // Missão Exploração
+          // (11, 10, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 30, false, 13);
+
+
+          console.log("Joel e Ellie voltam à Jackson. Ellie está um pouco estranha e decide conversar com Joel");
+          await api.objetivoExploracao(11);
+          await api.mostrarDialogo(35,37);
+
+          await api.updateXPMisJoelExp(11);
+
+          console.log("Você chegou ao fim do MUD. Deixa o like e compartilha com seus amigos!!");
+
+
+        };
+
+
       } catch (error) {
         console.error("Erro ao mover para a sala:", error.message || error);
       }
-    }
+    } // fechando mover para sala
 
-  } catch (error) {
+  } catch (error) { // try primeira tela
     console.error("Erro ao executar o início do jogo:", error.message || error);
-  }
-  finally {
+  } finally {
     console.log("Fechando a conexão com o banco de dados...");
     console.log("Banco desconectado com sucesso!");
     await api.updateSala(1);
     process.exit();
   }
-}
+} // fecha primeira tela
 
 async function iniciarJogo() {
   await primeiraTela();

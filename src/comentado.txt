@@ -1,0 +1,15 @@
+// let choose = askAndReturn("Você encontrou alguns itens na sala. Deseja pegá-los\nS/N\n");
+          // if (choose.toLowerCase() == 's') {
+          //   await api.adicionarItemAoInventario(1, 1, 18);
+          //   await api.adicionarItemAoInventario(2, 1, 18);
+          //   await api.adicionarItemAoInventario(3, 1, 18);
+          //   await api.adicionarItemAoInventario(4, 1, 18);
+          //   await api.adicionarItemAoInventario(5, 1, 18);
+          //   await api.adicionarItemAoInventario(6, 1, 12);
+          //   await api.adicionarItemAoInventario(7, 1, 12);
+          //   await api.adicionarItemAoInventario(8, 1, 17);
+          //   await api.adicionarItemAoInventario(9, 1, 17);
+          //   await api.updateCapacidadeInventario(1);
+
+          //   console.log("\nItens adicionados ao inventário com sucesso!\n");
+          // }
