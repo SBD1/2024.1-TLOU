@@ -17,12 +17,10 @@ Evento: Joel descobre que Ellie é imune
 
 Regiao id3 - Cidade de Bill
 Sala 1: Encontro com o NPC- Lider de Facção e um pequeno combate
-Sala 2: MissaoExploracaoObterItem id 3
-Sala 3: suprimentos e diálogos entre Joel,Ellie e Bill
+Sala 2: MissaoExploracaoObterItem id 3 e suprimentos e diálogos entre Joel,Ellie e Bill
 
 Regiao id4- Esgoto
-Sala 1: Encontro com Henry e Sam -> diálogos e suprimentos
-Sala 2: MissaoExploracaoObterItem id 4
+Sala 1: Encontro com Henry e Sam -> diálogos e suprimentos e  MissaoExploracaoObterItem id 4
 Sala 3: MissaoPatrulha id 2
 
 Evento: Sam se infecta e Henry se mata
@@ -37,14 +35,12 @@ Sala 2: MissaoPatrulha id3 - Encontrar Ellie
 Evento: Ellie mata David após tentativa de abusp
 
 Regiao id 7 - Hospital Saint Mary
-Sala 1: Reencontro com Marlene(explicacao de tudo)e encontro de suprimentos
-Sala 2: MissaoExploracaoObterItem id 6
+Sala 1: Reencontro com Marlene(explicacao de tudo)e encontro de suprimentos E MissaoExploracaoObterItem id 6
 
 Evento: Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la. 
 
-Sala 3: MissaoPatrulha id 4
+Sala 2: MissaoPatrulha id 4
 
 FINAL DO JOGO
 Volta para Jackson
-Sala 3: MissaoPatrulha id 5
 Sala 4: MissaoExploracaoObterItem id 7 e diálogos finais

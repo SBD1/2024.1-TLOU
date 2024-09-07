@@ -1,20 +1,15 @@
-mostra inventario no começo e opcao dele querer ver o invetario dps de pegar algum item
-verificacao de escolha
-ele quer pegar tudo?
-se sim, bota tudo
-se nao, ele manda o id e a qnt que ele quer
-
-funcao para matar enemy
-A gente tem a tabela Arma, que tem municaoAtual e municaoMax e o dano
-A ideia é pegar a vida do npc e ir decrementando no valor do dano, se chegar a 0 ele morre deleta ele
-checar se municaoatual n chega no 0
-municaoAtual nunca pode passar da municalmax
-
 colocar os update de sala na main(cada vez que a missao for concluida)
 
+deixar adicionar no inventário só se tiver capacidade para tal
 
-verificacao de dano(as palavras aleatorias. se for == 'acerto' '> 
-da o da dano e desconta na vida. se == 'errou' , so desconta a municao)
-97
+a logica do pc morrer:
+se o PC morrer em x sala
+ele volta pro inicio dessa x sala
+e perde todos os itens que ele adquiriu(se ele tiver pego)
+e todos os npc voltam a vida(se ele tiver matado ou nao)
 
-a logica do pc morrer(volta pro inicio da sala que ele estava antes e perde todos os itens)
+oh, se o cara escolher uma arma, ele usa ela enquanto tiver municao
+quando a municao da arma escolhida acabar aparece as opcoes novamente
+pra ele poder mudar de arma
+
+arrumar DML
