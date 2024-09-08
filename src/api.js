@@ -37,6 +37,14 @@ class Api {
     return response;
   };
 
+  /*createTriggers = async () => {
+    let response = false;
+    await this.client.query(sqlTrg).then(() => {
+      response = true;
+    });
+    return response;
+  };*/
+
   populateTables = async () => {
     let response = false;
     await this.client.query(sqlData).then(() => {
@@ -45,13 +53,7 @@ class Api {
     return response;
   };
 
-  /*createTriggers = async () => {
-    let response = false;
-    await this.client.query(sqlTrg).then(() => {
-      response = true;
-    });
-    return response;
-  };*/
+  
 
   getSalaAtual = async () => {
     try {
@@ -153,16 +155,17 @@ verificarCapacidadeInventario = async () => {
 
     if (result.rows.length > 0) {
       return result.rows[0].capacidadeDisponivel;
+      
     } else {
       throw new Error('Inventário não encontrado.');
     }
   } catch (error) {
     console.error("Erro ao verificar a capacidade do inventário:", error.message || error);
-    return 0; // Retorna 0 em caso de erro para evitar adição de itens
+    return 0; //Retorna 0 em caso de erro para evitar adição de itens
   }
 };
 
-// Atualizar capacidade do inventário
+//Atualizar capacidade do inventário
 updateCapacidadeInventario = async () => {
   try {
     await this.client.query(`
@@ -178,12 +181,12 @@ updateCapacidadeInventario = async () => {
   }
 };
 
-// Função para adicionar um item ao inventário
+//Função para adicionar um item ao inventário
 adicionarItemAoInventario = async (idinstitem, iditem) => {
   try {
     const capacidadeDisponivel = await this.verificarCapacidadeInventario(); 
 
-    if (capacidadeDisponivel > 0) {
+    if (capacidadeDisponivel <= 0) {
       const result = await this.client.query(`
         UPDATE InstItem
         SET IdInventario = 1
@@ -192,7 +195,7 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
       `, [idinstitem, iditem]);
 
       if (result.rows.length > 0) {
-        // Atualiza a capacidade após adicionar o item
+        //Atualiza a capacidade após adicionar o item
         await this.updateCapacidadeInventario();
         console.log(`O item foi adicionado ao inventário!`);
       } else {
@@ -205,7 +208,8 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
     console.error("Erro ao adicionar o item ao inventário:", error.message || error);
   }
 };
-
+  
+  
 
   // adicionarItemAoInventario = async (idInstItem, idItem) => {
   //   try {
@@ -921,9 +925,9 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
               SET Sala = NULL, IdInventario = 1
               WHERE idinstitem = $1
             `, [item.idinstitem]);
+            console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
           }
           await this.updateCapacidadeInventario(1);
-          console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
           break;
   
         case '2': // Não pegar nenhum item
@@ -1038,6 +1042,7 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
           LEFT JOIN Arma a ON i.IdItem = a.IdItem
           LEFT JOIN Vestimenta v ON i.IdItem = v.IdItem
           LEFT JOIN Consumivel c ON i.IdItem = c.IdItem
+          WHERE i.idinventario = 1
           ORDER BY nomeItem;
         `);
   
