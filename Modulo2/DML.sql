@@ -20,7 +20,7 @@ INSERT INTO Sala (idSala, IdRegiao) VALUES
 (9, 5),
 (10, 5),
 (11, 6),
-(12, 6),
+(12, 5),
 (13, 5);
 
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
@@ -49,7 +49,7 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 (23,  'N');
 
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
-(1, 150, 'Inventário do Joel.'),
+(1, 10, 'Inventário do Joel.'),
 (2, 50, 'Inventário do Ellie.'),
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
@@ -180,21 +180,22 @@ INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
 (67, 11, 11, NULL),
 (68, 3 , 11, NULL),
 (69, 18 , 11, NULL),
-(70, 18, 10, NULL),
-(71, 18, 10, NULL),
-(72, 18, 10, NULL),
-(73, 19, 10, NULL),
-(74, 27, 10, NULL),
-(75, 18, 9, NULL),
-(76, 18, 9, NULL),
-(77, 18, 9, NULL),
-(78, 17, 9, NULL),
-(79 ,1, 5, NULL),
-(80 ,9, 5, NULL),
-(81 ,20, 8, NULL),
-(82 ,19, 8, NULL),
-(83 ,26, 7, NULL),
-(84 ,32, 4, NULL);
+(70, 18, NULL, 10),
+(71, 18, NULL, 10),
+(72, 18, NULL, 10),
+(73, 19, NULL, 10),
+(74, 27, NULL, 10),
+(75, 18, NULL, 9),
+(76, 18, NULL, 9),
+(77, 18, NULL, 9),
+(78, 17, NULL, 9),
+(79 ,1, NULL, 5),
+(80 ,9, NULL, 5),
+(81 ,20, NULL, 5),
+(82 ,19, NULL, 8),
+(83 ,26, NULL, 7),
+(84 ,32, NULL, 4),
+(85, 33, NULL, 11);
 
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
@@ -313,13 +314,13 @@ INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, esta
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (1, 'Primeiro contato com Ellie', 'Ellie é encontrada pela primeira vez, trazida por Marlene na Zona de Quarentena.', 2, 1),
 (2, 'Morte de Tess', 'Tess sacrifica sua vida para garantir a segurança do grupo, enfrentando os infectados com coragem e determinação.', 3, 1),
-(3, 'Joel descobre que Ellie é imune', 'Joel descobre que Ellie é imune ao vírus após uma conversa com Marlene.', 6, 1),
+(3, 'Joel descobre que Ellie é imune', 'Joel descobre que Ellie é imune ao vírus após uma conversa com Marlene.', 4, 1),
 (4, 'Encontro com Bill', 'Durante a busca por suprimentos, Joel e Ellie encontram Bill, que os ajuda a montar um veículo para continuar a viagem.', 6, 1),
 (5, 'Sam se infecta e Henry tira sua própria vida', 'Sam é infectado, e, incapaz de lidar com a perda, Henry tira sua própria vida.', 7, 1),
-(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 8, 1),
-(7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 9, 1),
-(8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 12, 1),
-(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 13, 1);
+(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 9, 1),
+(7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 10, 1),
+(8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 11, 1),
+(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 12, 1);
 
 INSERT INTO Itinerario(idItinerario, horario, dia, idEvento) VALUES
 (1, 10, '2024-01-23', 1),  
@@ -462,7 +463,6 @@ INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (3, 3, 'F', 1), 
 (4, 4, 'F', 1),
 (5, 5, 'F', 1),
-(6, 6, 'F', 1),
 (7, 7, 'F', 1),
 (8, 14, 'I', 2),
 (9, 14, 'I', 2),
@@ -507,6 +507,7 @@ INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (48, 17, 'I', 12),
 (49, 15, 'I', 12),
 (50, 15, 'I', 12);
+
 
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade, danoInfectado) VALUES
 (14, 'Corredor', 2, 7),

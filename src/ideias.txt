@@ -25,14 +25,59 @@ habilidades do joel
 
 fazer aumento de nivel de acordo com o xp
 
-Sala 7 fazer o loop de missão
+
+
 
 funcao de mostrar inimigo esta errada(ja foi)
 ver isso de updateVidaNPC
 
 tirar esses textos de merda(que o arthur fez)
 
-Erro ao adicionar o item ao inventário: invalid input syntax for type integer: "{}" -- sala 5
+Erro ao adicionar o item ao inventário: invalid input syntax for type integer: "{}" -- sala 5(na funcao de adquirir item de npc)
 
 dialogo errado na sala 7
+
 Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 8)
+
+sala 2 printando inimigos duas vezes(colocar a lembracinha)
+
+Erro ao atacar PC por Infectado: update or delete on table "pc" violates foreign key constraint "personagem_evento_fk" on table "evento"(sala 4)
+
+
+Pai e Filha
+Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.
+consultas na sala errada(Esta na 6) -- era para estar na sala 7
+
+sala 7- printando objetivo duas vezes(dps do console.log)
+
+sala 7 printando evento de outra sala(deve ser coisa do DML)
+
+SALA 8- spoiler?
+final da sala 8 continua chamando a sala 8
+
+sam e henry morrendo na sala errada(sala 5)
+
+Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro -- essa linha esta errada     
+Após encontro com Tommy, Ellie e Joel decidem conversar!
+
+Erro ao realizar missão: Cannot read properties of undefined (reading 'objetivo') -- sala 10
+Na frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho -- sala 11
+
+Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy -- sala 11(evento errado)
+DML de sala - tem que ser na 5
+(12, 6),
+
+Na frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho -- adaptar sala 12
+
+Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva -- sala 13(tirar)
+-------------------
+da pra colocar um console.log na sala 2(dps de aceitar a missao)
+colocar consulta para mostrar descricao do item de tess(dps eu faco)
+
+
+erro ao adicionar o item ao inventário: invalid input syntax for type integer: "{"{\"idinstitem\":47}","{\"idinstitem\":48}","{\"idinstitem\":49}"}" -- sala 5
+
+Pai e Filha(NEM CHAMA A FUNCAO EVENTO VEI)
+Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.
+
+

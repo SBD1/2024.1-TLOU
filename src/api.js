@@ -6,6 +6,9 @@ import { question } from "readline-sync";
 const { Client } = pg;
 var sqlTables = readFileSync("../Modulo2/DDL.sql").toString();
 var sqlData = readFileSync("../Modulo2/DML.sql").toString();
+//var sqlTrg = readFileSync("..Modulo3/triggers.sql").toString();
+
+
 
 function separador() {
   console.log("==========================================================================")
@@ -41,6 +44,14 @@ class Api {
     });
     return response;
   };
+
+  /*createTriggers = async () => {
+    let response = false;
+    await this.client.query(sqlTrg).then(() => {
+      response = true;
+    });
+    return response;
+  };*/
 
   getSalaAtual = async () => {
     try {
@@ -119,7 +130,6 @@ class Api {
     }
   };
   
-
   updateVidaNPC = async (id) => {
     try {
       await this.client.query(`
@@ -132,19 +142,84 @@ class Api {
     }
   };
 
-  adicionarItemAoInventario = async (idInstItem, idItem) => {
-    try {
+  // Função para verificar a capacidade do inventário
+verificarCapacidadeInventario = async () => {
+  try {
+    const result = await this.client.query(`
+      SELECT capacidade - (SELECT COUNT(*) FROM InstItem WHERE IdInventario = 1) AS capacidadeDisponivel
+      FROM Inventario
+      WHERE idinventario = 1
+    `);
+
+    if (result.rows.length > 0) {
+      return result.rows[0].capacidadeDisponivel;
+    } else {
+      throw new Error('Inventário não encontrado.');
+    }
+  } catch (error) {
+    console.error("Erro ao verificar a capacidade do inventário:", error.message || error);
+    return 0; // Retorna 0 em caso de erro para evitar adição de itens
+  }
+};
+
+// Atualizar capacidade do inventário
+updateCapacidadeInventario = async () => {
+  try {
+    await this.client.query(`
+      UPDATE Inventario
+      SET capacidade = capacidade - 
+        (SELECT COUNT(*) 
+         FROM InstItem 
+         WHERE IdInventario = 1)
+      WHERE idinventario = 1
+    `);
+  } catch (error) {
+    console.error("Erro ao atualizar a capacidade:", error.message || error);
+  }
+};
+
+// Função para adicionar um item ao inventário
+adicionarItemAoInventario = async (idinstitem, iditem) => {
+  try {
+    const capacidadeDisponivel = await this.verificarCapacidadeInventario(); 
+
+    if (capacidadeDisponivel > 0) {
       const result = await this.client.query(`
         UPDATE InstItem
         SET IdInventario = 1
         WHERE idInstItem = $1 AND IdItem = $2
         RETURNING *;
-      `, [idInstItem, idItem]);
+      `, [idinstitem, iditem]);
 
-    } catch (error) {
-      console.error("Erro ao adicionar o item ao inventário:", error.message || error);
+      if (result.rows.length > 0) {
+        // Atualiza a capacidade após adicionar o item
+        await this.updateCapacidadeInventario();
+        console.log(`O item foi adicionado ao inventário!`);
+      } else {
+        console.log(`Item não encontrado ou já adicionado ao inventário.`);
+      }
+    } else {
+      console.log(`Não há capacidade suficiente no inventário.`);
     }
-  };
+  } catch (error) {
+    console.error("Erro ao adicionar o item ao inventário:", error.message || error);
+  }
+};
+
+
+  // adicionarItemAoInventario = async (idInstItem, idItem) => {
+  //   try {
+  //     const result = await this.client.query(`
+  //       UPDATE InstItem
+  //       SET IdInventario = 1
+  //       WHERE idInstItem = $1 AND IdItem = $2
+  //       RETURNING *;
+  //     `, [idInstItem, idItem]);
+
+  //   } catch (error) {
+  //     console.error("Erro ao adicionar o item ao inventário:", error.message || error);
+  //   }
+  // };
 
   mostrarArmas = async () => {
     try {
@@ -167,18 +242,18 @@ class Api {
     }
   };
 
-  updateCapacidadeInventario = async (IdPersonagem) => {
-    try {
-      await this.client.query(`
-        UPDATE Inventario SET capacidade = capacidade - 
-        (SELECT COUNT(i.idinstitem) AS total
-        FROM institem i 
-        JOIN inventario ii ON ii.idinventario = i.idinventario)
-        WHERE idinventario = $1`, [IdPersonagem]);
-    } catch (error) {
-      console.error("Erro ao atualizar a capacidade:", error.message || error);
-    }
-  };
+  // updateCapacidadeInventario = async () => {
+  //   try {
+  //     await this.client.query(`
+  //       UPDATE Inventario SET capacidade = capacidade - 
+  //       (SELECT COUNT(i.idinstitem) AS total
+  //       FROM institem i 
+  //       JOIN inventario ii ON ii.idinventario = i.idinventario)
+  //       WHERE idinventario = 1`);
+  //   } catch (error) {
+  //     console.error("Erro ao atualizar a capacidade:", error.message || error);
+  //   }
+  // };
 
   // Função para exibir um dialogo
   mostrarDialogo = async (DialogoInicio, DialogoFim) => {
@@ -504,17 +579,17 @@ class Api {
           console.log("\nRecarregando a arma...\n");
           await this.recarregarArma(idarma);
           municaoAtualPC = armaResult.rows[0].municaomax;
-          await this.sleep (600);
+          //await this.sleep (600);
         }
 
         // Determinar se o ataque acerta ou erra
         const acerto = Math.random() < 0.74 ? 'acertou' : 'errou';
         console.log(`Resultado do ataque: ${acerto}`);
-        await this.sleep (600);
+        //await this.sleep (600);
 
         if (acerto === 'errou') {
           console.log("O ataque falhou e o inimigo te acertou.");
-          await this.sleep (600);
+          //await this.sleep (600);
           await this.atacarPCPorInfectado(1, idnpc);
           // Atualizar munição mesmo se o ataque falhar
           municaoAtualPC -= 1;
@@ -524,7 +599,7 @@ class Api {
             WHERE IdItem = $2;
           `, [municaoAtualPC, idarma]);
           console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
-          await this.sleep (600);
+          //await this.sleep (600);
         } else {
           // Se acertou, decrementar a vida do NPC
           let novaVida = vidaAtualNpc - danoArma;
@@ -541,7 +616,7 @@ class Api {
                 WHERE InstNPC.idInstNPC = npc_to_delete.idInstNPC;
             `, [idnpc, sala]);
             console.log("Inimigo eliminado.");
-            await this.sleep (600);
+            //await this.sleep (600);
             npcVivo = false;
           } else {
             await this.client.query(`
@@ -550,7 +625,7 @@ class Api {
               WHERE IdPersonagem = $2;
             `, [novaVida, idnpc]);
             console.log(`\nVida do NPC atualizada para: ${novaVida}`);
-            await this.sleep (600);
+            //await this.sleep (600);
           }
 
           // Atualizar a munição da arma
@@ -561,13 +636,13 @@ class Api {
             WHERE IdItem = $2;
           `, [municaoAtualPC, idarma]);
           console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
-          await this.sleep (600);
+          //await this.sleep (600);
         }
 
         // Verificar se o NPC foi derrotado para sair do loop
         if (!npcVivo) {
           console.log("Combate finalizado.");
-          await this.sleep (600);
+          //await this.sleep (600);
           return;
         }
       }
@@ -575,7 +650,7 @@ class Api {
       console.error("Erro ao atacar NPC:", error.message || error);
       if (error.message.includes("morreu")) {
         await this.reiniciarSala(sala, idpc);
-      await this.sleep (600);
+        //await this.sleep (600);
     }
   }
 };
@@ -716,7 +791,6 @@ class Api {
         await this.updateSala(proximaSalaNumero);
 
         console.log("Sala atualizada, esperando 2 segundos...");
-        // await sleep(2000); // Remova o comentário se desejar adicionar uma pausa.
         console.clear();
 
         // Obtém a nova sala atual

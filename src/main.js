@@ -101,9 +101,6 @@ async function primeiraTela() {
               escolhaReceita = askAndReturn("\nEscolha o número da receita para realizá-la ou pressione 'V' para voltar: ");
 
               if (escolhaReceita.toLowerCase() === 'v') {
-
-                // voltar para a continuação da sala
-                console.log("não seiiiii");
                 return;       
               }
 
@@ -121,7 +118,6 @@ async function primeiraTela() {
             console.log("Nenhuma receita de crafting disponível.");
           }
         } else if (craft.toLowerCase() === 'n') {
-          // MESMA LÓGICA SE TECLAR V
           console.log("\nVocê optou por não realizar craft. Continuando...");
           return; 
         } else {
@@ -311,11 +307,10 @@ async function primeiraTela() {
           await api.mostrarInventario();
           await api.mostrarNPCsDaSala(salaAtual);
           await api.evento(salaAtual);
-          const DialogoInicio = 1;
-          const DialogoFim = 6;
-          await api.mostrarDialogo(DialogoInicio, DialogoFim);
+          await api.mostrarDialogo(1, 6);
           await api.mostrarItensDaSala(salaAtual);
           await api.verInventario();
+          // mudar aqui para sala 2 dps
           await api.mudarParaProximaSala(2, processarSala2);
         };
 
@@ -441,7 +436,6 @@ async function primeiraTela() {
 
           console.log("Você conseguiu sair da Cidade Infestada");
           await api.mostrarDialogo(12, 13);
-          console.log("Após a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo!");
           await api.mudarParaProximaSala(5, processarSala5);
         };
 
@@ -456,6 +450,7 @@ async function primeiraTela() {
           await api.mostrarInimigoNPC(5);
           await api.mostrarDialogo(49, 54);
           await api.mostrarArmas();
+          console.log("DA ONDE TA VINDO ESSE EVENTO???");
           let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
           await api.atacarNPC(3, armaUsada, salaAtual, 1);
           await api.updateVidaNPC(3);
@@ -467,10 +462,6 @@ async function primeiraTela() {
           await api.updateXPNPC(4);
           await api.adquireItemNPC(6);
           await api.mostrarDialogo(55, 56);
-          await api.evento(5);
-          await api.adquireItemNPC(5);
-          await api.adquireItemNPC(8);
-
           await api.mudarParaProximaSala(6, processarSala6);
         };
 
@@ -558,7 +549,6 @@ async function primeiraTela() {
           await api.verInventario();
           await api.updateVidaVestimenta();
           await api.mostrarItensDaSala(salaAtual);
-          await api.objetivoExploracao(salaAtual);
 
           while (true) {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
@@ -602,6 +592,7 @@ async function primeiraTela() {
               await api.updateXPMisJoelPatr(1);
               await api.updateXPNPC(14);
               await api.updateXPNPC(15);
+              await api.evento(salaAtual);
 
               break; // Sai do loop
             } else if (mis === 'n') {
@@ -616,8 +607,8 @@ async function primeiraTela() {
             }
           }  
           await api.evento(salaAtual);
-          await api.mostrarDialogo(20, 22);
-        await api.mudarParaProximaSala(8, processarSala8);
+          await api.mostrarDialogo(20,22);
+          await api.mudarParaProximaSala(8, processarSala8);
         };
 
         async function processarSala8(salaAtual) {
@@ -666,6 +657,7 @@ async function primeiraTela() {
               await api.updateXPNPC(17);
       
               break; // Sai do loop
+
             } else if (mis === 'n') {
               console.log("Missão recusada.");
               console.log("Você tem que aceitar a missão para continuar jogando :)");
@@ -676,8 +668,8 @@ async function primeiraTela() {
             } else {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
-            await api.mudarParaProximaSala(9, processarSala9);
           }
+          await api.mudarParaProximaSala(9, processarSala9);
         };
 
 
@@ -688,9 +680,9 @@ async function primeiraTela() {
           await api.updateVidaVestimenta();
           console.log("Após uma viagem longa e cansativa, Joel e Ellie finalmente chegam a Jackson, onde seu irmão Tommy mora!");
           await api.mostrarDialogo(23, 25);
-          await api.evento(6);
+          await api.evento(salaAtual);
           await api.updateXPMisJoelExp(7);
-          await api.objetivoExploracao(7);
+          await api.objetivoExploracao(salaAtual);
           console.log("Após encontro com Tommy, Ellie e Joel decidem conversar!");
           await api.mudarParaProximaSala(10, processarSala10);
         };
@@ -701,13 +693,13 @@ async function primeiraTela() {
           await api.verInventario();
           await api.updateVidaVestimenta();
           await api.mostrarDialogo(26, 29);
-          await api.evento(7);
+          await api.evento(salaAtual);
 
           while (true) {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {
               console.log("Missão aceita! Você deve resgatar Ellie");
-              await api.objetivoExploracao(8);
+              await api.objetivoExploracao(salaAtual);
               await api.mostrarInimigoNPC(salaAtual);
               console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
               await api.mostrarArmas();
@@ -721,7 +713,7 @@ async function primeiraTela() {
               await api.updateVidaNPC(15);
               console.log("\nVocê matou um Estalador!\n");
               console.log("Joel escuta um barulho e decide ir atrás!");
-              await api.evento(8);
+              await api.evento(salaAtual + 1); //ver depois esse evento
               await api.updateXPMisJoelPatr(8);
               await api.updateXPNPC(14);
               await api.updateXPNPC(15);
@@ -750,13 +742,13 @@ async function primeiraTela() {
           await api.updateVidaVestimenta();
           await api.mostrarDialogo(57, 58);
           await api.mostrarDialogo(32, 34);
-          await api.objetivoExploracao(9);
+          await api.objetivoExploracao(salaAtual);
 
           while (true) {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {      
               console.log("Missão aceita! Você deve salvar a vida de Ellie");
-              await api.evento(9);
+              await api.evento(salaAtual + 1);
               await api.mostrarInimigoNPC(salaAtual);
               console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
               await api.mostrarArmas();
@@ -780,7 +772,7 @@ async function primeiraTela() {
               console.log("\nAcabou, Marlene está morta! n");
               await api.adquireItemNPC(11);
               console.log("Após adquirir a chave do carro do corpo de Marlene, Joel agora consegue sair do hospital!!");
-              await api.updateXPMisJoelPatr(8);
+              await api.updateXPMisJoelExp(9);
               await api.updateXPNPC(18);
               await api.updateXPNPC(13);
               await api.updateXPNPC(7);
@@ -797,8 +789,6 @@ async function primeiraTela() {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
           }
-
-          await api.evento(9);
           await api.mudarParaProximaSala(12, processarSala12);
         };
 
@@ -815,10 +805,9 @@ async function primeiraTela() {
             if (mis === 's') {
             
               console.log("Missão aceita! Você deve matar todos esses infectados");
-              await api.objetivoPatrulha(10);
+              await api.objetivoPatrulha(12);
               await api.mostrarInimigoNPC(salaAtual);
   
-              console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
               await api.mostrarArmas();
               let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
   
@@ -879,12 +868,13 @@ async function primeiraTela() {
 
 
           console.log("Joel e Ellie voltam à Jackson. Ellie está um pouco estranha e decide conversar com Joel");
-          await api.objetivoExploracao(11);
+          await api.objetivoExploracao(salaAtual);
           await api.mostrarDialogo(35, 37);
 
           await api.updateXPMisJoelExp(11);
 
           console.log("Você chegou ao fim do MUD. Deixa o like e compartilha com seus amigos!!");
+          process.exit();
         };
 
       } catch (error) {
