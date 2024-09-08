@@ -23,7 +23,7 @@ class Api {
 
   constructor() {
     this.client.connect();
-  }
+  };
 
   createTables = async () => {
     let response = false;
@@ -57,7 +57,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao obter a sala atual:", error.message || error);
     }
-  }
+  };
 
   updateSala = async (idSala) => {
     try {
@@ -69,7 +69,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao atualizar a sala:", error.message || error);
     }
-  }
+  };
 
   // Função para exibir os NPCs da sala atual
   mostrarNPCsDaSala = async (idSala) => {
@@ -91,7 +91,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao listar os NPCs da sala:", error.message || error);
     }
-  }
+  };
 
   mostrarInimigoNPC = async (idSala) => {
     try {
@@ -99,10 +99,11 @@ class Api {
         SELECT n.nomePersonagem as nome, i.idinstnpc as idinstancia
         FROM NPC n
         JOIN instnpc i ON n.idpersonagem = i.idnpc
-		    JOIN infectado ii ON ii.idnpc = i.idnpc
-        JOIN faccaohumana h ON h.idnpc = i.idnpc
-        JOIN animal a ON a.idnpc = i.idnpc
-		    WHERE i.sala = $1 AND i.tiponpc = 'I' OR i.tiponpc = 'A' OR i.tiponpc = 'F' AND ealiado = false
+        LEFT JOIN infectado ii ON ii.idnpc = i.idnpc
+        LEFT JOIN faccaohumana h ON h.idnpc = i.idnpc
+        LEFT JOIN animal a ON a.idnpc = i.idnpc
+        WHERE i.sala = $1 AND (i.tiponpc = 'I' OR i.tiponpc = 'A' OR i.tiponpc = 'F') 
+        AND ealiado = false
         ORDER BY idinstancia;
         `, [idSala]);
       if (npcs.rows.length === 0) {
@@ -116,7 +117,20 @@ class Api {
     } catch (error) {
       console.error("Erro ao listar os NPCs da sala:", error.message || error);
     }
-  }
+  };
+  
+
+  updateVidaNPC = async (id) => {
+    try {
+      await this.client.query(`
+      UPDATE NPC
+      SET vidaAtual = vidaMax
+      where idPersonagem = $1;
+      `, [id]);
+    } catch (error) {
+      console.error("Erro ao atualizar a vida:", error.message || error);
+    }
+  };
 
   adicionarItemAoInventario = async (idInstItem, idItem) => {
     try {
@@ -131,129 +145,6 @@ class Api {
       console.error("Erro ao adicionar o item ao inventário:", error.message || error);
     }
   };
-
-  mostrarItensDaSala = async (idSala) => {
-    try {
-      // Buscar e ordenar itens na sala
-      const itens = await this.client.query(`
-        SELECT 
-          it.idinstitem,
-          COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeItem,
-          it.idItem,
-          COUNT(*) AS quantidade
-        FROM InstItem it
-        LEFT JOIN Consumivel c ON it.idItem = c.idItem
-        LEFT JOIN Arma a ON it.idItem = a.idItem
-        LEFT JOIN Vestimenta v ON it.idItem = v.idItem
-        WHERE it.Sala = $1
-        GROUP BY it.idinstitem, it.idItem, COALESCE(a.nomeItem, v.nomeItem, c.nomeItem)
-        ORDER BY it.idinstitem ASC;  -- Ordenar por idinstitem
-      `, [idSala]);
-
-      if (itens.rows.length === 0) {
-        console.log("Nenhum item encontrado nesta sala.");
-        return;
-      }
-
-      console.log("\nItens encontrados na sala atual:");
-      itens.rows.forEach((item) => {
-        console.log(`| ${item.idinstitem} - ${item.nomeitem}`);
-      });
-
-      let choose = readlineSync.question(
-        "\nVocê encontrou alguns itens na sala.\nDeseja pegá-los?\n(1 - Todos, 2 - Nenhum, 3 - Especificar)\n"
-      );
-
-      switch (choose) {
-        case '1': // Pegar todos os itens
-          for (const item of itens.rows) {
-            await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
-            // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
-            await this.client.query(`
-              UPDATE InstItem
-              SET Sala = NULL, IdInventario = 1
-              WHERE idinstitem = $1
-            `, [item.idinstitem]);
-          }
-          await this.updateCapacidadeInventario(1);
-          console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
-          break;
-
-        case '2': // Não pegar nenhum item
-          console.log("\nVocê decidiu não pegar nenhum item.\n");
-          break;
-
-        case '3': // Pegar itens específicos
-          let idItem;
-          let itensSelecionados = new Set();  // Usar um Set para manter os IDs únicos
-
-          do {
-            idItem = readlineSync.question("Digite o ID do item que deseja pegar ou '0' para sair: ");
-            if (idItem === '0') break;
-
-            const itemEncontrado = itens.rows.find((item) => item.idinstitem === parseInt(idItem));
-
-            if (!itemEncontrado) {
-              console.log("ID do item inválido. Tente novamente.");
-              continue;
-            }
-
-            if (itensSelecionados.has(idItem)) {
-              console.log("Este item já foi selecionado. Tente outro.");
-              continue;
-            }
-
-            // Adicionar o item ao inventário
-            await this.adicionarItemAoInventario(itemEncontrado.idinstitem, itemEncontrado.idItem);
-            await this.updateCapacidadeInventario(1);
-            // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
-            await this.client.query(`
-              UPDATE InstItem
-              SET Sala = NULL, IdInventario = 1
-              WHERE idinstitem = $1
-            `, [itemEncontrado.idinstitem]);
-
-            // Adicionar o ID do item ao Set de itens selecionados
-            itensSelecionados.add(idItem);
-
-            console.log(`O item '${itemEncontrado.nomeitem}' foi adicionado ao inventário!\n`);
-
-          } while (idItem !== '0');
-
-          break;
-
-        default:
-          console.log("\nOpção inválida.\n");
-      }
-    } catch (error) {
-      console.error("Erro ao listar os itens da sala:", error.message || error);
-    }
-  };
-
-  mostrarInventario = async () => {
-    try {
-      const inventario = await this.client.query(`
-        SELECT COUNT(i.idInstItem) AS totalitens, COALESCE(a.nomeItem,
-        v.nomeItem, c.nomeItem) AS nomeItem  
-        FROM InstItem i
-        JOIN Inventario ii ON i.IdInventario = ii.idInventario
-        LEFT JOIN Arma a ON i.IdItem = a.IdItem
-        LEFT JOIN Vestimenta v ON i.IdItem = v.IdItem
-        LEFT JOIN Consumivel c ON i.IdItem = c.IdItem
-        GROUP BY  a.nomeItem, v.nomeItem, c.nomeItem
-        ORDER BY totalitens;`);
-      if (inventario.rows.length === 0) {
-        console.log("Seu inventário está vazio");
-      } else {
-        console.log("\nSeus itens:");
-        inventario.rows.forEach(i => {
-          console.log(`|Qtd: ${i.totalitens} | ${i.nomeitem}`);
-        });
-      }
-    } catch (error) {
-      console.error("Erro ao mostrar inventario:", error.message || error);
-    }
-  }
 
   mostrarArmas = async () => {
     try {
@@ -274,7 +165,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao mostrar armas:", error.message || error);
     }
-  }
+  };
 
   updateCapacidadeInventario = async (IdPersonagem) => {
     try {
@@ -287,7 +178,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao atualizar a capacidade:", error.message || error);
     }
-  }
+  };
 
   // Função para exibir um dialogo
   mostrarDialogo = async (DialogoInicio, DialogoFim) => {
@@ -308,23 +199,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao listar os diálogos:", error.message || error);
     }
-  }
-
-  removerItemNoInventario = async (idinstitem, iditem) => {
-    try {
-      const result = await this.client.query(`
-        DELETE InstItem
-        WHERE idInstItem = ${idinstitem} AND IdItem = ${iditem}
-      `);
-      if (result.rows.length === 0) {
-        console.log("Erro ao remover item ao inventário.");
-      } else {
-        return result.rows[0];
-      }
-    } catch (error) {
-      console.error("Erro ao remover o item ao inventário:", error.message || error);
-    }
-  }
+  };
 
   contarEAtualizarCapacidade = async (idinventario) => {
     try {
@@ -352,7 +227,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao contar instâncias ou atualizar a capacidade do inventário:", error.message || error);
     }
-  }
+  };
 
   updateVidaVestimenta = async () => {
     try {
@@ -372,7 +247,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao atualizar a vida:", error.message || error);
     }
-  }
+  };
 
   evento = async (sala) => {
     try {
@@ -387,7 +262,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao realizar evento:", error.message || error);
     }
-  }
+  };
 
   //funcao para mostrar objetivo da missao exploracao
   objetivoExploracao = async (sala) => {
@@ -401,7 +276,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao realizar missão:", error.message || error);
     }
-  }
+  };
 
   objetivoPatrulha = async (sala) => {
     try {
@@ -414,7 +289,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao realizar missão:", error.message || error);
     }
-  }
+  };
 
   atacarPCPorAnimal = async (idpc, idanimal) => {
     try {
@@ -540,7 +415,7 @@ class Api {
 
   sleep = async (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+  };
   
   reiniciarSala = async (sala, idpc) => {
     try {
@@ -554,7 +429,6 @@ class Api {
             );
         `, [sala]);
 
-      
         //await this.client.query(`
         //    DELETE FROM Inventario
         //    WHERE IdPersonagem = $1;
@@ -703,7 +577,8 @@ class Api {
         await this.reiniciarSala(sala, idpc);
       await this.sleep (600);
     }
-  };
+  }
+};
 
   recarregarArma = async (idarma) => {
     try {
@@ -716,7 +591,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao atualizar a munição da arma:", error.message || error);
     }
-  }
+  };
 
   updateXPMisJoelPatr = async (idMissao) => {
     try {
@@ -732,18 +607,6 @@ class Api {
 
     } catch (error) {
       console.error("Erro ao atualizar o XP:", error.message || error);
-    }
-  };
-
-  updateVidaNPC = async (id) => {
-    try {
-      await this.client.query(`
-      UPDATE NPC
-      SET vidaAtual = vidaMax
-      where idPersonagem = $1;
-      `, [id]);
-    } catch (error) {
-      console.error("Erro ao atualizar a vida:", error.message || error);
     }
   };
 
@@ -772,7 +635,7 @@ class Api {
     } catch (error) {
       console.error("Erro ao atualizar o XP:", error.message || error);
     }
-  }
+  };
 
   adquireItemNPC = async (idinventarioNPC) => {
     try {
@@ -802,8 +665,8 @@ class Api {
       // Tratamento de erro
       console.log("Erro ao adquirir item de NPC:", error.message || error);
     }
-    }
-  }
+  };
+  
 
   infos = async (salaAtual) => {
     try {
@@ -838,21 +701,6 @@ class Api {
 
   askAndReturn = async (texto) => {
     return question(texto);
-  }
-
-  // Função para perguntar e mostrar o inventário
-  verInventario = async () => {
-    try {
-      const respostaUsuario = await this.askAndReturn("\nVocê deseja ver seu inventário?\nS/N\n");
-      const mis = String(respostaUsuario).trim(); // Garante que o valor seja uma string e remove espaços em branco
-
-      if (mis.toLowerCase() === 's') {
-        console.log("Seu inventário atual é:");
-        await this.mostrarInventario();
-      }
-    } catch (error) {
-      console.error("Erro ao exibir o inventário:", error);
-    }
   };
 
   mudarParaProximaSala = async (proximaSalaNumero, funcaoProcessamentoProximaSala) => {
@@ -944,6 +792,226 @@ class Api {
   //     }
   //   }
   // }
+
+  mostrarItensDaSala = async (idSala) => {
+    try {
+      // Buscar e ordenar itens na sala
+      const itens = await this.client.query(`
+        SELECT 
+          it.idinstitem,
+          COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeitem,
+          it.idItem
+        FROM InstItem it
+        LEFT JOIN Consumivel c ON it.idItem = c.idItem
+        LEFT JOIN Arma a ON it.idItem = a.idItem
+        LEFT JOIN Vestimenta v ON it.idItem = v.idItem
+        WHERE it.Sala = $1
+        ORDER BY it.idinstitem ASC;
+      `, [idSala]);
+  
+      if (itens.rows.length === 0) {
+        console.log("Nenhum item encontrado nesta sala.");
+        return;
+      }
+  
+      // Agrupar itens pelo nome
+      const itensAgrupados = itens.rows.reduce((acc, item) => {
+        const { nomeitem, idinstitem } = item;
+        if (!acc[nomeitem]) {
+          acc[nomeitem] = { ids: [], count: 0 };
+        }
+        acc[nomeitem].ids.push(idinstitem);
+        acc[nomeitem].count += 1; // Incrementa 1 para cada ocorrência do item
+        return acc;
+      }, {});
+  
+      console.log("\nItens encontrados na sala:");
+      for (const [nomeitem, { ids, count }] of Object.entries(itensAgrupados)) {
+        // Ordenar IDs em ordem crescente
+        const idsOrdenados = ids.sort((a, b) => a - b);
+        console.log(`| Qtd: ${count} | ${nomeitem} | ID: ${idsOrdenados.join(',')}`);
+      }
+  
+      const escolha = await this.askAndReturn(
+        "\nVocê encontrou alguns itens na sala.\nDeseja pegá-los?\n(1 - Todos, 2 - Nenhum, 3 - Especificar)\n"
+      );
+      const escolhaTratada = String(escolha).trim().toLowerCase();
+  
+      switch (escolhaTratada) {
+        case '1': // Pegar todos os itens
+          for (const item of itens.rows) {
+            await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
+            // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
+            await this.client.query(`
+              UPDATE InstItem
+              SET Sala = NULL, IdInventario = 1
+              WHERE idinstitem = $1
+            `, [item.idinstitem]);
+          }
+          await this.updateCapacidadeInventario(1);
+          console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
+          break;
+  
+        case '2': // Não pegar nenhum item
+          console.log("\nVocê decidiu não pegar nenhum item.\n");
+          break;
+  
+        case '3': // Pegar itens específicos
+          const idsParaPegar = await this.askAndReturn("Digite o(s) ID(s) dos itens que deseja pegar (separados por vírgula ou espaço):\n");
+          const idsSelecionados = idsParaPegar
+            .split(/[\s,]+/) // Divide por espaços ou vírgulas
+            .map(id => parseInt(id.trim(), 10))
+            .filter(id => !isNaN(id)); // Filtra IDs válidos
+  
+          if (idsSelecionados.length > 0) {
+            const idsInvalidos = [];
+            for (const id of idsSelecionados) {
+              const itemEncontrado = itens.rows.find(item => item.idinstitem === id);
+  
+              if (itemEncontrado) {
+                // Adicionar item ao inventário
+                await this.adicionarItemAoInventario(itemEncontrado.idinstitem, itemEncontrado.idItem);
+                await this.updateCapacidadeInventario(1);
+                // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
+                await this.client.query(`
+                  UPDATE InstItem
+                  SET Sala = NULL, IdInventario = 1
+                  WHERE idinstitem = $1
+                `, [itemEncontrado.idinstitem]);
+  
+                console.log(`O item '${itemEncontrado.nomeitem}' foi adicionado ao inventário!\n`);
+              } else {
+                idsInvalidos.push(id);
+              }
+            }
+  
+            if (idsInvalidos.length > 0) {
+              console.log(`IDs de item inválidos: ${idsInvalidos.join(', ')}. Tente novamente.`);
+            }
+          } else {
+            console.log("Nenhum ID de item válido foi fornecido.");
+          }
+          break;
+  
+        default:
+          console.log("\nOpção inválida.\n");
+      }
+    } catch (error) {
+      console.error("Erro ao listar os itens da sala:", error.message || error);
+    }
+  };
+  
+    verInventario = async () => {
+      try {
+        const respostaUsuario = await this.askAndReturn("\nVocê deseja ver seu inventário?\nS/N\n");
+        const mis = String(respostaUsuario).trim().toLowerCase(); // Garante que o valor seja uma string e remove espaços em branco
+  
+        if (mis === 's') {
+          let removerItem = true;
+  
+          while (removerItem) {
+            // Mostrar o inventário
+            console.log("Seu inventário atual é:");
+            const inventario = await this.mostrarInventario();
+  
+            // Perguntar se deseja remover um item
+            const respostaRemover = await this.askAndReturn("\nVocê deseja remover um item? S/N\n");
+            const remover = String(respostaRemover).trim().toLowerCase();
+  
+            if (remover === 's') {
+              // Perguntar qual item remover
+              const idItemRemover = await this.askAndReturn("Digite o(s) ID(s) do item que deseja remover (separados por vírgula ou espaço):\n");
+              const idsParaRemover = idItemRemover
+                .split(/[\s,]+/) // Divide por espaços ou vírgulas
+                .map(id => parseInt(id.trim(), 10))
+                .filter(id => !isNaN(id)); // Filtra IDs válidos
+  
+              if (idsParaRemover.length > 0) {
+                for (const id of idsParaRemover) {
+                  // Verifica se o item existe
+                  const inventarioAtual = await this.mostrarInventario();
+                  const itemExiste = inventarioAtual.some(item => item.idinstitem === id);
+  
+                  if (itemExiste) {
+                    await this.removerItem(id);
+                    console.log(`Item com ID ${id} removido com sucesso.`);
+                  } else {
+                    console.log(`ID de item ${id} inválido. Tente novamente.`);
+                  }
+                }
+              } else {
+                console.log("IDs de item inválidos. Tente novamente.");
+              }
+            } else if (remover === 'n') {
+              console.log("Continuando...");
+              removerItem = false;
+            } else {
+              console.log("Opção inválida. Por favor, responda com S ou N.");
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao exibir o inventário:", error.message || error);
+      }
+    };
+  
+    mostrarInventario = async () => {
+      try {
+        const inventario = await this.client.query(`
+          SELECT i.idInstItem, COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeItem
+          FROM InstItem i
+          JOIN Inventario ii ON i.IdInventario = ii.idInventario
+          LEFT JOIN Arma a ON i.IdItem = a.IdItem
+          LEFT JOIN Vestimenta v ON i.IdItem = v.IdItem
+          LEFT JOIN Consumivel c ON i.IdItem = c.IdItem
+          ORDER BY nomeItem;
+        `);
+  
+        if (inventario.rows.length === 0) {
+          console.log("Seu inventário está vazio.");
+          return [];
+        }
+  
+        // Agrupar itens pelo nome
+        const itensAgrupados = inventario.rows.reduce((acc, item) => {
+          const { nomeitem, idinstitem } = item;
+          if (!acc[nomeitem]) {
+            acc[nomeitem] = { ids: [], count: 0 };
+          }
+          acc[nomeitem].ids.push(idinstitem);
+          acc[nomeitem].count += 1; // Incrementa 1 para cada ocorrência do item
+          return acc;
+        }, {});
+  
+        console.log("\nSeus itens:");
+        for (const [nomeitem, { ids, count }] of Object.entries(itensAgrupados)) {
+          // Ordenar IDs em ordem crescente
+          const idsOrdenados = ids.sort((a, b) => a - b);
+          console.log(`| Qtd: ${count} | ${nomeitem} | ID: ${idsOrdenados.join(',')}`);
+        }
+  
+        return inventario.rows; // Retorna os itens para que possam ser usados para remoção
+  
+      } catch (error) {
+        console.error("Erro ao mostrar inventário:", error.message || error);
+      }
+    };
+  
+    removerItem = async (idInstItem) => {
+      try {
+        await this.client.query(`
+          DELETE FROM InstItem
+          WHERE idInstItem = $1;
+        `, [idInstItem]);
+  
+        console.log("Item removido com sucesso.");
+      } catch (error) {
+        console.error("Erro ao remover item:", error.message || error);
+      }
+    };
+    
+
+
 
 }// fechando a api
 

@@ -34,10 +34,10 @@ async function primeiraTela() {
     var api = new Api();
 
     let r = askAndReturn(
-      "1 - Criar e Popular Tabelas\n2 - Sair\n"
+      "1- Jogar\n2- Sair\n3- Criar e Popular Tabelas\n"
     );
 
-    if (r == 1) {
+    if (r == 3) {
       try {
         let table = await api.createTables();
         let popu = await api.populateTables();
@@ -627,7 +627,7 @@ async function primeiraTela() {
           await api.updateVidaVestimenta();
 
           console.log("\nApós a morte de Henry e Sam, vocês se encontram sozinhos novamente.");
-          await api.objetivoPatrulha(6);
+          await api.objetivoPatrulha(8);
 
           while (true) {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();

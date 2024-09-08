@@ -459,7 +459,7 @@ INSERT INTO Dialoga (idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) 
 
 INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (2, 2, 'F', 1),
-(3, 3, 'F', 1),
+(3, 3, 'F', 1), 
 (4, 4, 'F', 1),
 (5, 5, 'F', 1),
 (6, 6, 'F', 1),

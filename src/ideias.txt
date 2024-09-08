@@ -26,3 +26,13 @@ habilidades do joel
 fazer aumento de nivel de acordo com o xp
 
 Sala 7 fazer o loop de missão
+
+funcao de mostrar inimigo esta errada(ja foi)
+ver isso de updateVidaNPC
+
+tirar esses textos de merda(que o arthur fez)
+
+Erro ao adicionar o item ao inventário: invalid input syntax for type integer: "{}" -- sala 5
+
+dialogo errado na sala 7
+Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 8)
