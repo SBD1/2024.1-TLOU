@@ -31,7 +31,7 @@ BEFORE INSERT OR UPDATE ON Vestimenta
 FOR EACH ROW EXECUTE FUNCTION check_Vestimenta();
 
 ------------ teste 
-INSERT INTO Item (idItem, tipoItem) VALUES (27, 'A');
+--INSERT INTO Item (idItem, tipoItem) VALUES (27, 'A');
 
-INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao) VALUES
-(27, 'Escudo de Aço', 'Escudo improvisado para defesa contra ataques.', 'true')(27, 'Escudo de Aço', 'Escudo improvisado para defesa contra ataques.', 'true')
+--INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao) VALUES
+--(27, 'Escudo de Aço', 'Escudo improvisado para defesa contra ataques.', 'true')(27, 'Escudo de Aço', 'Escudo improvisado para defesa contra ataques.', 'true')

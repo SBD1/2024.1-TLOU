@@ -27,7 +27,7 @@ BEFORE INSERT OR UPDATE ON MissaoExploracaoObterItem
 FOR EACH ROW EXECUTE FUNCTION check_Exploracao();
 
 ------------ teste 
-INSERT INTO Missao (idMissao, tipoMis) VALUES (16, 'E');
+--INSERT INTO Missao (idMissao, tipoMis) VALUES (16, 'E');
 
-INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao, Sala)
-VALUES (16, 13, 'Nao se matar hoje', 'Sobrevivencia', 2, 34, 'false' , 2);
+--INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao, Sala)
+--VALUES (16, 13, 'Nao se matar hoje', 'Sobrevivencia', 2, 34, 'false' , 2);

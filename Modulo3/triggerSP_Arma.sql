@@ -32,7 +32,7 @@ BEFORE INSERT OR UPDATE ON Arma
 FOR EACH ROW EXECUTE FUNCTION check_Arma();
 
 ------------ teste 
-INSERT INTO Item (idItem, tipoItem) VALUES (26, 'V');
+-- INSERT INTO Item (idItem, tipoItem) VALUES (26, 'V');
 
-INSERT INTO Arma (IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, descricaoItem)
-VALUES (26, 'Faca2Mona', 20, NULL, 10, true, 'Afiada e versátil para combate corpo a corpoGATAH.');
+--INSERT INTO Arma (IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, descricaoItem)
+--VALUES (26, 'Faca2Mona', 20, NULL, 10, true, 'Afiada e versátil para combate corpo a corpoGATAH.');

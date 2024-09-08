@@ -24,4 +24,4 @@ BEFORE INSERT OR UPDATE ON Item
 FOR EACH ROW EXECUTE FUNCTION check_Item();
 
 ------------ teste 
-INSERT INTO Item VALUES (24, 'A');
+--INSERT INTO Item VALUES (24, 'A');

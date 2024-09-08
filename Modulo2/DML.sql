@@ -54,7 +54,12 @@ INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
 (5, 15, 'Inventário do Henry.'),
-(6, 50, 'Inventário do Líder dos Serafitas');
+(6, 50, 'Inventário do Líder dos Serafitas'),
+(7, 50, 'Inventário do Baiacu'),
+(8, 50, 'Inventário do Sam'),
+(9, 50, 'Inventário do David'),
+(10, 50, 'Inventário do Líder dos Vagalumes'),
+(11, 50, 'Inventário da Marlene');
 
 INSERT INTO Missao(idMissao, tipoMis) VALUES
 (1, 'E'),
@@ -101,7 +106,9 @@ INSERT INTO Item(idItem, tipoItem) VALUES
 (28, 'C'),
 (29, 'C'),
 (30, 'C'),
-(31, 'C');
+(31, 'C'),
+(32, 'C'),
+(33, 'C');
 
 INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
 (1, 31, NULL, 1),
@@ -172,7 +179,22 @@ INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
 (66, 20, 11, NULL),
 (67, 11, 11, NULL),
 (68, 3 , 11, NULL),
-(69, 18 , 11, NULL);
+(69, 18 , 11, NULL),
+(70, 18, 10, NULL),
+(71, 18, 10, NULL),
+(72, 18, 10, NULL),
+(73, 19, 10, NULL),
+(74, 27, 10, NULL),
+(75, 18, 9, NULL),
+(76, 18, 9, NULL),
+(77, 18, 9, NULL),
+(78, 17, 9, NULL),
+(79 ,1, 5, NULL),
+(80 ,9, 5, NULL),
+(81 ,20, 8, NULL),
+(82 ,19, 8, NULL),
+(83 ,26, 7, NULL),
+(84 ,32, 4, NULL);
 
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
@@ -188,16 +210,16 @@ INSERT INTO NPC (IdPersonagem, xp, vidaMax, vidaAtual, nomePersonagem, IdInventa
 (4, 10, 100, 100, 'Líder dos Serafitas', 6, false, 'F'),
 (5, 10, 100, 100, 'Tess', 4, true, 'F'),
 (6, 10, 100, 100, 'Tommy',3, true, 'F'),
-(7, 10, 100, 100, 'Marlene', NULL, false, 'F'),
+(7, 10, 100, 100, 'Marlene', 11, false, 'F'),
 (8, 10, 100, 100, 'Henry', 5, true, 'F'),
-(9, 10, 80, 80, 'Sam', NULL, true, 'F'),
+(9, 10, 80, 80, 'Sam', 8, true, 'F'),
 (10, 10, 100, 100, 'Bill', NULL, true, 'F'),
-(11, 10, 100, 100, 'David', NULL, false, 'F'),
+(11, 10, 100, 100, 'David', 9, false, 'F'),
 (12, 10, 100, 100, 'Sobrevivente Viajante', NULL, false, 'F'),
 (13, 10, 100, 100, 'Médico dos Vagalumes', NULL, false, 'F'),
 (14, 10, 30, 30, 'Corredor', NULL, false, 'I'),
 (15, 10, 45, 45, 'Estalador', NULL, false, 'I'),
-(16, 10, 120, 120, 'Baiacu', NULL, false,'I'),
+(16, 10, 120, 120, 'Baiacu', 7, false,'I'),
 (17, 10, 45, 45, 'Espreitador', NULL, false, 'I'),
 (18, 10, 100, 100, 'Vagalumes', NULL, false, 'F'),
 (19, 10, 100, 100, 'Serafitas', NULL, false, 'F'),
@@ -241,7 +263,9 @@ INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, d
 (27, 'Coquetel Molotov', 'Projétil explosivo.', NULL, true, 'Garrafa incendiária utilizada para causar danos de fogo em área.', 15),
 (28, 'Bomba de Pregos', 'Projétil explosivo', NULL, true, 'Bomba que detona ao contato, causando dano em área com fragmentos de pregos.', 30),
 (29, 'Bomba Incendiária', 'Projétil explosivo', NULL, true, 'Bomba que causa uma explosão de fogo ao ser lançada.', 25),
-(30, 'Flechas', 'Munição', NULL, true, 'Munição para arco.', NULL);
+(30, 'Flechas', 'Munição', NULL, true, 'Munição para arco.', NULL),
+(32, 'Lembrança de Tess', 'Chaveiro', NULL, false, 'Uma recordação de Tess para Joel para que ele sempre se lembre de quem foi sua melhor amiga e amada!', 1),
+(33, 'Chave do carro', 'Chave', NULL, false, 'Chave do carro para voltar para Jackson', NULL);
 
 INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem, juncao) VALUES
 (1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 17, 'Álcool + Trapos'),

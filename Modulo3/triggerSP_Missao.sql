@@ -24,4 +24,4 @@ BEFORE INSERT OR UPDATE ON Missao
 FOR EACH ROW EXECUTE FUNCTION check_Missao();
 
 ------------ teste 
-INSERT INTO Missao VALUES (14, 'E');
+--INSERT INTO Missao VALUES (14, 'E');

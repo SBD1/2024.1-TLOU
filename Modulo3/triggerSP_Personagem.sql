@@ -24,4 +24,4 @@ BEFORE INSERT OR UPDATE ON Personagem
 FOR EACH ROW EXECUTE FUNCTION check_Personagem();
 
 ------------ teste 
-INSERT INTO Personagem VALUES (23, 'N');
+--INSERT INTO Personagem VALUES (23, 'N');

@@ -27,7 +27,7 @@ BEFORE INSERT OR UPDATE ON MissaoPatrulha
 FOR EACH ROW EXECUTE FUNCTION check_Patrulha();
 
 ------------ teste 
-INSERT INTO Missao (idMissao, tipoMis) VALUES (18, 'P');
+--INSERT INTO Missao (idMissao, tipoMis) VALUES (18, 'P');
 
-INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao, Sala)
-VALUES (18, 13, 'Nao se matar hoje', 'Sobrevivencia', 2, 10, 30, 'false', 2);
+--INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao, Sala)
+--VALUES (18, 13, 'Nao se matar hoje', 'Sobrevivencia', 2, 10, 30, 'false', 2);

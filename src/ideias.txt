@@ -1,46 +1,28 @@
-colocar os update de sala na main(cada vez que a missao for concluida)
-
-deixar adicionar no inventário só se tiver capacidade para tal
+deixar adicionar no inventário só se tiver capacidade para tal(trigger)
 
 a logica do pc morrer:
 se o PC morrer em x sala
 ele volta pro inicio dessa x sala
 e perde todos os itens que ele adquiriu(se ele tiver pego)
-e todos os npc voltam a vida(se ele tiver matado ou nao)
+e todos os npc voltam a vida(se ele tiver matado ou nao) =>
+Erro ao atacar PC por Infectado: update or delete on table "pc" violates foreign key constraint "personagem_evento_fk" on table "evento"
+
 
 oh, se o cara escolher uma arma, ele usa ela enquanto tiver municao
 quando a municao da arma escolhida acabar aparece as opcoes novamente
 pra ele poder mudar de arma
 
-arrumar DML
 
-perguntar se ele quer ir pra proxima sala
+Perguntar pro joel se ele quer usar os itens dele (bomba, saúde...) => parece estar nos triggers
 
-dar update na missao 3, pegar seus xp e mostrar objetivo
+Opção de remover ao vizualizar o inventário(seguir a mesma logica do que ja tem)
 
-Erro ao atacar PC por Infectado: update or delete on table "pc" violates foreign key constraint "personagem_evento_fk" on table "evento"
+Quando matar o mostro dropar itens(dps arrumar dml pq a funcao esta pronta)
 
-A partir 3 sistema craft
+Opção inválida no aceitar 
 
-Perguntar pro joel se ele quer usar os itens dele (bomba, saúde...)
+habilidades do joel
 
-Opção de remover ao vizualizar o inventário
+fazer aumento de nivel de acordo com o xp
 
-Quando matar o mostro dropar itens
-
-Erro ao adquirir item de NPC: syntax error at or near "Item"(sala 5)
-
-Erro ao mover para a sala: Cannot read property 'askAndReturn' of undefined
-
-Opção inválida no aceitar missão
-
-Erro ao adicionar o item ao inventário: invalid input syntax for type integer: "{"{\"idinstitem\":47}","{\"idinstitem\":48}","{\"idinstitem\":49}"}" (Sala 6 - mas ta adicionando no inventário)
-
-Erro ao atualizar a capacidade: new row for relation "inventario" violates check constraint "inventario_capacidade_check"(sala 7)
-
-depois do dialogo da marlene
-Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 11)
-
-Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 12)
-
-Erro ao realizar missão: Cannot read property 'objetivo' of undefined(sala 13)
+Sala 7 fazer o loop de missão

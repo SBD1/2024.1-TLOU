@@ -2,18 +2,17 @@ import pg from "pg";
 import { readFileSync } from "fs";
 import readlineSync from 'readline-sync';
 import { question } from "readline-sync";
-import { Console } from "console";
 
 const { Client } = pg;
 var sqlTables = readFileSync("../Modulo2/DDL.sql").toString();
 var sqlData = readFileSync("../Modulo2/DML.sql").toString();
-// var sqlTrg = readFileSync("Modulo3/trigger_stored_procedure.sql").toString();
 
 function separador() {
   console.log("==========================================================================")
 }
 
 class Api {
+
   client = new Client({
     host: "localhost",
     user: "postgres",
@@ -539,7 +538,41 @@ class Api {
     }
   };
 
-  atacarNPC = async (idnpc, idarma, sala) => {
+  sleep = async (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+  reiniciarSala = async (sala, idpc) => {
+    try {
+        await this.client.query(`
+            UPDATE NPC
+            SET vidaAtual = vidaMax
+            WHERE IdPersonagem IN (
+                SELECT idNPC
+                FROM InstNPC
+                WHERE Sala = $1
+            );
+        `, [sala]);
+
+      
+        //await this.client.query(`
+        //    DELETE FROM Inventario
+        //    WHERE IdPersonagem = $1;
+        //`, [idpc]);
+
+        await this.client.query(`
+            UPDATE Personagem
+            SET Sala = $1
+            WHERE IdPersonagem = $2;
+        `, [sala, idpc]);
+
+        console.log("Sala reiniciada com sucesso. PC reposicionado e itens limpos.");
+    } catch (error) {
+        console.error("Erro ao reiniciar a sala:", error.message || error);
+    }
+};
+
+  atacarNPC = async (idnpc, idarma, sala, idpc) => {
     try {
       let npcVivo = true;
 
@@ -597,14 +630,17 @@ class Api {
           console.log("\nRecarregando a arma...\n");
           await this.recarregarArma(idarma);
           municaoAtualPC = armaResult.rows[0].municaomax;
+          await this.sleep (600);
         }
 
         // Determinar se o ataque acerta ou erra
         const acerto = Math.random() < 0.74 ? 'acertou' : 'errou';
         console.log(`Resultado do ataque: ${acerto}`);
+        await this.sleep (600);
 
         if (acerto === 'errou') {
           console.log("O ataque falhou e o inimigo te acertou.");
+          await this.sleep (600);
           await this.atacarPCPorInfectado(1, idnpc);
           // Atualizar munição mesmo se o ataque falhar
           municaoAtualPC -= 1;
@@ -614,6 +650,7 @@ class Api {
             WHERE IdItem = $2;
           `, [municaoAtualPC, idarma]);
           console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
+          await this.sleep (600);
         } else {
           // Se acertou, decrementar a vida do NPC
           let novaVida = vidaAtualNpc - danoArma;
@@ -630,6 +667,7 @@ class Api {
                 WHERE InstNPC.idInstNPC = npc_to_delete.idInstNPC;
             `, [idnpc, sala]);
             console.log("Inimigo eliminado.");
+            await this.sleep (600);
             npcVivo = false;
           } else {
             await this.client.query(`
@@ -638,6 +676,7 @@ class Api {
               WHERE IdPersonagem = $2;
             `, [novaVida, idnpc]);
             console.log(`\nVida do NPC atualizada para: ${novaVida}`);
+            await this.sleep (600);
           }
 
           // Atualizar a munição da arma
@@ -648,16 +687,21 @@ class Api {
             WHERE IdItem = $2;
           `, [municaoAtualPC, idarma]);
           console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
+          await this.sleep (600);
         }
 
         // Verificar se o NPC foi derrotado para sair do loop
         if (!npcVivo) {
           console.log("Combate finalizado.");
+          await this.sleep (600);
           return;
         }
       }
     } catch (error) {
       console.error("Erro ao atacar NPC:", error.message || error);
+      if (error.message.includes("morreu")) {
+        await this.reiniciarSala(sala, idpc);
+      await this.sleep (600);
     }
   };
 
@@ -671,18 +715,6 @@ class Api {
 
     } catch (error) {
       console.error("Erro ao atualizar a munição da arma:", error.message || error);
-    }
-  }
-
-  updateVidaNPC = async (id) => {
-    try {
-      await this.client.query(`
-      UPDATE NPC
-      SET vidaAtual = vidaMax
-      where idPersonagem = $1;
-      `, [id]);
-    } catch (error) {
-      console.error("Erro ao atualizar a vida:", error.message || error);
     }
   }
 
@@ -700,6 +732,18 @@ class Api {
 
     } catch (error) {
       console.error("Erro ao atualizar o XP:", error.message || error);
+    }
+  };
+
+  updateVidaNPC = async (id) => {
+    try {
+      await this.client.query(`
+      UPDATE NPC
+      SET vidaAtual = vidaMax
+      where idPersonagem = $1;
+      `, [id]);
+    } catch (error) {
+      console.error("Erro ao atualizar a vida:", error.message || error);
     }
   };
 
@@ -758,8 +802,8 @@ class Api {
       // Tratamento de erro
       console.log("Erro ao adquirir item de NPC:", error.message || error);
     }
+    }
   }
-
 
   infos = async (salaAtual) => {
     try {
@@ -799,7 +843,7 @@ class Api {
   // Função para perguntar e mostrar o inventário
   verInventario = async () => {
     try {
-      const respostaUsuario = await this.askAndReturn("\nVocê deseja sver seu inventário?\nS/N\n");
+      const respostaUsuario = await this.askAndReturn("\nVocê deseja ver seu inventário?\nS/N\n");
       const mis = String(respostaUsuario).trim(); // Garante que o valor seja uma string e remove espaços em branco
 
       if (mis.toLowerCase() === 's') {
@@ -840,11 +884,66 @@ class Api {
     }
   };
 
+  setTrueMissaoPatrulha = async(idMissao) => {
+    try{
+      await this.client.query(`
+        UPDATE MissaoPatrulha SET statusMissao = 'true'
+        WHERE idMissao = ${idMissao}`)
 
+    }
+    catch(error){
+      console.error("Erro ao atualizar missão: ", error);
+    }
+  };
 
+  setTrueMissaoExploracao = async(idMissao) => {
+    try{
+      await this.client.query(`
+        UPDATE MissaoExploracao SET statusMissao = 'true'
+        WHERE idMissao = ${idMissao}`)
 
+    }
+    catch(error){
+      console.error("Erro ao atualizar missão:", error);
+    }
+  };
+  
+  // foiConcluida = async(idMissao) =>  {
+  //   if(idMissao == 1){
+  //     return ;
+  //   }
+  //   else{
+  //     try{
+  //       const missaoPreE = await this.client.query(`
+  //         SELECT statusMissao
+  //         FROM MissaoExploracaoObterItem
+  //         WHERE IdMissao = (
+  //           SELECT IdMissaoPre
+  //           FROM MissaoExploracaoObterItem
+  //           WHERE IdMissao = ${idMissao}
+  //           ) AND statusMissao = 'true';
+  //         `,[idMissao]);
 
+  //       const preP = await this.client.query(`
+  //         SELECT statusMissao
+  //         FROM MissaoExploracaoObterItem
+  //         WHERE IdMissao = (
+  //           SELECT IdMissaoPre
+  //           FROM MissaoPatrulha
+  //           WHERE IdMissao = ${idMissao}
+  //           ) AND statusMissao = 'true';
+  //         `,[idMissao]);
 
+  //         const preMisExp = missaoPreE.rows;
+  //         const preMisP = preP.rows;
+
+  //     }
+  //     catch(error){
+  //       console.error("Erro ao atualizar missão:", error);
+
+  //     }
+  //   }
+  // }
 
 }// fechando a api
 

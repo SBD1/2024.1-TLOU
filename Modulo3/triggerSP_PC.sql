@@ -28,7 +28,7 @@ BEFORE INSERT OR UPDATE ON PC
 FOR EACH ROW EXECUTE FUNCTION check_PC();
 
 ------------ teste 
-INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES (30, 'n');
+--INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES (30, 'n');
 
-INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario)
-VALUES (30, 1, 100, 100, NULL, 'Test PC', 'sem twitter:(', 2, 3);
+--INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario)
+--VALUES (30, 1, 100, 100, NULL, 'Test PC', 'sem twitter:(', 2, 3);

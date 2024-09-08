@@ -31,7 +31,7 @@ BEFORE INSERT OR UPDATE ON Consumivel
 FOR EACH ROW EXECUTE FUNCTION check_Consumivel();
 
 ------------ teste 
-INSERT INTO Item (idItem, tipoItem) VALUES (26, 'A');
+--INSERT INTO Item (idItem, tipoItem) VALUES (26, 'A');
 
-INSERT INTO Consumivel (IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, descricaoItem) VALUES
+--INSERT INTO Consumivel (IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, descricaoItem) VALUES
 (26, 'Celular', 'Negócio tecnológico', 23,'true', 'Usa')

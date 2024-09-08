@@ -1,116 +1,3 @@
--- sp e trigger para inserir um personagem em uma tabela de PC ou NPC 1 = pc, 2 = npc
-CREATE FUNCTION inserirEspecificoPersonagem() RETURNS trigger AS $$
-BEGIN 
-    -- verificacao se ja existe em alguma tabela das especificas 
-    PERFORM * FROM PC WHERE NEW.IdPersonagem = PC.IdPersonagem;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Este personagem já foi inserido na tabela PC';
-    END IF;
-
-    PERFORM * FROM NPC WHERE NEW.IdPersonagem = NPC.IdPersonagem;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Este personagem já foi inserido na tabela NPC';
-    END IF;
-
-    IF (NEW.IdPersonagem IS NOT NULL AND NEW.Sala IS NOT NULL AND NEW.xp IS NOT NULL AND NEW.vidaMax IS NOT NULL AND 
-    NEW.nomePersonagem IS NOT NULL NEW.estado IS NOT NULL AND NEW.Evolucao IS NOT NULL AND NEW.IdInventario IS NOT NULL 
-    AND Personagem.tipo = 1) -- inserindo um pc
-        INSERT INTO PC VALUES (NEW.idPersonagem, NEW.Sala, NEW.xp, NEW.vidaMax, NEW.vidaAtual, NEW.nomePersonagem, 
-        NEW.estado, NEW.Evolucao, NEW.IdInventario);
-
-    ELSE IF (NEW.IdPersonagem IS NOT NULL AND NEW.Sala IS NOT NULL AND NEW.xp IS NOT NULL AND NEW.vidaMax IS NOT NULL AND 
-    NEW.nomePersonagem IS NOT NULL AND NEW.eAliado IS NOT NULL AND NEW.tipoNPC IS NOT NULL AND Personagem.tipo = 2) -- inserindo um npc
-        INSERT INTO NPC VALUES (NEW.idPersonagem, NEW.Sala, NEW.xp, NEW.vidaMax, 
-        NEW.vidaAtual, NEW.nomePersonagem, NEW.IdInventario, NEW.eAliado, NEW.tipoNPC);
-    END IF;
-
-    RETURN NEW;
-END;
-
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER t_inserirPCouNPC 
-BEFORE INSERT ON PC OR NPC 
-FOR EACH ROW EXECUTE PROCEDURE inserirEspecificoPersonagem();
-
---fazer remocao
---trigger que impeca a mudanca de tipo
---------------------------------------------------------------------------------------------------------------------------------
-
--- sp e trigger para inserir um item em uma tabela especifica (arma, vestimenta ou consumivel), arma = 1, vestimeta = 2, consumivel = 3 
-CREATE FUNCTION inserirEspecificoItem() RETURNS trigger AS $$
-BEGIN 
-    -- verificacao se ja existe em alguma tabela das especificas 
-    PERFORM * FROM Arma WHERE NEW.IdItem = Arma.IdItem;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Este item já foi inserido na tabela Arma';
-    END IF;
-
-    PERFORM * FROM Vestimenta WHERE NEW.IdItem = Vestimenta.IdItem;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Este item já foi inserido na tabela Vestimenta';
-    END IF;
-
-    PERFORM * FROM Consumivel WHERE NEW.IdItem = Consumivel.IdItem;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Este item já foi inserido na tabela Consumivel';
-    END IF;
-
-    IF (NEW.IdItem IS NOT NULL AND NEW.nomeItem IS NOT NULL AND NEW.dano IS NOT NULL AND NEW.municaoMax IS NOT NULL AND 
-    NEW.eAtaque IS NOT NULL NEW.descricaoItem AND Item.tipo = 1) -- inserindo uma arma
-        INSERT INTO Arma VALUES (NEW.IdItem, NEW.nomeItem, NEW.dano, NEW.municaoMax, NEW.municaoAtual, NEW.eAtaque, NEW.descricaoItem);
-        
-    ELSE IF (NEW.IdItem IS NOT NULL AND NEW.nomeItem IS NOT NULL NEW.eAtaque IS NOT NULL NEW.descricaoItem AND Item.tipo = 2) -- inserindo uma vestimenta
-        INSERT INTO Vestimenta VALUES (NEW.IdItem, NEW.nomeItem, NEW.eAtaque, NEW.descricaoItem);
-
-    ELSE IF (NEW.IdItem IS NOT NULL AND NEW.nomeItem IS NOT NULL AND NEW.tipoConsumivel IS NOT NULL AND 
-    NEW.eAtaque IS NOT NULL NEW.descricaoItem AND Item.tipo = 3) -- inserindo um consumivel
-        INSERT INTO Consumivel VALUES (NEW.IdItem, NEW.nomeItem, NEW.tipoConsumivel, NEW.aumentoVida, NEW.eAtaque, NEW.descricaoItem);
-    END IF;
-
-    RETURN NEW;
-END;
-
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER t_inserirItemEspecifico
-BEFORE INSERT ON Arma OR Vestimenta OR Consumivel
-FOR EACH ROW EXECUTE PROCEDURE inserirEspecificoItem ();
-
---------------------------------------------------------------------------------------------------------------------------------
--- sp e trigger para inserir uma missao em uma tabela especifica, exploracao = 1, patrulha = 2
-CREATE FUNCTION inserirEspecificoMissao() RETURNS trigger AS $$
-BEGIN 
-    -- verificacao se ja existe em alguma tabela das especificas 
-    PERFORM * FROM MissaoExploracaoObterItem WHERE NEW.IdMissao = MissaoExploracaoObterItem.IdMissao;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Esta missão já foi inserida na tabela Missão de Exploração/Obter item';
-    END IF;
-
-    PERFORM * FROM MissaoPatrulha WHERE NEW.IdMissao = MissaoPatrulha.IdMissao;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Esta missão já foi inserida na tabela Missão Patrulha';
-    END IF;
-
-    IF (NEW.IdMissao IS NOT NULL AND NEW.objetivo IS NOT NULL AND NEW.nomeMis IS NOT NULL AND NEW.IdPersonagem IS NOT NULL AND 
-    NEW.xpMis IS NOT NULL NEW.statusMissao IS NOT NULL AND NEW.Sala IS NOT NULL Missao.tipo = 1) -- inserindo uma missao exploracao
-        INSERT INTO MissaoExploracaoObterItem VALUES (NEW.IdMissao, NEW.idMissaoPre, NEW.objetivo, NEW.nomeMis, NEW.IdPersonagem, NEW.xpMis, 
-        NEW.statusMissao, NEW.Sala);
-
-    IF (NEW.IdMissao IS NOT NULL AND NEW.objetivo IS NOT NULL AND NEW.nomeMis IS NOT NULL AND NEW.IdPersonagem IS NOT NULL AND 
-    NEW.xpMis IS NOT NULL NEW.statusMissao IS NOT NULL AND NEW.Sala IS NOT NULL AND NEW.qtdNPCs IS NOT NULL AND Missao.tipo = 2) -- inserindo uma missao patrulha
-        INSERT INTO MissaoPatrulha VALUES (NEW.IdMissao, NEW.idMissaoPre, NEW.objetivo, NEW.nomeMis, NEW.qtdNPCs, NEW.IdPersonagem, NEW.xpMis, 
-        NEW.statusMissao, NEW.Sala);
-    END IF;
-
-    RETURN NEW;
-END;
-
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER t_inserirMissaoEspecifica
-BEFORE INSERT ON MissaoExploracaoObterItem OR MissaoPatrulha
-FOR EACH ROW EXECUTE PROCEDURE inserirEspecificoMissao();
 
 --------------------------------------------------------------------------------------------------------------------------------
 
@@ -168,41 +55,6 @@ FOR EACH ROW
 EXECUTE FUNCTION atualizarCapacidadeInventario();
 
 --------------------------------------------------------------------------------------------------------------------------------
-
-CREATE FUNCTION check_regiao() 
-RETURNS trigger AS $$
-BEGIN
-
-    PERFORM * FROM Regiao WHERE NEW.idRegiao = Regiao.idRegiao;
-    IF FOUND THEN
-        RAISE EXCEPTION 'Esta Regiao já se encontra na tabela de regiões';
-    END IF;
-
-    IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL 
-    AND Regiao.tipoRegiao = 1) -- inserindo uma Regiao   
-    INSERT INTO Regiao VALUES (NEW.idRegiao, NEW.descricaoRegiao, NEW.nomeRegiao, NEW.capacidade, NEW.tipoRegiao);
-        
-    ELSE IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL 
-    AND NEW.seguranca IS NOT NULL AND NEW.populacaoAtual IS NOT NULL AND Regiao.tipoRegiao = 2) -- inserindo uma ZonaQuarentena     
-    INSERT INTO ZonaQuarentena VALUES (NEW.idRegiao, NEW.descricaoRegiao, NEW.nomeRegiao, NEW.capacidade, NEW.tipoRegiao, NEW.seguranca, NEW.populacaoAtual);
-
-    ELSE IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL 
-    AND NEW.defesa IS NOT NULL AND Regiao.tipoRegiao = 3) -- inserindo um acampamento
-        INSERT INTO Acampamento VALUES (NEW.idRegiao, NEW.descricaoRegiao, NEW.nomeRegiao, NEW.capacidade, NEW.tipoRegiao, NEW.defesa);
-
-    ELSE IF (NEW.idRegiao IS NOT NULL AND NEW.descricaoRegiao IS NOT NULL AND NEW.nomeRegiao IS NOT NULL AND NEW.capacidade IS NOT NULL 
-    AND NEW.tipo IS NOT NULL AND NEW.periculosidade IS NOT NULL AND Regiao.tipoRegiao = 4) -- inserindo um local abandonado
-        INSERT INTO LocalAbandonado VALUES (NEW.idRegiao, NEW.descricaoRegiao, NEW.nomeRegiao, NEW.capacidade, NEW.tipoRegiao, NEW.tipo, NEW.periculosidade)
-    END IF;
-
-    RETURN NEW; -- retorna a tupla para prosseguir com a operação se não tiver encontrado 
-END;
-
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_regiao
-BEFORE UPDATE OR INSERT ON Regiao OR ZonaQuarentena OR Acampamento OR LocalAbandonado
-FOR EACH ROW EXECUTE PROCEDURE check_regiao();
 --------------------------------------------------------------------------------------------------------------------------------
 
 -- Verifica se a 'vidaAtual', for maior do que 0 e menor que a 'vidaMax' do NPC
@@ -313,8 +165,6 @@ EXECUTE FUNCTION atualizarEvolucao();
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-LIGA DA JUSTIÇA ADAPTADO
-
 CREATE FUNCTION consumir_item(id_p int, id_consumivel int) RETURNS void AS $$
 DECLARE
   pontos_de_vida int;
@@ -339,7 +189,7 @@ BEGIN
     WHERE i.idItem = id_consumivel;
 
     -- Obtém os atributos atuais do personagem
-    SELECT * INTO personagem FROM NPC WHERE IdPersonagem = id_p;
+    SELECT * INTO personagem FROM PC WHERE IdPersonagem = id_p;
 
     -- Atualiza os pontos de vida do personagem
     personagem.vidaAtual := personagem.vidaAtual + pontos_de_vida;
@@ -355,9 +205,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---------
-
-GPT DO DE CIMA
 
 -- Consumir um item Consumível
 CREATE FUNCTION consumirItem() 
@@ -366,7 +213,7 @@ BEGIN
     -- Verifica se o item é do tipo Consumível
     IF EXISTS (SELECT 1 FROM Consumivel WHERE NEW.IdItem = Consumivel.IdItem) THEN
         -- Atualiza a vida do personagem
-        UPDATE Personagem 
+        UPDATE PC 
         SET vidaAtual = vidaAtual + (SELECT aumentoVida FROM Consumivel WHERE IdItem = NEW.IdItem)
         WHERE IdPersonagem = NEW.IdPersonagem;
 

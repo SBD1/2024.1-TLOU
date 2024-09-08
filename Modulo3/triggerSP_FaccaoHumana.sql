@@ -30,10 +30,10 @@ BEFORE INSERT OR UPDATE ON FaccaoHumana
 FOR EACH ROW EXECUTE FUNCTION check_FaccaoHumana();
 
 ------------ teste 
-INSERT INTO Personagem VALUES (26, 'N');
+--INSERT INTO Personagem VALUES (26, 'N');
 
-INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) 
-VALUES (26, 2, 10, 30, 30, 'Insetos', NULL, false, 'F');
+--INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) 
+--VALUES (26, 2, 10, 30, 30, 'Insetos', NULL, false, 'F');
 
-INSERT INTO FaccaoHumana (IdNPC, nomeFaccao) VALUES
-(26, 'JuliAna');
+--INSERT INTO FaccaoHumana (IdNPC, nomeFaccao) VALUES
+--(26, 'JuliAna');

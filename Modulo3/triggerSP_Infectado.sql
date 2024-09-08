@@ -30,10 +30,10 @@ BEFORE INSERT OR UPDATE ON Infectado
 FOR EACH ROW EXECUTE FUNCTION check_Infectado();
 
 ------------ teste 
-INSERT INTO Personagem VALUES (25, 'N');
+--INSERT INTO Personagem VALUES (25, 'N');
 
-INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) 
-VALUES (25, 2, 10, 30, 30, 'Insetos', NULL, false, 'A');
+--INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) 
+--VALUES (25, 2, 10, 30, 30, 'Insetos', NULL, false, 'A');
 
-INSERT INTO Infectado (IdNPC, comportamentoInfec, velocidade) VALUES
-(25, 'Doido', 12);
+--INSERT INTO Infectado (IdNPC, comportamentoInfec, velocidade) VALUES
+--(25, 'Doido', 12);

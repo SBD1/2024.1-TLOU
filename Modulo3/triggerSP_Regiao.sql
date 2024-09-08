@@ -63,14 +63,14 @@ EXECUTE PROCEDURE check_Regiao();
 
 -----testes 
 
-INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
-VALUES
-(7, 'Nova Zona de Quarentena', 'Zona Nova', 30, 'Z', 8, 500, NULL, NULL, NULL);
+--INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
+--VALUES
+--(7, 'Nova Zona de Quarentena', 'Zona Nova', 30, 'Z', 8, 500, NULL, NULL, NULL);
 
-INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
-VALUES
-(8, 'Novo Acampamento', 'Acampamento Novo', 50, 'A', NULL, NULL, 15, NULL, NULL);
+--INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
+--VALUES
+--(8, 'Novo Acampamento', 'Acampamento Novo', 50, 'A', NULL, NULL, 15, NULL, NULL);
 
-INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
-VALUES
-(9, 'Novo Local Abandonado', 'Local Abandonado Novo', 20, 'L', NULL, NULL, NULL, 'Cidade Fantasma', 7);
+--INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade)
+--VALUES
+--(9, 'Novo Local Abandonado', 'Local Abandonado Novo', 20, 'L', NULL, NULL, NULL, 'Cidade Fantasma', 7);

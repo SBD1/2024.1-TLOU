@@ -30,10 +30,10 @@ BEFORE INSERT OR UPDATE ON Animal
 FOR EACH ROW EXECUTE FUNCTION check_Animal();
 
 ------------ teste 
-INSERT INTO Personagem VALUES (29, 'N');
+-- INSERT INTO Personagem VALUES (29, 'N');
 
-INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) 
-VALUES (29, 2, 10, 30, 30, 'Insetos', NULL, false, 'H');
+-- INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) 
+-- VALUES (29, 2, 10, 30, 30, 'Insetos', NULL, false, 'H');
 
-INSERT INTO Animal (IdNPC, nomeAnimal, ameaca) VALUES
-(29, 'JuliAna', 12);
+-- INSERT INTO Animal (IdNPC, nomeAnimal, ameaca) VALUES
+-- (29, 'JuliAna', 12);
