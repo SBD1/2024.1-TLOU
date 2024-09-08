@@ -737,20 +737,20 @@ class Api {
         SELECT idInstItem    
         FROM InstItem
         WHERE IdInventario = $1`, [idinventarioNPC]);
-  
+
       // Consulta para obter os itens correspondentes às instâncias no inventário do NPC
       const itemnpcResult = await this.client.query(`
         SELECT i.idItem
         FROM InstItem inst
         JOIN Item i ON inst.IdItem = i.idItem
         WHERE inst.IdInventario = $1`, [idinventarioNPC]);
-  
-      
+
+
       const institemnpc = institemnpcResult.rows;
       const itemnpc = itemnpcResult.rows;
 
       this.adicionarItemAoInventario(institemnpc, itemnpc);
-  
+
       // Mensagem de sucesso
       console.log("Você adquiriu os itens com sucesso!");
     }
@@ -759,14 +759,14 @@ class Api {
       console.log("Erro ao adquirir item de NPC:", error.message || error);
     }
   }
-  
+
 
   infos = async (salaAtual) => {
     try {
       // Obtém a sala atual (ou use o valor passado como parâmetro)
       salaAtual = await this.getSalaAtual(); // se necessário
       console.log("CHEGOU NA SALA " + salaAtual);
-  
+
       // Consulta a região atual com base na sala
       const regiaoAtual = await this.client.query(`
         SELECT r.nomeRegiao, r.descricaoRegiao
@@ -775,7 +775,7 @@ class Api {
         JOIN PC p ON p.sala = s.idSala
         WHERE s.idSala = $1
       `, [salaAtual]);
-  
+
       // Verifica se a consulta retornou resultados
       if (regiaoAtual.rows.length > 0) {
         const regiao = regiaoAtual.rows[0];
@@ -795,21 +795,53 @@ class Api {
   askAndReturn = async (texto) => {
     return question(texto);
   }
-  
+
   // Função para perguntar e mostrar o inventário
   verInventario = async () => {
     try {
-      let escolha = String(this.askAndReturn("\nDeseja ver seu inventário?\nS/N\n"));
-  
-      if (escolha.toLowerCase() === 's') {
+      const respostaUsuario = await this.askAndReturn("\nVocê deseja sver seu inventário?\nS/N\n");
+      const mis = String(respostaUsuario).trim(); // Garante que o valor seja uma string e remove espaços em branco
+
+      if (mis.toLowerCase() === 's') {
         console.log("Seu inventário atual é:");
-        this.mostrarInventario();
+        await this.mostrarInventario();
       }
     } catch (error) {
       console.error("Erro ao exibir o inventário:", error);
     }
   };
-  
+
+  mudarParaProximaSala = async (proximaSalaNumero, funcaoProcessamentoProximaSala) => {
+    try {
+      // Pergunta ao usuário se ele deseja seguir para a próxima sala e aguarda a resposta
+      const respostaUsuario = await this.askAndReturn("\nVocê deseja seguir para a próxima sala?\nS/N\n");
+      const mis = String(respostaUsuario).trim(); // Garante que o valor seja uma string e remove espaços em branco
+
+      if (mis.toLowerCase() === 's') {
+        console.log(`\n\nVocê irá agora para sala ${proximaSalaNumero}, aguarde...`);
+
+        // Atualiza para a próxima sala
+        await this.updateSala(proximaSalaNumero);
+
+        console.log("Sala atualizada, esperando 2 segundos...");
+        // await sleep(2000); // Remova o comentário se desejar adicionar uma pausa.
+        console.clear();
+
+        // Obtém a nova sala atual
+        let novaSala = await this.getSalaAtual();
+
+        // Chama a função de processamento para a nova sala
+        await funcaoProcessamentoProximaSala(novaSala);
+      } else {
+        console.log("Usuário escolheu não mudar de sala.");
+      }
+    } catch (error) {
+      console.error("Erro ao mudar para a próxima sala:", error);
+    }
+  };
+
+
+
 
 
 

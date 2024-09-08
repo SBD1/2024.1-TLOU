@@ -345,28 +345,12 @@ async function primeiraTela() {
           const DialogoFim = 6;
           await api.mostrarDialogo(DialogoInicio, DialogoFim);
           await api.mostrarItensDaSala(salaAtual);
-
-          let escolha = askAndReturn("Deseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
-
-          console.log("\n\nVocê irá agora para sala 2, aguarde...");
-
-          // Atualiza para a próxima sala
-          await api.updateSala(2);
-
-          console.log("Sala atualizada, esperando 2 segundos...");
-          //console.clear();
-
-
-          let novaSala = await api.getSalaAtual();
-          await processarSala2(novaSala); // Chama processarSala2 diretamente
+          await api.verInventario();
+          await api.mudarParaProximaSala(2, processarSala2);
         };
 
         async function processarSala2(salaAtual) {
-          console.log("Você está na Sala 2.");
+          await api.infos();
           await api.mostrarNPCsDaSala(salaAtual);
           await api.mostrarDialogo(7, 8);
           await api.objetivoExploracao(salaAtual);
@@ -394,19 +378,7 @@ async function primeiraTela() {
             await api.mostrarDialogo(38, 48);
             console.log("\nApós a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo.");
 
-            console.log("\n\nVocê irá agora para sala 3, aguarde...");
-            // Atualiza para a próxima sala
-            await api.updateSala(3);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            //console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala3(novaSala);
+            await api.mudarParaProximaSala(3, processarSala3);
 
           } else if (mis.toLowerCase() == 'n') {
             console.log("Você tem que aceitar a missão para continuar jogando :)");
@@ -417,21 +389,7 @@ async function primeiraTela() {
         };
 
         async function processarSala3(salaAtual) {
-          console.log("Você está na Sala 3.");
-          salaAtual = await api.getSalaAtual();
-
-          const regiaoAtual = await api.client.query(`
-            SELECT r.nomeRegiao, r.descricaoRegiao
-            FROM Regiao r 
-            JOIN Sala s ON s.idRegiao = r.idRegiao 
-            JOIN PC p ON p.sala = s.idSala`);
-
-          if (regiaoAtual.rows.length > 0) {
-            const regiao = regiaoAtual.rows[0];
-            console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
-            console.log(`Descrição: ${regiao.descricaoregiao}\n`);
-          }
-
+          await api.infos();
           await api.mostrarDialogo(9, 11);
           await api.mostrarItensDaSala(salaAtual);
           await api.updateVidaVestimenta();
@@ -442,25 +400,12 @@ async function primeiraTela() {
             await api.mostrarInventario();
           }
 
-          console.log("\n\nVocê irá agora para sala 4, aguarde...");
-
-          // Atualiza para a próxima sala
-          await api.updateSala(4);
-
-          console.log("Sala atualizada, esperando 2 segundos...");
-          //await sleep(2000);
-          //console.clear();
-
-          // Agora continue para a próxima sala
-          let novaSala = await api.getSalaAtual();
-          console.log("Nova sala recebida:", novaSala);
-
-          await processarSala4(novaSala);
+         await api.mudarParaProximaSala(4, processarSala4);
         };
 
         async function processarSala4(salaAtual) {
-          console.log("Você está na Sala 4.");
-
+          await api.infos();
+          
           console.log("Depois de pegar alguns itens na sala, você encontra uma missão.");
 
           const misprat1 = askAndReturn("\nVocê aceita essa missão?\nS/N\n");
@@ -511,22 +456,7 @@ async function primeiraTela() {
             await api.mostrarDialogo(12, 13);
             console.log("Após a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo!");
 
-            console.log("\n\nVocê irá agora para sala 5, aguarde...");
-
-            const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-            if (mis.toLowerCase() == 's') {
-              // Atualiza para a próxima sala
-              await api.updateSala(5);
-
-              console.log("Sala atualizada, esperando 2 segundos...");
-              //await sleep(1000);  
-              //console.clear();
-
-              // Agora continue para a próxima sala
-              let novaSala = await api.getSalaAtual();
-              console.log("Nova sala recebida:", novaSala);
-              await processarSala5(salaAtual);
-            }
+         await api.mudarParaProximaSala(5, processarSala5);
           } else if (mis.toLowerCase() == 'n') {
             console.log("Você tem que aceitar a missão para continuar jogando :)");
             // REMOVA O process.exit() AQUI
@@ -536,26 +466,8 @@ async function primeiraTela() {
         };
 
         async function processarSala5(salaAtual) {
-          salaAtual = await api.getSalaAtual();
-          console.log("CHEGOU NA SALA 5!!!!!!!!!!");
-          //Mostrar a região
-          const regiaoAtual = await api.client.query(`
-            SELECT r.nomeRegiao, r.descricaoRegiao
-            FROM Regiao r 
-            JOIN Sala s ON s.idRegiao = r.idRegiao 
-            JOIN PC p ON p.sala = s.idSala`);
-
-          if (regiaoAtual.rows.length > 0) {
-            const regiao = regiaoAtual.rows[0];
-            console.log(`\nVocê está na região: ${regiao.nomeregiao}`);
-            console.log(`Descrição: ${regiao.descricaoregiao}\n`);
-          }
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.infos();
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -584,31 +496,12 @@ async function primeiraTela() {
           await api.adquireItemNPC(6);
           await api.mostrarDialogo(55, 56);
 
-          console.log("\n\nVocê irá agora para sala 6, aguarde...");
-
-          // Atualiza para a próxima sala
-          await api.updateSala(6);
-
-          console.log("Sala atualizada, esperando 2 segundos...");
-          //await sleep(2000);
-          //console.clear();
-
-          // Agora continue para a próxima sala
-          let novaSala = await api.getSalaAtual();
-          console.log("Nova sala recebida:", novaSala);
-
-          await processarSala6(novaSala);
+         await api.mudarParaProximaSala(6, processarSala6);
         };
 
         async function processarSala6(salaAtual) {
           await api.infos(salaAtual);
-          //await api.verInventario ();
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -669,40 +562,14 @@ async function primeiraTela() {
 
             console.log("Você conseguiu sair da escola");
             console.log("Após obter o carro, vocês seguem o caminho até Tommy");
-            
           }
 
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 7, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(7);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            //console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala7(novaSala);
-          }
+          await api.mudarParaProximaSala(7, processarSala7);
         }
-
-
 
         async function processarSala7(salaAtual) {
           await api.infos(salaAtual);
-
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -754,35 +621,12 @@ async function primeiraTela() {
             await api.mostrarDialogo(20, 22);
           }
 
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 8, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(8);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            //console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala8(novaSala);
-          }
-        };
+         await api.mudarParaProximaSala(8, processarSala8);
+              };
 
         async function processarSala8(salaAtual) {
           await api.infos(salaAtual);
-
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -827,36 +671,13 @@ async function primeiraTela() {
             await api.updateXPNPC(17);
           }
 
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 9, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(9);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            //console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala9(novaSala);
-          }
-
+         await api.mudarParaProximaSala(9, processarSala9);
         };
 
 
         async function processarSala9(salaAtual) {
           await api.infos(salaAtual);
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -873,37 +694,12 @@ async function primeiraTela() {
 
           console.log("Após encontro com Tommy, Ellie e Joel decidem conversar!");
 
-
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 10, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(10);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            //console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala10(novaSala);
-          }
-
+          await api.mudarParaProximaSala(10, processarSala10);
         };
 
         async function processarSala10(salaAtual) {
           await api.infos(salaAtual);
-
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -940,37 +736,13 @@ async function primeiraTela() {
             await api.updateXPNPC(15);
           }
 
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 11, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(11);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            //console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala11(novaSala);
-          }
-
+          await api.mudarParaProximaSala(11, processarSala11);
         };
 
         async function processarSala11(salaAtual) {
           await api.infos(salaAtual);
-
           await api.mostrarItensDaSala(salaAtual);
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -1025,25 +797,7 @@ async function primeiraTela() {
 
           await api.evento(9);
 
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 12, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(12);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala12(novaSala);
-          }
-
+         await api.mudarParaProximaSala(12, processarSala12);
         };
 
         async function processarSala12(salaAtual) {
@@ -1098,35 +852,12 @@ async function primeiraTela() {
             await api.updateXPNPC(15);
           }
 
-          const mis = askAndReturn("\nVocê seguir para a próxima sala?\nS/N\n");
-          if (mis.toLowerCase() == 's') {
-
-            console.log("\n\nVocê irá agora para sala 13, aguarde...");
-
-            // Atualiza para a próxima sala
-            await api.updateSala(13);
-
-            console.log("Sala atualizada, esperando 2 segundos...");
-            //await sleep(2000);
-            console.clear();
-
-            // Agora continue para a próxima sala
-            let novaSala = await api.getSalaAtual();
-            console.log("Nova sala recebida:", novaSala);
-
-            await processarSala13(novaSala);
-          }
-
+         await api.mudarParaProximaSala(13, processarSala13);
         };
 
         async function processarSala13(salaAtual) {
           await api.infos(salaAtual);
-
-          let escolha = askAndReturn("\nDeseja ver seu inventário?\nS/N\n");
-          if (escolha.toLowerCase() == 's') {
-            console.log("Seu inventário atual é:");
-            await api.mostrarInventario();
-          }
+          await api.verInventario();
 
           //Aumenta  vida de acordo com a vestimenta escolhida
           await api.updateVidaVestimenta();
@@ -1142,10 +873,7 @@ async function primeiraTela() {
           await api.updateXPMisJoelExp(11);
 
           console.log("Você chegou ao fim do MUD. Deixa o like e compartilha com seus amigos!!");
-
-
         };
-
 
       } catch (error) {
         console.error("Erro ao mover para a sala:", error.message || error);
