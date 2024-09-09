@@ -148,20 +148,26 @@ class Api {
 verificarCapacidadeInventario = async () => {
   try {
     const result = await this.client.query(`
-      SELECT capacidade - (SELECT COUNT(*) FROM InstItem WHERE IdInventario = 1) AS capacidadeDisponivel
+      SELECT capacidade - COALESCE((SELECT COUNT(*) FROM InstItem WHERE IdInventario = 1), 0) AS capacidadeDisponivel
       FROM Inventario
-      WHERE idinventario = 1
+      WHERE idinventario = 1;
     `);
+   
+     // Log do resultado da consulta
+     console.log('Resultado da consulta:', result.rows);
 
     if (result.rows.length > 0) {
-      return result.rows[0].capacidadeDisponivel;
+
+      const capacidadeDisponivel = result.rows[0].capacidadedisponivel;
+      console.log('Capacidade Disponível:', capacidadeDisponivel);
+      return capacidadeDisponivel;
       
     } else {
-      throw new Error('Inventário não encontrado.');
+      throw new Error('Inventário não encontrado.');  
     }
   } catch (error) {
     console.error("Erro ao verificar a capacidade do inventário:", error.message || error);
-    return 0; //Retorna 0 em caso de erro para evitar adição de itens
+    return -1; 
   }
 };
 
@@ -184,30 +190,49 @@ updateCapacidadeInventario = async () => {
 //Função para adicionar um item ao inventário
 adicionarItemAoInventario = async (idinstitem, iditem) => {
   try {
-    const capacidadeDisponivel = await this.verificarCapacidadeInventario(); 
+    const capacidadeDisponivel = await this.verificarCapacidadeInventario();
+    console.log("EBAAA:" + capacidadeDisponivel);
 
-    if (capacidadeDisponivel <= 0) {
-      const result = await this.client.query(`
+    if (capacidadeDisponivel > 0) {
+      // 1. Atualiza a sala do item para NULL
+      const resultUpdateSala = await this.client.query(`
         UPDATE InstItem
-        SET IdInventario = 1
-        WHERE idInstItem = $1 AND IdItem = $2
-        RETURNING *;
+        SET Sala = NULL
+        WHERE idInstItem = $1 AND IdItem = $2;
       `, [idinstitem, iditem]);
 
-      if (result.rows.length > 0) {
-        //Atualiza a capacidade após adicionar o item
-        await this.updateCapacidadeInventario();
-        console.log(`O item foi adicionado ao inventário!`);
-      } else {
-        console.log(`Item não encontrado ou já adicionado ao inventário.`);
+      if (resultUpdateSala.rowCount === 0) {
+        console.log("Erro ao remover o item da sala.");
+        return false;
       }
+
+      // 2. Atualiza o inventário do item
+      const resultUpdateInventario = await this.client.query(`
+        UPDATE InstItem
+        SET IdInventario = 1
+        WHERE idInstItem = $1 AND IdItem = $2;
+      `, [idinstitem, iditem]);
+
+      if (resultUpdateInventario.rowCount === 0) {
+        console.log("Erro ao adicionar o item ao inventário.");
+        return false;
+      }
+
+      // Atualiza a capacidade após adicionar o item
+      await this.updateCapacidadeInventario();
+      console.log(`O item foi adicionado ao inventário!`);
+
+      return true;
     } else {
-      console.log(`Não há capacidade suficiente no inventário.`);
+      console.log("Não há capacidade suficiente no inventário.");
+      return false;
     }
   } catch (error) {
     console.error("Erro ao adicionar o item ao inventário:", error.message || error);
+    return false;
   }
 };
+
   
   
 
@@ -917,17 +942,43 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
   
       switch (escolhaTratada) {
         case '1': // Pegar todos os itens
+          //   for (const item of itens.rows) {
+          //     const sucesso = await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
+              
+          //     // Verificação se adicionarItemAoInventario foi bem-sucedida
+          //     if (!sucesso) {
+          //       console.log(`Erro ao adicionar o item ${item.nomeitem} ao inventário.`);
+          //       return;  // Encerra se houver erro
+          //     }
+          //   }
+
+          //   // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
+          //   await this.client.query(`
+          //     UPDATE InstItem
+          //     SET Sala = NULL, IdInventario = 1
+          //     WHERE idinstitem = $1
+          //   `, [item.idinstitem]);
+          //   console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
+          
+          // await this.updateCapacidadeInventario(1);
+          // break;
           for (const item of itens.rows) {
-            await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
-            // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
-            await this.client.query(`
-              UPDATE InstItem
-              SET Sala = NULL, IdInventario = 1
-              WHERE idinstitem = $1
-            `, [item.idinstitem]);
-            console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
+            // Verifique a capacidade antes de adicionar o item
+            const capacidadeDisponivel = await this.verificarCapacidadeInventario();
+            console.log("Capacidade Disponível: " + capacidadeDisponivel);
+            
+            if (capacidadeDisponivel > 0) {
+              const sucesso = await this.adicionarItemAoInventario(item.idinstitem, item.iditem);
+              if (!sucesso) {
+                console.log(`Erro ao adicionar o item ${item.nomeitem} ao inventário.`);
+                return;
+              }
+            } else {
+              console.log("Inventário cheio. Não é possível adicionar mais itens.");
+              return;
+            }
           }
-          await this.updateCapacidadeInventario(1);
+          console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
           break;
   
         case '2': // Não pegar nenhum item

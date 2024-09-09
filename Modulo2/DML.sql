@@ -49,7 +49,7 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 (23,  'N');
 
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
-(1, 10, 'Inventário do Joel.'),
+(1, 25, 'Inventário do Joel.'),
 (2, 50, 'Inventário do Ellie.'),
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
@@ -309,7 +309,7 @@ INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 (10, 14, 550);
 
 INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario) VALUES
-(1, 1, 50, 2000, 1000, 'Joel', 'saudável', 5, 1);
+(1, 1, 50, 2000, 10, 'Joel', 'saudável', 5, 1);
 
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (1, 'Primeiro contato com Ellie', 'Ellie é encontrada pela primeira vez, trazida por Marlene na Zona de Quarentena.', 2, 1),

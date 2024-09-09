@@ -6,6 +6,7 @@ ele volta pro inicio dessa x sala
 e perde todos os itens que ele adquiriu(se ele tiver pego)
 e todos os npc voltam a vida(se ele tiver matado ou nao) =>
 Erro ao atacar PC por Infectado: update or delete on table "pc" violates foreign key constraint "personagem_evento_fk" on table "evento"
+continua dando esse erro!!!!!!!!! 
 
 
 oh, se o cara escolher uma arma, ele usa ela enquanto tiver municao
