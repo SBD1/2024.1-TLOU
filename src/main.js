@@ -16,7 +16,7 @@ function separador() {
 
 async function primeiraTela() {
   try {
-    //console.clear();
+    console.clear();
 
     console.log(` 
             ████████ ██   ██ ███████     ██       █████  ███████ ████████      ██████  ███████     ██    ██ ███████ 
@@ -42,7 +42,7 @@ async function primeiraTela() {
         let table = await api.createTables();
         let popu = await api.populateTables();
         await sleep(1);
-        //console.clear();
+        console.clear();
         if (table && popu) {
           console.log("\n\nTabelas criadas e populadas com sucesso");
           separador();
@@ -66,7 +66,7 @@ async function primeiraTela() {
         const infoJogador = await api.client.query('SELECT nomePersonagem, estado, vidaAtual, xp FROM PC');
         if (infoJogador.rows.length > 0) {
           const jogador = infoJogador.rows[0];
-          //console.clear();
+          console.clear();
           console.log(`Seu nome é: ${jogador.nomepersonagem}, Estado: ${jogador.estado}\nVida Atual: ${jogador.vidaatual}, Experiência: ${jogador.xp}`);
         }
         const x = await api.getSalaAtual();

@@ -53,7 +53,6 @@ class Api {
     return response;
   };
 
-  
 
   getSalaAtual = async () => {
     try {
@@ -131,7 +130,7 @@ class Api {
       console.error("Erro ao listar os NPCs da sala:", error.message || error);
     }
   };
-  
+
   updateVidaNPC = async (id) => {
     try {
       await this.client.query(`
@@ -145,96 +144,77 @@ class Api {
   };
 
   // Função para verificar a capacidade do inventário
-verificarCapacidadeInventario = async () => {
-  try {
-    const result = await this.client.query(`
-      SELECT capacidade - COALESCE((SELECT COUNT(*) FROM InstItem WHERE IdInventario = 1), 0) AS capacidadeDisponivel
+  verificarCapacidadeInventario = async () => {
+    try {
+      const result = await this.client.query(`
+      SELECT capacidade - (SELECT COUNT(*) FROM InstItem WHERE IdInventario = 1)
+      AS capacidadeDisponivel
       FROM Inventario
       WHERE idinventario = 1;
     `);
-   
-     // Log do resultado da consulta
-     console.log('Resultado da consulta:', result.rows);
-
-    if (result.rows.length > 0) {
-
-      const capacidadeDisponivel = result.rows[0].capacidadedisponivel;
-      console.log('Capacidade Disponível:', capacidadeDisponivel);
-      return capacidadeDisponivel;
-      
-    } else {
-      throw new Error('Inventário não encontrado.');  
+      const item = result.rows[0].capacidadedisponivel;
+      if (item > 0) {
+        console.log(`capacidade é ${item}`);
+        return item;
+      } else {
+        console.log('Capacidade inválida.');
+        return 0;
+      }
+    } catch (error) {
+      console.error("Erro ao verificar a capacidade do inventário:", error.message || error);
+      return -1;
     }
-  } catch (error) {
-    console.error("Erro ao verificar a capacidade do inventário:", error.message || error);
-    return -1; 
-  }
-};
+  };
 
-//Atualizar capacidade do inventário
-updateCapacidadeInventario = async () => {
-  try {
-    await this.client.query(`
-      UPDATE Inventario
-      SET capacidade = capacidade - 
-        (SELECT COUNT(*) 
-         FROM InstItem 
-         WHERE IdInventario = 1)
-      WHERE idinventario = 1
-    `);
-  } catch (error) {
-    console.error("Erro ao atualizar a capacidade:", error.message || error);
-  }
-};
-
-//Função para adicionar um item ao inventário
-adicionarItemAoInventario = async (idinstitem, iditem) => {
-  try {
-    const capacidadeDisponivel = await this.verificarCapacidadeInventario();
-    console.log("EBAAA:" + capacidadeDisponivel);
-
-    if (capacidadeDisponivel > 0) {
+  //Função para adicionar um item ao inventário
+  adicionarItemAoInventario = async (idinstitem) => {
+    try {
       // 1. Atualiza a sala do item para NULL
       const resultUpdateSala = await this.client.query(`
         UPDATE InstItem
-        SET Sala = NULL
-        WHERE idInstItem = $1 AND IdItem = $2;
-      `, [idinstitem, iditem]);
+        SET Sala = NULL, idinventario = 1
+        WHERE idInstItem = $1;
+        `, [idinstitem]);
 
       if (resultUpdateSala.rowCount === 0) {
-        console.log("Erro ao remover o item da sala.");
+        console.log("Erro ao adicionar o item da sala.");
         return false;
       }
-
-      // 2. Atualiza o inventário do item
-      const resultUpdateInventario = await this.client.query(`
-        UPDATE InstItem
-        SET IdInventario = 1
-        WHERE idInstItem = $1 AND IdItem = $2;
-      `, [idinstitem, iditem]);
-
-      if (resultUpdateInventario.rowCount === 0) {
-        console.log("Erro ao adicionar o item ao inventário.");
-        return false;
-      }
-
       // Atualiza a capacidade após adicionar o item
-      await this.updateCapacidadeInventario();
-      console.log(`O item foi adicionado ao inventário!`);
+      console.log(`O item do id: ${idinstitem} foi adicionado ao inventário!`);
 
       return true;
-    } else {
-      console.log("Não há capacidade suficiente no inventário.");
+    } catch (error) {
+      console.error("Erro ao adicionar o item ao inventário:", error.message || error);
       return false;
     }
-  } catch (error) {
-    console.error("Erro ao adicionar o item ao inventário:", error.message || error);
-    return false;
-  }
-};
+  };
 
-  
-  
+  //Atualizar capacidade do inventário
+  updateCapacidadeInventario = async () => {
+    try {
+      await this.client.query(`
+        UPDATE Inventario
+        SET capacidade = capacidade - 
+          (SELECT COUNT(*) 
+           FROM InstItem 
+           WHERE IdInventario = 1)
+        WHERE idinventario = 1
+      `);
+      const capacidadeDepoisUpdate = await this.client.query(`
+        SELECT capacidade FROM Inventario WHERE idinventario = 1;
+      `);
+      // Verifica se a consulta retornou algum resultado
+      if (capacidadeDepoisUpdate.rows.length > 0) {
+        // Exibe o valor da capacidade
+        console.log("Capacidade depois do update:", capacidadeDepoisUpdate.rows[0].capacidade);
+      } else {
+        console.log("Nenhum dado retornado para o inventário com id 1.");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar a capacidade:", error.message || error);
+    }
+  };
 
   // adicionarItemAoInventario = async (idInstItem, idItem) => {
   //   try {
@@ -520,10 +500,10 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
   sleep = async (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
-  
+
   reiniciarSala = async (sala, idpc) => {
     try {
-        await this.client.query(`
+      await this.client.query(`
             UPDATE NPC
             SET vidaAtual = vidaMax
             WHERE IdPersonagem IN (
@@ -533,22 +513,22 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
             );
         `, [sala]);
 
-        //await this.client.query(`
-        //    DELETE FROM Inventario
-        //    WHERE IdPersonagem = $1;
-        //`, [idpc]);
+      //await this.client.query(`
+      //    DELETE FROM Inventario
+      //    WHERE IdPersonagem = $1;
+      //`, [idpc]);
 
-        await this.client.query(`
+      await this.client.query(`
             UPDATE Personagem
             SET Sala = $1
             WHERE IdPersonagem = $2;
         `, [sala, idpc]);
 
-        console.log("Sala reiniciada com sucesso. PC reposicionado e itens limpos.");
+      console.log("Sala reiniciada com sucesso. PC reposicionado e itens limpos.");
     } catch (error) {
-        console.error("Erro ao reiniciar a sala:", error.message || error);
+      console.error("Erro ao reiniciar a sala:", error.message || error);
     }
-};
+  };
 
   atacarNPC = async (idnpc, idarma, sala, idpc) => {
     try {
@@ -597,75 +577,80 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
 
         const danoArma = armaResult.rows[0].danoa;
         let municaoAtualPC = armaResult.rows[0].municaoa;
+        // enquanro a muição for maior que 0
+        // select count (*) from institem
+        // where iditem = 18 and idinventario = 1
+        let municao = await this.verMunicao();
+        while (municao > 0) {
+          municao = await this.verMunicao();
+          if (isNaN(danoArma) || isNaN(municaoAtualPC)) {
+            console.log(`Valores retornados da arma inválidos: dano=${danoArma}, municaoAtual=${municaoAtualPC}`);
+            return;
+          }
 
-        if (isNaN(danoArma) || isNaN(municaoAtualPC)) {
-          console.log(`Valores retornados da arma inválidos: dano=${danoArma}, municaoAtual=${municaoAtualPC}`);
-          return;
-        }
+          // Verificar se há munição suficiente
+          if (municaoAtualPC <= 0) {
+            console.log("\nRecarregando a arma...\n");
+            const armacarregada = await this.recarregarArma(idarma);
+            armacarregada = armaResult.rows[0].municaomax;
+          }
 
-        // Verificar se há munição suficiente
-        if (municaoAtualPC <= 0) {
-          console.log("\nRecarregando a arma...\n");
-          await this.recarregarArma(idarma);
-          municaoAtualPC = armaResult.rows[0].municaomax;
-          //await this.sleep (600);
-        }
+          // Determinar se o ataque acerta ou erra
+          const acerto = Math.random() < 0.76 ? 'acertou' : 'errou';
+          console.log(`Resultado do ataque: ${acerto}`);
 
-        // Determinar se o ataque acerta ou erra
-        const acerto = Math.random() < 0.74 ? 'acertou' : 'errou';
-        console.log(`Resultado do ataque: ${acerto}`);
-        //await this.sleep (600);
 
-        if (acerto === 'errou') {
-          console.log("O ataque falhou e o inimigo te acertou.");
-          //await this.sleep (600);
-          await this.atacarPCPorInfectado(1, idnpc);
-          // Atualizar munição mesmo se o ataque falhar
-          municaoAtualPC -= 1;
-          await this.client.query(`
+          if (acerto === 'errou') {
+            console.log("O ataque falhou e o inimigo te acertou.");
+            //await this.sleep (600);
+            await this.atacarPCPorInfectado(1, idnpc);
+            // Atualizar munição mesmo se o ataque falhar
+            municaoAtualPC -= 1;
+            await this.client.query(`
             UPDATE Arma
             SET municaoAtual = $1
             WHERE IdItem = $2;
-          `, [municaoAtualPC, idarma]);
-          console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
-          //await this.sleep (600);
-        } else {
-          // Se acertou, decrementar a vida do NPC
-          let novaVida = vidaAtualNpc - danoArma;
-          if (novaVida <= 0) {
-            await this.client.query(`
+            `, [municaoAtualPC, idarma]);
+            console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
+            //await this.sleep (600);
+          } else {
+            // Se acertou, decrementar a vida do NPC
+            let novaVida = vidaAtualNpc - danoArma;
+            if (novaVida <= 0) {
+              await this.client.query(`
               WITH npc_to_delete AS (
                 SELECT idInstNPC
                 FROM InstNPC
                 WHERE idNPC = $1 AND Sala= $2
                 LIMIT 1
-            )
+                )
                 DELETE FROM InstNPC
                 USING npc_to_delete
                 WHERE InstNPC.idInstNPC = npc_to_delete.idInstNPC;
-            `, [idnpc, sala]);
-            console.log("Inimigo eliminado.");
-            //await this.sleep (600);
-            npcVivo = false;
-          } else {
+                `, [idnpc, sala]);
+              console.log("Inimigo eliminado.");
+              //await this.sleep (600);
+              npcVivo = false;
+            } else {
+              await this.client.query(`
+                  UPDATE NPC
+                  SET vidaAtual = $1
+                  WHERE IdPersonagem = $2;
+                  `, [novaVida, idnpc]);
+              console.log(`\nVida do NPC atualizada para: ${novaVida}`);
+              //await this.sleep (600);
+            }
+
+            // Atualizar a munição da arma
+            municaoAtualPC -= 1;
             await this.client.query(`
-              UPDATE NPC
-              SET vidaAtual = $1
-              WHERE IdPersonagem = $2;
-            `, [novaVida, idnpc]);
-            console.log(`\nVida do NPC atualizada para: ${novaVida}`);
+                  UPDATE Arma
+                  SET municaoAtual = $1
+                  WHERE IdItem = $2;
+                  `, [municaoAtualPC, idarma]);
+            console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
             //await this.sleep (600);
           }
-
-          // Atualizar a munição da arma
-          municaoAtualPC -= 1;
-          await this.client.query(`
-            UPDATE Arma
-            SET municaoAtual = $1
-            WHERE IdItem = $2;
-          `, [municaoAtualPC, idarma]);
-          console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
-          //await this.sleep (600);
         }
 
         // Verificar se o NPC foi derrotado para sair do loop
@@ -680,17 +665,30 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
       if (error.message.includes("morreu")) {
         await this.reiniciarSala(sala, idpc);
         //await this.sleep (600);
+      }
     }
-  }
-};
+  };
 
   recarregarArma = async (idarma) => {
     try {
       await this.client.query(`
       UPDATE Arma
       SET municaoAtual = municaoMax
-      WHERE IdItem = $1;
+      WHERE IdItem = $1
+      RETURNING municaoMax;
       `, [idarma]);
+
+      await this.client.query(`
+          WITH municao_to_delete AS (
+                SELECT idInstItem
+                FROM InstItem
+                WHERE idItem = 18 and idinventario = 1
+                LIMIT 1
+                )
+                DELETE FROM InstItem
+                USING municao_to_delete
+                WHERE InstItem.idInstItem = municao_to_delete.idInstItem;
+          `);
 
     } catch (error) {
       console.error("Erro ao atualizar a munição da arma:", error.message || error);
@@ -770,7 +768,7 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
       console.log("Erro ao adquirir item de NPC:", error.message || error);
     }
   };
-  
+
 
   infos = async (salaAtual) => {
     try {
@@ -835,30 +833,30 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
     }
   };
 
-  setTrueMissaoPatrulha = async(idMissao) => {
-    try{
+  setTrueMissaoPatrulha = async (idMissao) => {
+    try {
       await this.client.query(`
         UPDATE MissaoPatrulha SET statusMissao = 'true'
         WHERE idMissao = ${idMissao}`)
 
     }
-    catch(error){
+    catch (error) {
       console.error("Erro ao atualizar missão: ", error);
     }
   };
 
-  setTrueMissaoExploracao = async(idMissao) => {
-    try{
+  setTrueMissaoExploracao = async (idMissao) => {
+    try {
       await this.client.query(`
         UPDATE MissaoExploracao SET statusMissao = 'true'
         WHERE idMissao = ${idMissao}`)
 
     }
-    catch(error){
+    catch (error) {
       console.error("Erro ao atualizar missão:", error);
     }
   };
-  
+
   // foiConcluida = async(idMissao) =>  {
   //   if(idMissao == 1){
   //     return ;
@@ -911,12 +909,12 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
         WHERE it.Sala = $1
         ORDER BY it.idinstitem ASC;
       `, [idSala]);
-  
+
       if (itens.rows.length === 0) {
         console.log("Nenhum item encontrado nesta sala.");
         return;
       }
-  
+
       // Agrupar itens pelo nome
       const itensAgrupados = itens.rows.reduce((acc, item) => {
         const { nomeitem, idinstitem } = item;
@@ -927,24 +925,24 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
         acc[nomeitem].count += 1; // Incrementa 1 para cada ocorrência do item
         return acc;
       }, {});
-  
+
       console.log("\nItens encontrados na sala:");
       for (const [nomeitem, { ids, count }] of Object.entries(itensAgrupados)) {
         // Ordenar IDs em ordem crescente
         const idsOrdenados = ids.sort((a, b) => a - b);
         console.log(`| Qtd: ${count} | ${nomeitem} | ID: ${idsOrdenados.join(',')}`);
       }
-  
+
       const escolha = await this.askAndReturn(
         "\nVocê encontrou alguns itens na sala.\nDeseja pegá-los?\n(1 - Todos, 2 - Nenhum, 3 - Especificar)\n"
       );
-      const escolhaTratada = String(escolha).trim().toLowerCase();
-  
-      switch (escolhaTratada) {
+      // const escolhaTratada = String(escolha).trim().toLowerCase();
+
+      switch (escolha) {
         case '1': // Pegar todos os itens
           //   for (const item of itens.rows) {
           //     const sucesso = await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
-              
+
           //     // Verificação se adicionarItemAoInventario foi bem-sucedida
           //     if (!sucesso) {
           //       console.log(`Erro ao adicionar o item ${item.nomeitem} ao inventário.`);
@@ -959,16 +957,16 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
           //     WHERE idinstitem = $1
           //   `, [item.idinstitem]);
           //   console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
-          
+
           // await this.updateCapacidadeInventario(1);
           // break;
           for (const item of itens.rows) {
             // Verifique a capacidade antes de adicionar o item
             const capacidadeDisponivel = await this.verificarCapacidadeInventario();
-            console.log("Capacidade Disponível: " + capacidadeDisponivel);
-            
+
             if (capacidadeDisponivel > 0) {
-              const sucesso = await this.adicionarItemAoInventario(item.idinstitem, item.iditem);
+              const sucesso = await this.adicionarItemAoInventario(item.idinstitem);
+
               if (!sucesso) {
                 console.log(`Erro ao adicionar o item ${item.nomeitem} ao inventário.`);
                 return;
@@ -978,25 +976,25 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
               return;
             }
           }
-          console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
+          //console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
           break;
-  
+
         case '2': // Não pegar nenhum item
           console.log("\nVocê decidiu não pegar nenhum item.\n");
           break;
-  
+
         case '3': // Pegar itens específicos
           const idsParaPegar = await this.askAndReturn("Digite o(s) ID(s) dos itens que deseja pegar (separados por vírgula ou espaço):\n");
           const idsSelecionados = idsParaPegar
             .split(/[\s,]+/) // Divide por espaços ou vírgulas
             .map(id => parseInt(id.trim(), 10))
             .filter(id => !isNaN(id)); // Filtra IDs válidos
-  
+
           if (idsSelecionados.length > 0) {
             const idsInvalidos = [];
             for (const id of idsSelecionados) {
               const itemEncontrado = itens.rows.find(item => item.idinstitem === id);
-  
+
               if (itemEncontrado) {
                 // Adicionar item ao inventário
                 await this.adicionarItemAoInventario(itemEncontrado.idinstitem, itemEncontrado.idItem);
@@ -1007,13 +1005,13 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
                   SET Sala = NULL, IdInventario = 1
                   WHERE idinstitem = $1
                 `, [itemEncontrado.idinstitem]);
-  
+
                 console.log(`O item '${itemEncontrado.nomeitem}' foi adicionado ao inventário!\n`);
               } else {
                 idsInvalidos.push(id);
               }
             }
-  
+
             if (idsInvalidos.length > 0) {
               console.log(`IDs de item inválidos: ${idsInvalidos.join(', ')}. Tente novamente.`);
             }
@@ -1021,7 +1019,7 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
             console.log("Nenhum ID de item válido foi fornecido.");
           }
           break;
-  
+
         default:
           console.log("\nOpção inválida.\n");
       }
@@ -1029,64 +1027,62 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
       console.error("Erro ao listar os itens da sala:", error.message || error);
     }
   };
-  
-    verInventario = async () => {
-      try {
-        const respostaUsuario = await this.askAndReturn("\nVocê deseja ver seu inventário?\nS/N\n");
-        const mis = String(respostaUsuario).trim().toLowerCase(); // Garante que o valor seja uma string e remove espaços em branco
-  
-        if (mis === 's') {
-          let removerItem = true;
-  
-          while (removerItem) {
-            // Mostrar o inventário
-            console.log("Seu inventário atual é:");
-            const inventario = await this.mostrarInventario();
-  
-            // Perguntar se deseja remover um item
-            const respostaRemover = await this.askAndReturn("\nVocê deseja remover um item? S/N\n");
-            const remover = String(respostaRemover).trim().toLowerCase();
-  
-            if (remover === 's') {
-              // Perguntar qual item remover
-              const idItemRemover = await this.askAndReturn("Digite o(s) ID(s) do item que deseja remover (separados por vírgula ou espaço):\n");
-              const idsParaRemover = idItemRemover
-                .split(/[\s,]+/) // Divide por espaços ou vírgulas
-                .map(id => parseInt(id.trim(), 10))
-                .filter(id => !isNaN(id)); // Filtra IDs válidos
-  
-              if (idsParaRemover.length > 0) {
-                for (const id of idsParaRemover) {
-                  // Verifica se o item existe
-                  const inventarioAtual = await this.mostrarInventario();
-                  const itemExiste = inventarioAtual.some(item => item.idinstitem === id);
-  
-                  if (itemExiste) {
-                    await this.removerItem(id);
-                    console.log(`Item com ID ${id} removido com sucesso.`);
-                  } else {
-                    console.log(`ID de item ${id} inválido. Tente novamente.`);
-                  }
+
+  verInventario = async () => {
+    try {
+      const respostaUsuario = await this.askAndReturn("\nVocê deseja ver seu inventário?\nS/N\n");
+
+      if (respostaUsuario === 's') {
+        let removerItem = true;
+
+        while (removerItem) {
+          // Mostrar o inventário
+          console.log("Seu inventário atual é:");
+          const inventario = await this.mostrarInventario();
+
+          // Perguntar se deseja remover um item
+          const respostaRemover = await this.askAndReturn("\nVocê deseja remover um item? S/N\n");
+
+          if (respostaRemover === 's') {
+            // Perguntar qual item remover
+            const idItemRemover = await this.askAndReturn("Digite o(s) ID(s) do item que deseja remover (separados por vírgula ou espaço):\n");
+            const idsParaRemover = idItemRemover
+              .split(/[\s,]+/) // Divide por espaços ou vírgulas
+              .map(id => parseInt(id.trim(), 10))
+              .filter(id => !isNaN(id)); // Filtra IDs válidos
+
+            if (idsParaRemover.length > 0) {
+              for (const id of idsParaRemover) {
+                // Verifica se o item existe
+                const inventarioAtual = await this.mostrarInventario();
+                const itemExiste = inventarioAtual.some(item => item.idinstitem === id);
+
+                if (itemExiste) {
+                  await this.removerItem(id);
+                  console.log(`Item com ID ${id} removido com sucesso.`);
+                } else {
+                  console.log(`ID de item ${id} inválido. Tente novamente.`);
                 }
-              } else {
-                console.log("IDs de item inválidos. Tente novamente.");
               }
-            } else if (remover === 'n') {
-              console.log("Continuando...");
-              removerItem = false;
             } else {
-              console.log("Opção inválida. Por favor, responda com S ou N.");
+              console.log("IDs de item inválidos. Tente novamente.");
             }
+          } else if (respostaRemover === 'n') {
+            console.log("Continuando...");
+            removerItem = false;
+          } else {
+            console.log("Opção inválida. Por favor, responda com S ou N.");
           }
         }
-      } catch (error) {
-        console.error("Erro ao exibir o inventário:", error.message || error);
       }
-    };
-  
-    mostrarInventario = async () => {
-      try {
-        const inventario = await this.client.query(`
+    } catch (error) {
+      console.error("Erro ao exibir o inventário:", error.message || error);
+    }
+  };
+
+  mostrarInventario = async () => {
+    try {
+      const inventario = await this.client.query(`
           SELECT i.idInstItem, COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeItem
           FROM InstItem i
           JOIN Inventario ii ON i.IdInventario = ii.idInventario
@@ -1096,52 +1092,62 @@ adicionarItemAoInventario = async (idinstitem, iditem) => {
           WHERE i.idinventario = 1
           ORDER BY nomeItem;
         `);
-  
-        if (inventario.rows.length === 0) {
-          console.log("Seu inventário está vazio.");
-          return [];
-        }
-  
-        // Agrupar itens pelo nome
-        const itensAgrupados = inventario.rows.reduce((acc, item) => {
-          const { nomeitem, idinstitem } = item;
-          if (!acc[nomeitem]) {
-            acc[nomeitem] = { ids: [], count: 0 };
-          }
-          acc[nomeitem].ids.push(idinstitem);
-          acc[nomeitem].count += 1; // Incrementa 1 para cada ocorrência do item
-          return acc;
-        }, {});
-  
-        console.log("\nSeus itens:");
-        for (const [nomeitem, { ids, count }] of Object.entries(itensAgrupados)) {
-          // Ordenar IDs em ordem crescente
-          const idsOrdenados = ids.sort((a, b) => a - b);
-          console.log(`| Qtd: ${count} | ${nomeitem} | ID: ${idsOrdenados.join(',')}`);
-        }
-  
-        return inventario.rows; // Retorna os itens para que possam ser usados para remoção
-  
-      } catch (error) {
-        console.error("Erro ao mostrar inventário:", error.message || error);
+
+      if (inventario.rows.length === 0) {
+        console.log("Seu inventário está vazio.");
+        return [];
       }
-    };
-  
-    removerItem = async (idInstItem) => {
-      try {
-        await this.client.query(`
+
+      // Agrupar itens pelo nome
+      const itensAgrupados = inventario.rows.reduce((acc, item) => {
+        const { nomeitem, idinstitem } = item;
+        if (!acc[nomeitem]) {
+          acc[nomeitem] = { ids: [], count: 0 };
+        }
+        acc[nomeitem].ids.push(idinstitem);
+        acc[nomeitem].count += 1; // Incrementa 1 para cada ocorrência do item
+        return acc;
+      }, {});
+
+      console.log("\nSeus itens:");
+      for (const [nomeitem, { ids, count }] of Object.entries(itensAgrupados)) {
+        // Ordenar IDs em ordem crescente
+        const idsOrdenados = ids.sort((a, b) => a - b);
+        console.log(`| Qtd: ${count} | ${nomeitem} | ID: ${idsOrdenados.join(',')}`);
+      }
+
+      return inventario.rows; // Retorna os itens para que possam ser usados para remoção
+
+    } catch (error) {
+      console.error("Erro ao mostrar inventário:", error.message || error);
+    }
+  };
+
+  removerItem = async (idInstItem) => {
+    try {
+      await this.client.query(`
           DELETE FROM InstItem
           WHERE idInstItem = $1;
         `, [idInstItem]);
-  
-        console.log("Item removido com sucesso.");
-      } catch (error) {
-        console.error("Erro ao remover item:", error.message || error);
-      }
-    };
-    
 
+      console.log("Item removido com sucesso.");
+    } catch (error) {
+      console.error("Erro ao remover item:", error.message || error);
+    }
+  };
 
+  verMunicao = async () => {
+    try {
+      const qtdMunicao = await this.client.query(`
+          select count (*) as ammo from institem
+          where iditem = 18 and idinventario = 1
+        `,);
+
+      return qtdMunicao.rows[0].ammo;
+    } catch (error) {
+      console.error("Erro ao verificar a munição:", error.message || error);
+    }
+  };
 
 }// fechando a api
 
