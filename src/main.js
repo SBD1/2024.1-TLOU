@@ -14,6 +14,7 @@ function separador() {
   console.log("===================================================================================================================\n")
 }
 
+
 async function primeiraTela() {
   try {
     console.clear();
@@ -41,6 +42,7 @@ async function primeiraTela() {
       try {
         let table = await api.createTables();
         let popu = await api.populateTables();
+        let trg = await api.createTriggers();
         await sleep(1);
         console.clear();
         if (table && popu) {
@@ -101,7 +103,7 @@ async function primeiraTela() {
               escolhaReceita = askAndReturn("\nEscolha o número da receita para realizá-la ou pressione 'V' para voltar: ");
 
               if (escolhaReceita.toLowerCase() === 'v') {
-                return;       
+                return;
               }
 
               if (!isNaN(escolhaReceita) && escolhaReceita >= 1 && escolhaReceita <= receitas.rows.length) {
@@ -119,7 +121,7 @@ async function primeiraTela() {
           }
         } else if (craft.toLowerCase() === 'n') {
           console.log("\nVocê optou por não realizar craft. Continuando...");
-          return; 
+          return;
         } else {
           console.log("Resposta inválida. Por favor, responda com 'S' para sim ou 'N' para não.");
           return mostrarReceitas();
@@ -255,14 +257,15 @@ async function primeiraTela() {
       }
     }
 
+
     async function moverParaSala(salaEscolhida) {
+
       try {
-        // Atualiza a sala do jogador no banco de dados
         await api.updateSala(salaEscolhida);
 
         // Obtem a nova sala atual do jogador
         let salaAtual = await api.getSalaAtual();
-
+        
         if (salaAtual == 1) {
           await processarSala1(salaAtual);
         }
@@ -303,6 +306,7 @@ async function primeiraTela() {
           await processarSala13(salaAtual);
         }
 
+
         async function processarSala1(salaAtual) {
           await api.mostrarInventario();
           await api.mostrarNPCsDaSala(salaAtual);
@@ -310,7 +314,6 @@ async function primeiraTela() {
           await api.mostrarDialogo(1, 6);
           await api.mostrarItensDaSala(salaAtual);
           await api.verInventario();
-          // mudar aqui para sala 2 dps
           await api.mudarParaProximaSala(2, processarSala2);
         };
 
@@ -326,25 +329,39 @@ async function primeiraTela() {
               console.log("Missão aceita!");
               await api.mostrarInimigoNPC(salaAtual);
 
-            console.log("\nProteja Ellie e Tess!");
-            await api.mostrarArmas();
-            let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+              console.log("\nProteja Ellie e Tess!");
+              await api.mostrarArmas();
+              let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
 
-            await api.mostrarInimigoNPC(salaAtual);
-            await api.atacarNPC(14, armaUsada, salaAtual, 1);
-            await api.updateVidaNPC(14);
+              await api.mostrarInimigoNPC(salaAtual);
+              await api.atacarNPC(14, armaUsada, salaAtual, 1);
+              await api.updateVidaNPC(14);
 
-            await api.atacarNPC(14, armaUsada, salaAtual, 1);
-            await api.updateVidaNPC(14);
+              let escolhaCombate = askAndReturn("Você deseja atacar novamente?\nS/N\n");
 
-            console.log("\nParabéns você salvou a Ellie e a Tess, concluindo a missão, você ganhará XP por matar os infectados e concluir a missão!\n");
-            await api.updateXPMisJoelExp(1);
-            await api.updateVidaNPC(14);
+              if (escolhaCombate.toLowerCase() === 's') {
+                await api.atacarNPC(14, armaUsada, salaAtual, 1);
+                await api.updateVidaNPC(14);
+              }
 
-            console.log("\nVocê conseguiu sair da Zona de Quarentena");
-            await api.mostrarDialogo(38, 48);
-            console.log("\nApós a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo.");
-            await api.adquireItemNPC(4);              
+              escolhaCombate = askAndReturn("Você deseja atacar novamente?\nS/N\n");
+              if (escolhaCombate.toLowerCase() === 's') {
+                await api.atacarNPC(12, armaUsada, salaAtual, 1);
+                await api.updateVidaNPC(12);
+              }
+              await api.adquireItemNPC(12);
+
+              console.log("\nParabéns você salvou a Ellie e a Tess, concluindo a missão, você ganhará XP por matar os infectados e concluir a missão!\n");
+
+              await api.updateXPMisJoelExp(1);
+              await api.updateVidaNPC(14);
+
+
+              console.log("\nVocê conseguiu sair da Zona de Quarentena");
+              await api.mostrarDialogo(38, 48);
+              console.log("\nApós a morte da Tess, você decide seguir o caminho com Ellie a fim de salvar o mundo.");
+              await api.adquireItemNPC(4);
+
               break; // Sai do loop
             } else if (mis === 'n') {
               console.log("Missão recusada.");
@@ -357,6 +374,14 @@ async function primeiraTela() {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
           }
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+              if (duvida.toLowerCase() === 's') {
+                await api.mostrarConsumivelVida();//consulta funciona
+                let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+                await api.consumivelDaVida(escolhaCura);
+                console.log("Cura realizada");
+              }
+
           await api.mudarParaProximaSala(3, processarSala3);
         };
 
@@ -380,47 +405,55 @@ async function primeiraTela() {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {
               console.log("Missão aceita!");
-      
+
               await api.objetivoPatrulha(salaAtual);
               await api.mostrarInimigoNPC(salaAtual);
-  
+
               console.log("\nMate todos seus inimigos");
               await api.mostrarArmas();
               let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
-  
+
               await api.mostrarInimigoNPC(salaAtual);
               await api.atacarNPC(14, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou um Corredor!\n");
-  
+
               await api.atacarNPC(14, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou outro Corredor!\n");
-  
-              await api.atacarNPC(14, armaUsada, salaAtual, 1);
+
+              await api.mostrarConsumivel();
+              let consumivelUsado = askAndReturn("Escolha o item que deseja usar para atacar: ");
+              await api.atacarNPCComConsumivel(14, consumivelUsado, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou mais um Corredor!\n");
-  
+
+              await api.mostrarArmas();
+              armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
               await api.atacarNPC(15, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou um Corredor!\n");
-  
-              console.log("\nEsses são ESTALADORES, são mais perigosos\n")
-  
-              await api.atacarNPC(15, armaUsada, salaAtual, 1);
+
+              console.log("\nEsses são ESTALADORES, são mais perigosos\n");
+
+              await api.mostrarConsumivel();
+              consumivelUsado = askAndReturn("Escolha o item que deseja usar para atacar: ");
+              await api.atacarNPCComConsumivel(15, consumivelUsado, salaAtual, 1);
               await api.updateVidaNPC(15);
-              console.log("\nVocê matou um Estalador\n!");
-  
+              console.log("\nVocê matou mais um Corredor!\n");
+
+              await api.mostrarArmas();
+              armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
               await api.atacarNPC(15, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou mais um Estalador\n!");
-  
+
               console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
               await api.mostrarInventario();
               await api.updateXPMisJoelPatr(1);
               await api.updateXPNPC(14);
               await api.updateXPNPC(15);
-              
+
               break; // Sai do loop
             } else if (mis === 'n') {
               console.log("Missão recusada.");
@@ -435,6 +468,15 @@ async function primeiraTela() {
           }
 
           console.log("Você conseguiu sair da Cidade Infestada");
+
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+          if (duvida.toLowerCase() === 's') {
+            await api.mostrarConsumivelVida();//consulta funciona
+            let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+            await api.consumivelDaVida(escolhaCura);
+            console.log("Cura realizada");
+          }
+
           await api.mostrarDialogo(12, 13);
           await api.mudarParaProximaSala(5, processarSala5);
         };
@@ -450,18 +492,34 @@ async function primeiraTela() {
           await api.mostrarInimigoNPC(5);
           await api.mostrarDialogo(49, 54);
           await api.mostrarArmas();
-          console.log("DA ONDE TA VINDO ESSE EVENTO???");
+
           let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
           await api.atacarNPC(3, armaUsada, salaAtual, 1);
           await api.updateVidaNPC(3);
           await api.atacarNPC(4, armaUsada, salaAtual, 1);
           await api.updateVidaNPC(4);
+
+
           console.log("Parabéns você matou todos os inimigos\n");
+
+          console.log("Quando você finalmente relaxa, o silêncio da floresta é quebrado. De repente, um Lobo Selvagem emerge das sombras entre as árvores e avança em sua direção, pronto para atacar.");
+          await api.atacarPCPorAnimal(1, 20, 5);
+          console.log("Ele te dou uma mordida mas você conseguiu escapar!");
+
           await api.mostrarInventario();
           await api.updateXPNPC(3);
           await api.updateXPNPC(4);
           await api.adquireItemNPC(6);
           await api.mostrarDialogo(55, 56);
+
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+          if (duvida.toLowerCase() === 's') {
+            await api.mostrarConsumivelVida();//consulta funciona
+            let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+            await api.consumivelDaVida(escolhaCura);
+            console.log("Cura realizada");
+          }
+
           await api.mudarParaProximaSala(6, processarSala6);
         };
 
@@ -479,52 +537,55 @@ async function primeiraTela() {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {
               console.log("Missão aceita!");
-            
-                      //missao id4
-                      await api.objetivoExploracao(salaAtual);
-                      await api.mostrarInimigoNPC(salaAtual);
-          
-                      console.log("No meio do caminho por suprimentos, Joel, Ellie e Bill se deparam com uma escola completa de inimigos!")
-                      console.log("\nMate todos seus inimigos");
-                      await api.mostrarArmas();
-                      let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
-          
-                      await api.mostrarInimigoNPC(salaAtual);
-                      await api.atacarNPC(14, armaUsada, salaAtual, 1);
-                      await api.updateVidaNPC(14);
-                      console.log("\nVocê matou um Corredor!\n");
-          
-                      await api.atacarNPC(14, armaUsada, salaAtual, 1);
-                      await api.updateVidaNPC(14);
-                      console.log("\nVocê matou outro Corredor!\n");
-          
-                      console.log("\nEsses são ESTALADORES, são mais perigosos\n");
-          
-                      await api.atacarNPC(15, armaUsada, salaAtual, 1);
-                      await api.updateVidaNPC(15);
-                      console.log("\nVocê matou um Estalador!\n");
-          
-                      await api.atacarNPC(15, armaUsada, salaAtual, 1);
-                      await api.updateVidaNPC(15);
-                      console.log("\nVocê matou um Estalador\n!");
-          
-                      console.log("Parece não ter mais nada a se preocupar. A sala está limpa e agora está livre para explorar a sala");
-                      await api.mostrarItensDaSala(salaAtual);
-          
-                      console.log("Quando você está próximo de sair da escola, é possível ouvir um barulho estrondoso.\nUma criatura ENORME sai de uma salaa das escolas, e ela quer te atacar");
-                      //Baiacu
-                      await api.atacarNPC(16, armaUsada, salaAtual, 1);
-                      await api.updateVidaNPC(16);
-                      console.log("\nVocê matou  um Baiacu\n!");
-                      await api.adquireItemNPC(7);
-          
-                      console.log("Parabéns, você acabou de lidar com um Baiacu, uma espécie de infectado rara e muito difícil de abater!\n");
-                      await api.mostrarInventario();
-                      await api.updateXPMisJoelExp(4);
-                      await api.updateXPNPC(14);
-                      await api.updateXPNPC(15);
-                      await api.updateXPNPC(16);
+
+              //missao id4
+              await api.objetivoExploracao(salaAtual);
+              await api.mostrarInimigoNPC(salaAtual);
+
+              console.log("No meio do caminho por suprimentos, Joel, Ellie e Bill se deparam com uma escola completa de inimigos!")
+              console.log("\nMate todos seus inimigos");
+              await api.mostrarArmas();
+              let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
+
+              await api.mostrarInimigoNPC(salaAtual);
+              await api.atacarNPC(14, armaUsada, salaAtual, 1);
+              await api.updateVidaNPC(14);
+              console.log("\nVocê matou um Corredor!\n");
+
+        
+              await api.atacarNPC(14, armaUsada, salaAtual, 1);
+              await api.updateVidaNPC(14);
+              console.log("\nVocê matou outro Corredor!\n");
+
+              console.log("\nEsses são ESTALADORES, são mais perigosos\n");
+
+              await api.atacarNPC(15, armaUsada, salaAtual, 1);
+              await api.updateVidaNPC(15);
+              console.log("\nVocê matou um Estalador!\n");
+
+              await api.atacarNPC(15, armaUsada, salaAtual, 1);
+              await api.updateVidaNPC(15);
+              console.log("\nVocê matou um Estalador\n!");
+
+              console.log("Parece não ter mais nada a se preocupar. A sala está limpa e agora está livre para explorar a sala");
+              await api.mostrarItensDaSala(salaAtual);
+
+              console.log("Quando você está próximo de sair da escola, é possível ouvir um barulho estrondoso.\nUma criatura ENORME sai de uma salaa das escolas, e ela quer te atacar");
+              //Baiacu
+              await api.atacarNPC(16, armaUsada, salaAtual, 1);
+              await api.updateVidaNPC(16);
+              console.log("\nVocê matou  um Baiacu\n!");
+              await api.adquireItemNPC(7);
+
+              console.log("Parabéns, você acabou de lidar com um Baiacu, uma espécie de infectado rara e muito difícil de abater!\n");
+              await api.mostrarInventario();
+              await api.updateXPMisJoelExp(4);
+              await api.updateXPNPC(14);
+              await api.updateXPNPC(15);
+              await api.updateXPNPC(16);
+
               
+
               break; // Sai do loop
             } else if (mis === 'n') {
               console.log("Missão recusada.");
@@ -538,9 +599,17 @@ async function primeiraTela() {
             }
           }
 
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+              if (duvida.toLowerCase() === 's') {
+                await api.mostrarConsumivelVida();//consulta funciona
+                let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+                await api.consumivelDaVida(escolhaCura);
+                console.log("Cura realizada");
+              }
+              
           console.log("Você conseguiu sair da escola");
           console.log("Após obter o carro, vocês seguem o caminho até Tommy");
-        await api.mudarParaProximaSala(7, processarSala7);
+          await api.mudarParaProximaSala(7, processarSala7);
         }
 
         async function processarSala7(salaAtual) {
@@ -554,38 +623,42 @@ async function primeiraTela() {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {
               console.log("Missão aceita!");
-            
+
               await api.objetivoExploracao(salaAtual);
 
               await api.mostrarInimigoNPC(salaAtual);
-  
+
               console.log("\nApós a Perca Total do carro, Joel e Ellie seguem vagando pela cidade de Pittsburgh");
               console.log("Após entrar numa casa para passar a noite, vocês percebem aqui ali também era o abrigo de outras duas pessoas");
               await api.mostrarDialogo(17, 19);
-  
+
               console.log("\nVocês estão decidem se juntar para passar pelo Esgoto a fim de sair da cidade.E nele vocês encontram alguns inimigos!")
               await api.mostrarArmas();
               let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
-  
+
               await api.mostrarInimigoNPC(salaAtual);
               await api.atacarNPC(14, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou um Corredor!\n");
-  
+
               await api.atacarNPC(14, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou outro Corredor!\n");
-  
-              await api.atacarNPC(14, armaUsada, salaAtual, 1);
+
+              await api.mostrarConsumivel();
+              consumivelUsado = askAndReturn("Escolha o item que deseja usar para atacar: ");
+              await api.atacarNPCComConsumivel(14, consumivelUsado, salaAtual, 1);
               await api.updateVidaNPC(14);
-              console.log("\nVocê matou outro Corredor!\n");
-  
+              console.log("\nVocê matou mais um Corredor!\n");
+
               console.log("\nEsse ESTALADOR, é mais perigoso\n");
-  
+
+              await api.mostrarArmas();
+              armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
               await api.atacarNPC(15, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou um Estalador!\n");
-  
+
               console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
               await api.mostrarItensDaSala(salaAtual);
               await api.mostrarInventario();
@@ -605,9 +678,18 @@ async function primeiraTela() {
             } else {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
-          }  
+          }
+
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+          if (duvida.toLowerCase() === 's') {
+            await api.mostrarConsumivelVida();//consulta funciona
+            let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+            await api.consumivelDaVida(escolhaCura);
+            console.log("Cura realizada");
+          }
+
           await api.evento(salaAtual);
-          await api.mostrarDialogo(20,22);
+          await api.mostrarDialogo(20, 22);
           await api.mudarParaProximaSala(8, processarSala8);
         };
 
@@ -624,38 +706,38 @@ async function primeiraTela() {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {
               console.log("Missão aceita!");
-            
+
               await api.mostrarInimigoNPC(salaAtual);
 
               console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
               await api.mostrarArmas();
               let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
-  
+
               await api.mostrarInimigoNPC(salaAtual);
               await api.atacarNPC(14, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou um Corredor!\n");
-  
+
               await api.atacarNPC(15, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou um Estalador!\n");
-  
+
               console.log("Agora você se depara com uma criatura também nunca antes vista. Parece um estalador mal formado. Mate-o")
-  
+
               await api.atacarNPC(17, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(17);
               console.log("\nVocê matou um Espreitador!\n");
-  
+
               await api.atacarNPC(17, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(17);
               console.log("\nVocê matou outro Espreitador!\n");
-  
+
               console.log("Parabéns você matou todos os inimigos, concluindo a missão, você ganhará xp por concluir a missão!\n");
               await api.updateXPMisJoelPatr(6);
               await api.updateXPNPC(14);
               await api.updateXPNPC(15);
               await api.updateXPNPC(17);
-      
+
               break; // Sai do loop
 
             } else if (mis === 'n') {
@@ -669,6 +751,14 @@ async function primeiraTela() {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
           }
+
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+          if (duvida.toLowerCase() === 's') {
+            await api.mostrarConsumivelVida();//consulta funciona
+            let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+            await api.consumivelDaVida(escolhaCura);
+            console.log("Cura realizada");
+          }
           await api.mudarParaProximaSala(9, processarSala9);
         };
 
@@ -679,10 +769,22 @@ async function primeiraTela() {
           await api.verInventario();
           await api.updateVidaVestimenta();
           console.log("Após uma viagem longa e cansativa, Joel e Ellie finalmente chegam a Jackson, onde seu irmão Tommy mora!");
+          await api.getNomeAnimal(21);
+          await api.getNomeAnimal(23);
           await api.mostrarDialogo(23, 25);
+          console.log("Nas montanhas ao redor, você observa um urso feroz investindo contra um cervo indefeso. Com um sorriso, você faz uma aposta com Ellie, acreditando na agilidade do cervo. No final, o urso prevalece, e você, claro, perde a aposta.");
           await api.evento(salaAtual);
           await api.updateXPMisJoelExp(7);
           await api.objetivoExploracao(salaAtual);
+
+          const duvida = askAndReturn("Deseja se curar?\nS/N\n");
+          if (duvida.toLowerCase() === 's') {
+            await api.mostrarConsumivelVida();//consulta funciona
+            let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+            await api.consumivelDaVida(escolhaCura);
+            console.log("Cura realizada");
+          }
+
           console.log("Após encontro com Tommy, Ellie e Joel decidem conversar!");
           await api.mudarParaProximaSala(10, processarSala10);
         };
@@ -709,16 +811,20 @@ async function primeiraTela() {
               await api.atacarNPC(14, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(14);
               console.log("\nVocê matou um Corredor!\n");
-              await api.atacarNPC(15, armaUsada, salaAtual, 1);
+
+              await api.mostrarConsumivel();
+              consumivelUsado = askAndReturn("Escolha o item que deseja usar para atacar: ");
+              await api.atacarNPCComConsumivel(15, consumivelUsado, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou um Estalador!\n");
+
               console.log("Joel escuta um barulho e decide ir atrás!");
               await api.evento(salaAtual + 1); //ver depois esse evento
               await api.updateXPMisJoelPatr(8);
               await api.updateXPNPC(14);
               await api.updateXPNPC(15);
               await api.adquireItemNPC(9);
-   
+
               break; // Sai do loop
             } else if (mis === 'n') {
               console.log("Missão recusada.");
@@ -730,6 +836,14 @@ async function primeiraTela() {
             } else {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
+          }
+
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+          if (duvida.toLowerCase() === 's') {
+            await api.mostrarConsumivelVida();//consulta funciona
+            let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+            await api.consumivelDaVida(escolhaCura);
+            console.log("Cura realizada");
           }
           await api.mudarParaProximaSala(11, processarSala11);
         };
@@ -746,37 +860,46 @@ async function primeiraTela() {
 
           while (true) {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
-            if (mis === 's') {      
+            if (mis === 's') {
               console.log("Missão aceita! Você deve salvar a vida de Ellie");
               await api.evento(salaAtual + 1);
               await api.mostrarInimigoNPC(salaAtual);
               console.log("\nNa frente de vocês, encontram-se inúmeros infectados e é necessário passar por eles para seguir o caminho");
+
               await api.mostrarArmas();
               let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
               await api.mostrarInimigoNPC(salaAtual);
               await api.atacarNPC(18, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(18);
               console.log("\nVocê matou um Vagalume que estava no hospital!\n");
+
               await api.atacarNPC(18, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(18);
               console.log("\nVocê matou outro Vagalume que estava no hospital!\n");
               await api.adquireItemNPC(10);
+
               await api.atacarNPC(13, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(13);
               console.log("\nVocê matou o médico que fazia a cirurgia em Ellie e agora ela se encontra desacordada nos seus braços!\n");
+
               console.log("Você deve levar Ellie parra fora do hospital e voltar para Jackson!");
+
               console.log("Na garagem do hospital, Marlene te intercepta");
               await api.mostrarDialogo(58, 65);
               await api.atacarNPC(7, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(7);
               console.log("\nAcabou, Marlene está morta! n");
               await api.adquireItemNPC(11);
+
               console.log("Após adquirir a chave do carro do corpo de Marlene, Joel agora consegue sair do hospital!!");
+
               await api.updateXPMisJoelExp(9);
               await api.updateXPNPC(18);
               await api.updateXPNPC(13);
               await api.updateXPNPC(7);
+
               
+
               break; // Sai do loop
             } else if (mis === 'n') {
               console.log("Missão recusada.");
@@ -789,6 +912,14 @@ async function primeiraTela() {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
           }
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+              if (duvida.toLowerCase() === 's') {
+                await api.mostrarConsumivelVida();//consulta funciona
+                let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+                await api.consumivelDaVida(escolhaCura);
+                console.log("Cura realizada");
+              }
+
           await api.mudarParaProximaSala(12, processarSala12);
         };
 
@@ -803,42 +934,50 @@ async function primeiraTela() {
           while (true) {
             const mis = askAndReturn("\nVocê aceita essa missão?\nS/N\n").trim().toLowerCase();
             if (mis === 's') {
-            
+
               console.log("Missão aceita! Você deve matar todos esses infectados");
               await api.objetivoPatrulha(12);
               await api.mostrarInimigoNPC(salaAtual);
-  
+
               await api.mostrarArmas();
               let armaUsada = askAndReturn("Escolha a arma que deseja usar: ");
-  
+
               await api.mostrarInimigoNPC(salaAtual);
-  
+
               await api.atacarNPC(17, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(17);
               console.log("\nVocê matou um Espreitador que estava rondando por Jackson!\n");
-  
+
               await api.atacarNPC(17, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(17);
               console.log("\nVocê matou outro Espreitador!\n");
-  
+
               await api.atacarNPC(17, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(17);
               console.log("\nVocê matou outro Espreitador!\n");
-  
+
               await api.atacarNPC(15, armaUsada, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou um Estalador que estava ali também");
-  
-              await api.atacarNPC(15, armaUsada, salaAtual, 1);
+
+              await api.mostrarConsumivel();
+              consumivelUsado = askAndReturn("Escolha o item que deseja usar para atacar: ");
+              await api.atacarNPCComConsumivel(15, consumivelUsado, salaAtual, 1);
               await api.updateVidaNPC(15);
               console.log("\nVocê matou outro Estalador ");
-  
+
+
+              console.log("Um pouco antes de chegar em Jackson, você encontra uma cobra");
+              await api.atacarPCPorAnimal(1, 22, 5);
+              console.log("Ele te deu uma mordida mas você conseguiu escapar!");
+
               console.log("Combate finalizado. Você pode voltar para Jackson em segurança!");
-  
+
               await api.updateXPMisJoelPatr(10);
               await api.updateXPNPC(17);
               await api.updateXPNPC(15);
-              
+
+
               break; // Sai do loop
             } else if (mis === 'n') {
               console.log("Missão recusada.");
@@ -851,7 +990,13 @@ async function primeiraTela() {
               console.log("Escolha inválida! Por favor, insira 'S' para aceitar ou 'N' para recusar.");
             }
           }
-
+          const duvida = askAndReturn("Agora que o combate acabou, você pode se curar para aumentar sua vida.\nDeseja se curar?\nS/N\n");
+              if (duvida.toLowerCase() === 's') {
+                await api.mostrarConsumivelVida();//consulta funciona
+                let escolhaCura = askAndReturn("Qual item você quer usar?\n");
+                await api.consumivelDaVida(escolhaCura);
+                console.log("Cura realizada");
+              }
           await api.mudarParaProximaSala(13, processarSala13);
         };
 
@@ -870,6 +1015,8 @@ async function primeiraTela() {
           console.log("Joel e Ellie voltam à Jackson. Ellie está um pouco estranha e decide conversar com Joel");
           await api.objetivoExploracao(salaAtual);
           await api.mostrarDialogo(35, 37);
+          console.log('Joel sorri enquanto diz: "Ainda te devo aquele ticket do Cervo, hein!"');
+
 
           await api.updateXPMisJoelExp(11);
 
@@ -893,7 +1040,7 @@ async function primeiraTela() {
 } // fecha primeira tela
 
 async function iniciarJogo() {
-await primeiraTela();
+  await primeiraTela();
 }
 
 iniciarJogo();

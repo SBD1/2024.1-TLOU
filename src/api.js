@@ -5,17 +5,10 @@ import { question } from "readline-sync";
 
 const { Client } = pg;
 var sqlTables = readFileSync("../Modulo2/DDL.sql").toString();
+var sqlTrg = readFileSync("../Modulo3/triggers.sql").toString()
 var sqlData = readFileSync("../Modulo2/DML.sql").toString();
-//var sqlTrg = readFileSync("..Modulo3/triggers.sql").toString();
-
-
-
-function separador() {
-  console.log("==========================================================================")
-}
 
 class Api {
-
   client = new Client({
     host: "localhost",
     user: "postgres",
@@ -23,6 +16,10 @@ class Api {
     port: 5451,
     database: "tlou",
   });
+
+  askAndReturn = async (texto) => {
+    return question(texto);
+  };
 
   constructor() {
     this.client.connect();
@@ -37,13 +34,13 @@ class Api {
     return response;
   };
 
-  /*createTriggers = async () => {
+  createTriggers = async () => {
     let response = false;
     await this.client.query(sqlTrg).then(() => {
       response = true;
     });
     return response;
-  };*/
+  };
 
   populateTables = async () => {
     let response = false;
@@ -52,7 +49,6 @@ class Api {
     });
     return response;
   };
-
 
   getSalaAtual = async () => {
     try {
@@ -216,20 +212,6 @@ class Api {
     }
   };
 
-  // adicionarItemAoInventario = async (idInstItem, idItem) => {
-  //   try {
-  //     const result = await this.client.query(`
-  //       UPDATE InstItem
-  //       SET IdInventario = 1
-  //       WHERE idInstItem = $1 AND IdItem = $2
-  //       RETURNING *;
-  //     `, [idInstItem, idItem]);
-
-  //   } catch (error) {
-  //     console.error("Erro ao adicionar o item ao inventário:", error.message || error);
-  //   }
-  // };
-
   mostrarArmas = async () => {
     try {
       const armas = await this.client.query(`
@@ -251,19 +233,6 @@ class Api {
     }
   };
 
-  // updateCapacidadeInventario = async () => {
-  //   try {
-  //     await this.client.query(`
-  //       UPDATE Inventario SET capacidade = capacidade - 
-  //       (SELECT COUNT(i.idinstitem) AS total
-  //       FROM institem i 
-  //       JOIN inventario ii ON ii.idinventario = i.idinventario)
-  //       WHERE idinventario = 1`);
-  //   } catch (error) {
-  //     console.error("Erro ao atualizar a capacidade:", error.message || error);
-  //   }
-  // };
-
   // Função para exibir um dialogo
   mostrarDialogo = async (DialogoInicio, DialogoFim) => {
     console.log(`\n`);
@@ -282,34 +251,6 @@ class Api {
       }
     } catch (error) {
       console.error("Erro ao listar os diálogos:", error.message || error);
-    }
-  };
-
-  contarEAtualizarCapacidade = async (idinventario) => {
-    try {
-      // Contar quantas instâncias foram inseridas no inventário
-      const countResult = await this.client.query(`
-        SELECT COUNT(*) AS item_count
-        FROM InstItem
-        WHERE IdInventario = ${idinventario};
-      `);
-
-      const itemCount = parseInt(countResult.rows[0].item_count, 10);
-
-      if (itemCount > 0) {
-        // Atualizar a capacidade do inventário subtraindo o número de instâncias contadas
-        const updateResult = await this.client.query(`
-          UPDATE Inventario
-          SET capacidade = capacidade - ${itemCount}
-          WHERE idInventario = ${idinventario}
-          RETURNING capacidade;
-        `);
-        console.log(`A capacidade do inventário foi atualizada para: ${updateResult.rows[0].capacidade}`);
-      } else {
-        console.log("Nenhuma instância foi encontrada no inventário.");
-      }
-    } catch (error) {
-      console.error("Erro ao contar instâncias ou atualizar a capacidade do inventário:", error.message || error);
     }
   };
 
@@ -375,30 +316,28 @@ class Api {
     }
   };
 
-  atacarPCPorAnimal = async (idpc, idanimal) => {
+  atacarPCPorAnimal = async (idpc, idanimal, salaAtual) => {
     try {
       // Obter os dados do PC
       const pcResult = await this.client.query(`
-        SELECT vidaAtual, vidaMax, Sala
+        SELECT vidaatual, vidamax
         FROM PC
-        WHERE IdPersonagem = ${idpc};
-        `);
+        WHERE IdPersonagem = $1;
+      `, [idpc]);
 
       if (pcResult.rows.length === 0) {
         console.log("PC não encontrado.");
         return;
       }
 
-      let vidaAtualPC = pcResult.rows[0].vidaAtual;
-      let vidaMaxPC = pcResult.rows[0].vidaMax;
-
+      let vidaAtualPC = pcResult.rows[0].vidaatual;
 
       // Obter os dados do Animal
       const animalResult = await this.client.query(`
         SELECT danoAnimal
         FROM Animal
-        WHERE IdNPC = ${idanimal};
-        `);
+        WHERE IdNPC = $1;
+      `, [idanimal]);
 
       if (animalResult.rows.length === 0) {
         console.log("Animal não encontrado.");
@@ -406,49 +345,48 @@ class Api {
       }
 
       let danoAnimal = animalResult.rows[0].danoanimal;
-      let salaAtual = pcResult.rows[0].sala;
 
       // Decrementar a vida do PC
       vidaAtualPC -= danoAnimal;
+      console.log(`\nVida do PC atualizada para: ${vidaAtualPC}`);
 
-      // Atualizar a vida do PC ou deletá-lo se a vida chegar a 0
-      if (vidaAtualPC <= 0) {
-        try {
-
-          if (vidaAtualPC <= 0) {
-            console.log("Você morreu, tente novamente.");
-            // Restaurar a vida do PC para o máximo e voltar para a sala anterior
-            await this.client.query(`
-              UPDATE PC
-              SET vidaAtual = ${vidaMaxPC}, Sala = ${salaAtual}
-              WHERE IdPersonagem = ${idpc};
-              `);
-
-            console.log(`PC retornou à sala ${salaAtual} com vida completa(${vidaMaxPC}).`);
-            console.log("PC eliminado.");
-          } else {
-            await this.client.query(`
-              UPDATE PC
-              SET vidaAtual = ${vidaAtualPC}
-              WHERE IdPersonagem = ${idpc};
-                `);
-            console.log(`Vida do PC atualizada para: ${vidaAtualPC}`);
-          }
-
-        } catch (error) {
-          console.error("Erro ao atacar PC por Animal:", error.message || error);
-        }
-      }
     } catch (error) {
       console.error("Erro ao atacar PC por Animal:", error.message || error);
     }
   };
 
-  atacarPCPorInfectado = async (idpc, idinfectado) => {
+  getNomeAnimal = async (idnpc) => {
+    try {
+      const result = await this.client.query(`
+        SELECT nomeAnimal
+        FROM Animal
+        WHERE IdNPC = $1;
+      `, [idnpc]);
+
+      if (result.rows.length === 0) {
+        console.log("Animal não encontrado.");
+        return null;
+      }
+
+      const nomeAnimal = result.rows[0].nomeanimal;
+      console.log(`Nome do Animal: ${nomeAnimal}`);
+      return nomeAnimal;
+    } catch (error) {
+      console.error("Erro ao buscar nome do animal:", error.message || error);
+      return null;
+    }
+  };
+
+  sleep = async (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+
+  atacarPCPorInfectado = async (idpc, idinfectado, salaAtual) => {
     try {
       // Obter os dados do PC
       const pcResult = await this.client.query(`
-        SELECT vidaAtual, vidaMax
+        SELECT vidaatual, vidamax
         FROM PC
         WHERE IdPersonagem = 1;
         `);
@@ -477,32 +415,27 @@ class Api {
       // Decrementar a vida do PC
       vidaAtualPC -= danoInfectado;
 
-      // Atualizar a vida do PC ou deletá-lo se a vida chegar a 0
-      if (vidaAtualPC <= 0) {
-        await this.client.query(`
-          DELETE FROM PC
-          WHERE IdPersonagem = ${idpc};
-          `);
-        console.log("PC eliminado.");
-      } else {
-        await this.client.query(`
+
+      await this.client.query(`
           UPDATE PC
           SET vidaAtual = ${vidaAtualPC}
           WHERE IdPersonagem = ${idpc};
           `);
-        console.log(`\nVida do PC atualizada para: ${vidaAtualPC}`);
-      }
+      console.log(`\nVida do PC atualizada para: ${vidaAtualPC}`);
+
+
+
     } catch (error) {
       console.error("Erro ao atacar PC por Infectado:", error.message || error);
     }
   };
 
-  sleep = async (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
-
-  reiniciarSala = async (sala, idpc) => {
+  reiniciarSala = async (salaAtual, idpc) => {
     try {
+      if (!salaAtual) {
+        console.error("Erro: salaAtual não pode ser NULL.");
+        return;
+      }
       await this.client.query(`
             UPDATE NPC
             SET vidaAtual = vidaMax
@@ -511,18 +444,13 @@ class Api {
                 FROM InstNPC
                 WHERE Sala = $1
             );
-        `, [sala]);
-
-      //await this.client.query(`
-      //    DELETE FROM Inventario
-      //    WHERE IdPersonagem = $1;
-      //`, [idpc]);
+        `, [salaAtual]);
 
       await this.client.query(`
-            UPDATE Personagem
-            SET Sala = $1
+            UPDATE PC
+            SET Sala = $1, vidaAtual = vidaMax
             WHERE IdPersonagem = $2;
-        `, [sala, idpc]);
+        `, [salaAtual, idpc]);
 
       console.log("Sala reiniciada com sucesso. PC reposicionado e itens limpos.");
     } catch (error) {
@@ -537,18 +465,18 @@ class Api {
       while (npcVivo) {
         // Obter os dados do NPC
         const npcResult = await this.client.query(`
-          SELECT n.vidaatual, n.vidamax
-          FROM instnpc i
-          JOIN npc n ON n.idpersonagem = i.idnpc
-          WHERE n.idpersonagem = $1 AND i.sala = $2
-        `, [idnpc, sala]);
+                SELECT n.vidaatual, n.vidamax
+                FROM instnpc i
+                JOIN npc n ON n.idpersonagem = i.idnpc
+                WHERE n.idpersonagem = $1 AND i.sala = $2
+            `, [idnpc, sala]);
 
         if (npcResult.rows.length === 0) {
           console.log("NPC não encontrado.");
           return;
         }
 
-        const vidaAtualNpc = npcResult.rows[0].vidaatual;
+        let vidaAtualNpc = npcResult.rows[0].vidaatual;
         const vidaMaxNpc = npcResult.rows[0].vidamax;
 
         if (isNaN(vidaAtualNpc) || isNaN(vidaMaxNpc)) {
@@ -558,17 +486,17 @@ class Api {
 
         if (vidaAtualNpc <= 0) {
           console.log("O NPC já está morto.");
-          npcVivo = false;
-          return;
+          npcVivo = false;  // Condição de saída
+          break;  // Sair do loop
         }
 
         // Obter os dados da arma
         const armaResult = await this.client.query(`
-          SELECT a.dano AS danoA, a.municaoAtual AS municaoA, a.municaoMax AS municaoMax
-          FROM Arma a
-          JOIN institem i ON i.iditem = a.iditem
-          WHERE a.IdItem = $1;
-        `, [idarma]);
+                SELECT a.dano AS danoA, a.municaoAtual AS municaoA, a.municaoMax AS municaoMax
+                FROM Arma a
+                JOIN institem i ON i.iditem = a.iditem
+                WHERE a.IdItem = $1;
+            `, [idarma]);
 
         if (armaResult.rows.length === 0) {
           console.log("Arma não encontrada.");
@@ -577,97 +505,81 @@ class Api {
 
         const danoArma = armaResult.rows[0].danoa;
         let municaoAtualPC = armaResult.rows[0].municaoa;
-        // enquanro a muição for maior que 0
-        // select count (*) from institem
-        // where iditem = 18 and idinventario = 1
-        let municao = await this.verMunicao();
-        while (municao > 0) {
-          municao = await this.verMunicao();
-          if (isNaN(danoArma) || isNaN(municaoAtualPC)) {
-            console.log(`Valores retornados da arma inválidos: dano=${danoArma}, municaoAtual=${municaoAtualPC}`);
-            return;
-          }
+        let municaoMaxPC = armaResult.rows[0].municaomax;
 
-          // Verificar se há munição suficiente
-          if (municaoAtualPC <= 0) {
-            console.log("\nRecarregando a arma...\n");
-            const armacarregada = await this.recarregarArma(idarma);
-            armacarregada = armaResult.rows[0].municaomax;
-          }
+        // Verificar e garantir que a munição está correta
+        if (isNaN(danoArma) || isNaN(municaoAtualPC) || isNaN(municaoMaxPC)) {
+          console.log(`Valores retornados da arma inválidos: dano=${danoArma}, municaoAtual=${municaoAtualPC}`);
+          return;
+        }
 
+        while (municaoAtualPC > 0) {
           // Determinar se o ataque acerta ou erra
-          const acerto = Math.random() < 0.76 ? 'acertou' : 'errou';
+          const acerto = Math.random() < 0.90 ? 'acertou' : 'errou';
           console.log(`Resultado do ataque: ${acerto}`);
-
 
           if (acerto === 'errou') {
             console.log("O ataque falhou e o inimigo te acertou.");
-            //await this.sleep (600);
-            await this.atacarPCPorInfectado(1, idnpc);
-            // Atualizar munição mesmo se o ataque falhar
-            municaoAtualPC -= 1;
-            await this.client.query(`
-            UPDATE Arma
-            SET municaoAtual = $1
-            WHERE IdItem = $2;
-            `, [municaoAtualPC, idarma]);
-            console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
-            //await this.sleep (600);
-          } else {
-            // Se acertou, decrementar a vida do NPC
-            let novaVida = vidaAtualNpc - danoArma;
-            if (novaVida <= 0) {
-              await this.client.query(`
-              WITH npc_to_delete AS (
-                SELECT idInstNPC
-                FROM InstNPC
-                WHERE idNPC = $1 AND Sala= $2
-                LIMIT 1
-                )
-                DELETE FROM InstNPC
-                USING npc_to_delete
-                WHERE InstNPC.idInstNPC = npc_to_delete.idInstNPC;
-                `, [idnpc, sala]);
-              console.log("Inimigo eliminado.");
-              //await this.sleep (600);
-              npcVivo = false;
-            } else {
-              await this.client.query(`
-                  UPDATE NPC
-                  SET vidaAtual = $1
-                  WHERE IdPersonagem = $2;
-                  `, [novaVida, idnpc]);
-              console.log(`\nVida do NPC atualizada para: ${novaVida}`);
-              //await this.sleep (600);
-            }
-
-            // Atualizar a munição da arma
-            municaoAtualPC -= 1;
-            await this.client.query(`
-                  UPDATE Arma
-                  SET municaoAtual = $1
-                  WHERE IdItem = $2;
-                  `, [municaoAtualPC, idarma]);
-            console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
-            //await this.sleep (600);
+            await this.atacarPCPorInfectado(1, idnpc, sala);
           }
+
+          // Se acertou, decrementar a vida do NPC
+          vidaAtualNpc -= danoArma;
+          if (vidaAtualNpc <= 0) {
+            vidaAtualNpc = 0;
+            console.log("Inimigo eliminado.");
+            npcVivo = false;  // NPC foi morto, terminar o loop
+            await this.client.query(`
+                        WITH npc_to_delete AS (
+                            SELECT idInstNPC
+                            FROM InstNPC
+                            WHERE idNPC = $1 AND Sala = $2
+                            LIMIT 1
+                        )
+                        DELETE FROM InstNPC
+                        USING npc_to_delete
+                        WHERE InstNPC.idInstNPC = npc_to_delete.idInstNPC;
+                    `, [idnpc, sala]);
+            break;  // Sair do loop
+          } else {
+            await this.client.query(`
+                        UPDATE NPC
+                        SET vidaAtual = $1
+                        WHERE IdPersonagem = $2;
+                    `, [vidaAtualNpc, idnpc]);
+            console.log(`\nVida do NPC atualizada para: ${vidaAtualNpc}`);
+          }
+
+          // Atualizar munição
+          municaoAtualPC -= 1;
+          await this.client.query(`
+                    UPDATE Arma
+                    SET municaoAtual = $1
+                    WHERE IdItem = $2;
+                `, [municaoAtualPC, idarma]);
+
+          console.log(`Munição da arma atualizada para: ${municaoAtualPC}`);
+
+          // Verificar se precisa recarregar a arma
+          if (municaoAtualPC <= 0) {
+            console.log("\nRecarregando a arma...\n");
+            municaoAtualPC = await this.recarregarArma(idarma);
+            console.log(`Munição recarregada: ${municaoAtualPC}`);
+          }
+
+          // Verificação de fim do combate
+          if (!npcVivo) break;
         }
 
-        // Verificar se o NPC foi derrotado para sair do loop
-        if (!npcVivo) {
-          console.log("Combate finalizado.");
-          //await this.sleep (600);
-          return;
-        }
+        // Quebra do loop principal caso NPC esteja morto
+        if (!npcVivo) break;
       }
+
     } catch (error) {
       console.error("Erro ao atacar NPC:", error.message || error);
-      if (error.message.includes("morreu")) {
-        await this.reiniciarSala(sala, idpc);
-        //await this.sleep (600);
-      }
     }
   };
+
 
   recarregarArma = async (idarma) => {
     try {
@@ -698,7 +610,7 @@ class Api {
   updateXPMisJoelPatr = async (idMissao) => {
     try {
       // Atualiza o XP do personagem
-      const xpMisExp = await this.client.query(`
+      await this.client.query(`
         UPDATE PC 
         SET xp = xp + (SELECT xpMis FROM MissaoPatrulha WHERE idMissao = $1)
         WHERE IdPersonagem = 1
@@ -733,7 +645,7 @@ class Api {
         WHERE IdPersonagem = 1
         `, [idnpc]);
 
-      console.log("XP de NPC atualizado com sucesso!");
+      console.log("XP do PC atualizado com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar o XP:", error.message || error);
     }
@@ -743,22 +655,21 @@ class Api {
     try {
       // Consulta para obter as instâncias de itens do inventário do NPC
       const institemnpcResult = await this.client.query(`
-        SELECT idInstItem    
+        SELECT idInstItem as instancia 
         FROM InstItem
         WHERE IdInventario = $1`, [idinventarioNPC]);
 
       // Consulta para obter os itens correspondentes às instâncias no inventário do NPC
       const itemnpcResult = await this.client.query(`
-        SELECT i.idItem
+        SELECT i.idItem as item
         FROM InstItem inst
         JOIN Item i ON inst.IdItem = i.idItem
         WHERE inst.IdInventario = $1`, [idinventarioNPC]);
 
+      const institemnpc = institemnpcResult.rows[0].instancia;
+      const itemnpc = itemnpcResult.rows[0].item;
 
-      const institemnpc = institemnpcResult.rows;
-      const itemnpc = itemnpcResult.rows;
-
-      this.adicionarItemAoInventario(institemnpc, itemnpc);
+      this.adicionarItemAoInventario(institemnpc);
 
       // Mensagem de sucesso
       console.log("Você adquiriu os itens com sucesso!");
@@ -769,12 +680,11 @@ class Api {
     }
   };
 
-
   infos = async (salaAtual) => {
     try {
       // Obtém a sala atual (ou use o valor passado como parâmetro)
       salaAtual = await this.getSalaAtual(); // se necessário
-      console.log("CHEGOU NA SALA " + salaAtual);
+      console.log("Você chegou na sala " + salaAtual);
 
       // Consulta a região atual com base na sala
       const regiaoAtual = await this.client.query(`
@@ -799,10 +709,6 @@ class Api {
       console.log("Erro ao mostrar as infos:", error.message);
       return null; // Retorna null em caso de erro
     }
-  };
-
-  askAndReturn = async (texto) => {
-    return question(texto);
   };
 
   mudarParaProximaSala = async (proximaSalaNumero, funcaoProcessamentoProximaSala) => {
@@ -857,57 +763,20 @@ class Api {
     }
   };
 
-  // foiConcluida = async(idMissao) =>  {
-  //   if(idMissao == 1){
-  //     return ;
-  //   }
-  //   else{
-  //     try{
-  //       const missaoPreE = await this.client.query(`
-  //         SELECT statusMissao
-  //         FROM MissaoExploracaoObterItem
-  //         WHERE IdMissao = (
-  //           SELECT IdMissaoPre
-  //           FROM MissaoExploracaoObterItem
-  //           WHERE IdMissao = ${idMissao}
-  //           ) AND statusMissao = 'true';
-  //         `,[idMissao]);
-
-  //       const preP = await this.client.query(`
-  //         SELECT statusMissao
-  //         FROM MissaoExploracaoObterItem
-  //         WHERE IdMissao = (
-  //           SELECT IdMissaoPre
-  //           FROM MissaoPatrulha
-  //           WHERE IdMissao = ${idMissao}
-  //           ) AND statusMissao = 'true';
-  //         `,[idMissao]);
-
-  //         const preMisExp = missaoPreE.rows;
-  //         const preMisP = preP.rows;
-
-  //     }
-  //     catch(error){
-  //       console.error("Erro ao atualizar missão:", error);
-
-  //     }
-  //   }
-  // }
-
   mostrarItensDaSala = async (idSala) => {
     try {
       // Buscar e ordenar itens na sala
       const itens = await this.client.query(`
-        SELECT 
+          SELECT 
           it.idinstitem,
           COALESCE(a.nomeItem, v.nomeItem, c.nomeItem) AS nomeitem,
           it.idItem
-        FROM InstItem it
-        LEFT JOIN Consumivel c ON it.idItem = c.idItem
-        LEFT JOIN Arma a ON it.idItem = a.idItem
-        LEFT JOIN Vestimenta v ON it.idItem = v.idItem
-        WHERE it.Sala = $1
-        ORDER BY it.idinstitem ASC;
+          FROM InstItem it
+          LEFT JOIN Consumivel c ON it.idItem = c.idItem
+          LEFT JOIN Arma a ON it.idItem = a.idItem
+          LEFT JOIN Vestimenta v ON it.idItem = v.idItem
+          WHERE it.Sala = $1
+          ORDER BY it.idinstitem ASC;
       `, [idSala]);
 
       if (itens.rows.length === 0) {
@@ -940,26 +809,6 @@ class Api {
 
       switch (escolha) {
         case '1': // Pegar todos os itens
-          //   for (const item of itens.rows) {
-          //     const sucesso = await this.adicionarItemAoInventario(item.idinstitem, item.idItem);
-
-          //     // Verificação se adicionarItemAoInventario foi bem-sucedida
-          //     if (!sucesso) {
-          //       console.log(`Erro ao adicionar o item ${item.nomeitem} ao inventário.`);
-          //       return;  // Encerra se houver erro
-          //     }
-          //   }
-
-          //   // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
-          //   await this.client.query(`
-          //     UPDATE InstItem
-          //     SET Sala = NULL, IdInventario = 1
-          //     WHERE idinstitem = $1
-          //   `, [item.idinstitem]);
-          //   console.log("\nTodos os itens foram adicionados ao inventário com sucesso!\n");
-
-          // await this.updateCapacidadeInventario(1);
-          // break;
           for (const item of itens.rows) {
             // Verifique a capacidade antes de adicionar o item
             const capacidadeDisponivel = await this.verificarCapacidadeInventario();
@@ -1148,6 +997,207 @@ class Api {
       console.error("Erro ao verificar a munição:", error.message || error);
     }
   };
+
+  consumivelDaVida = async (id) => {
+    try {
+      await this.client.query(`
+        UPDATE PC SET vidaAtual = vidaatual + (SELECT c.aumentoVida 
+        FROM Consumivel c
+        join institem i on i.iditem = c.iditem
+        join inventario inv on inv.idinventario = i.idinventario
+        WHERE i.IdItem = $1 and inv.idinventario = 1)
+        WHERE IdPersonagem = 1;`, [id]);
+    } catch (error) {
+      console.error("Erro ao consumir item:", error.message || error);
+    }
+  };
+
+  consumivelDano = async (idinstnpc, iditem) => {
+    try {
+      await this.client.query(`
+        UPDATE NPC
+        SET vidaAtual = vidaAtual - c.danoConsumivel
+        FROM Consumivel c
+        JOIN instnpc i ON NPC.idpersonagem = i.idnpc
+        WHERE i.idInstNPC = $1 
+        AND c.eAtaque = true   
+        AND c.IdItem = $2;     
+    `, [idinstnpc, iditem]);
+    }
+    catch {
+      console.error("Erro ao consumir item:", error.message || error);
+    }
+  };
+
+  mostrarConsumivel = async () => {
+    try {
+      const consumiveis = await this.client.query(`
+        select c.nomeitem AS nome, c.iditem
+        from consumivel c 
+        join institem i on i.iditem = c.iditem
+        join inventario ii on ii.idinventario = i.idinventario
+        where ii.idinventario = 1 and danoConsumivel IS NOT NULL`);
+      if (consumiveis.rows.length === 0) {
+        console.log("Você não possui consumiveis.");
+      } else {
+        console.log("\nSuas consumiveis:\n");
+        consumiveis.rows.forEach(consumivel => {
+          console.log(`${consumivel.nome} Id: ${consumivel.iditem}`);
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao mostrar consumiveis:", error.message || error);
+    }
+  };
+
+  mostrarConsumivelVida = async () => {
+    try {
+      const consumiveis = await this.client.query(`
+        select c.nomeitem AS nome, c.iditem
+        from consumivel c 
+        join institem i on i.iditem = c.iditem
+        join inventario ii on ii.idinventario = i.idinventario
+        where ii.idinventario = 1 and aumentoVida IS NOT NULL`);
+      if (consumiveis.rows.length === 0) {
+        console.log("Você não possui consumiveis.");
+      } else {
+        console.log("\nSeus consumiveis:\n");
+        consumiveis.rows.forEach(consumivel => {
+          console.log(`Id: ${consumivel.iditem} | ${consumivel.nome}`);
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao mostrar consumiveis:", error.message || error);
+    }
+  };
+
+  verVidaPC = async () => {
+    try {
+      const qtdVida = await this.client.query(`
+          SELECT vidaAtual FROM PC WHERE idPersonagem = 1;
+        `,);
+
+      return qtdVida.rows[0].ammo;
+    } catch (error) {
+      console.error("Erro ao verificar a munição:", error.message || error);
+    }
+  };
+
+  atacarNPCComConsumivel = async (idnpc, idconsumivel, sala, idpc) => {
+    try {
+      let npcVivo = true;
+
+      while (npcVivo) {
+        // Obter os dados do NPC
+        const npcResult = await this.client.query(`
+          SELECT n.vidaatual, n.vidamax
+          FROM instnpc i
+          JOIN npc n ON n.idpersonagem = i.idnpc
+          WHERE n.idpersonagem = $1 AND i.sala = $2
+        `, [idnpc, sala]);
+
+        if (npcResult.rows.length === 0) {
+          console.log("NPC não encontrado.");
+          return;
+        }
+
+        let vidaAtualNpc = npcResult.rows[0].vidaatual;
+        const vidaMaxNpc = npcResult.rows[0].vidamax;
+
+        if (isNaN(vidaAtualNpc) || isNaN(vidaMaxNpc)) {
+          console.log(`Valores retornados do NPC inválidos: vidaAtual=${vidaAtualNpc}, vidaMax=${vidaMaxNpc}`);
+          return;
+        }
+
+        if (vidaAtualNpc <= 0) {
+          console.log("O NPC já está morto.");
+          npcVivo = false;
+          break;  // Sair do loop
+        }
+
+        // Obter os dados do consumível
+        const consumivelResult = await this.client.query(`
+          SELECT c.danoConsumivel
+          FROM Consumivel c
+          WHERE c.IdItem = $1
+        `, [idconsumivel]);
+
+        if (consumivelResult.rows.length === 0) {
+          console.log("Consumível não encontrado.");
+          return;
+        }
+
+        const danoConsumivel = consumivelResult.rows[0].danoconsumivel;
+
+        if (isNaN(danoConsumivel)) {
+          console.log(`Dano do consumível inválido: danoConsumivel=${danoConsumivel}`);
+          return;
+        }
+
+        // Determinar se o ataque com o consumível acerta ou erra
+        const acerto = Math.random() < 0.90 ? 'acertou' : 'errou';
+        console.log(`Resultado do ataque com consumível: ${acerto}`);
+
+        if (acerto === 'errou') {
+          console.log("O ataque falhou e o inimigo te acertou.");
+          await this.atacarPCPorInfectado(1, idnpc, sala);
+        } else {
+          // Se acertou, decrementar a vida do NPC
+          vidaAtualNpc -= danoConsumivel;
+          if (vidaAtualNpc <= 0) {
+            vidaAtualNpc = 0;
+            console.log("Inimigo eliminado.");
+            npcVivo = false;  // NPC foi morto, terminar o loop
+            await this.client.query(`
+              WITH npc_to_delete AS (
+                SELECT idInstNPC
+                FROM InstNPC
+                WHERE idNPC = $1 AND Sala = $2
+                LIMIT 1
+              )
+              DELETE FROM InstNPC
+              USING npc_to_delete
+              WHERE InstNPC.idInstNPC = npc_to_delete.idInstNPC;
+            `, [idnpc, sala]);
+            break;  // Sair do loop
+          } else {
+            await this.client.query(`
+              UPDATE NPC
+              SET vidaAtual = $1
+              WHERE IdPersonagem = $2;
+            `, [vidaAtualNpc, idnpc]);
+            console.log(`\nVida do NPC atualizada para: ${vidaAtualNpc}`);
+          }
+        }
+
+        // Verificação de fim do combate
+        if (!npcVivo) break;
+      }
+
+      console.log("Combate finalizado.");
+    } catch (error) {
+      console.error("Erro ao atacar NPC com consumível:", error.message || error);
+    }
+  };
+
+  getPersonagem = async () => {
+    try {
+      // Executa a consulta para obter o ID do personagem
+      const pc = await this.client.query(`
+      SELECT idPersonagem FROM PC;
+    `);
+
+      // Verifica se há resultados e se o ID do personagem está disponível
+      if (pc.rows.length > 0 && pc.rows[0].idpersonagem) {
+        return pc.rows[0].idpersonagem;
+      } else {
+        throw new Error("Nenhum personagem encontrado ou idPersonagem não disponível.");
+      }
+    } catch (error) {
+      console.error("Erro ao obter o personagem:", error.message || error);
+      throw error; // Lança o erro para ser tratado em outro lugar, se necessário
+    }
+  }
 
 }// fechando a api
 

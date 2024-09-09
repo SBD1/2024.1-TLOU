@@ -49,7 +49,7 @@ INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES
 (23,  'N');
 
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
-(1, 25, 'Inventário do Joel.'),
+(1, 250, 'Inventário do Joel.'),
 (2, 50, 'Inventário do Ellie.'),
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
@@ -59,7 +59,8 @@ INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
 (8, 50, 'Inventário do Sam'),
 (9, 50, 'Inventário do David'),
 (10, 50, 'Inventário do Líder dos Vagalumes'),
-(11, 50, 'Inventário da Marlene');
+(11, 50, 'Inventário da Marlene'),
+(12, 50, 'Inventário do Sobrevivente');
 
 INSERT INTO Missao(idMissao, tipoMis) VALUES
 (1, 'E'),
@@ -195,7 +196,17 @@ INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
 (82 ,19, NULL, 8),
 (83 ,26, NULL, 7),
 (84 ,32, NULL, 4),
-(85, 33, NULL, 11);
+(85, 33, NULL, 11),
+(86, 33, NULL, 12),
+(87, 16, NULL, 12),
+(88, 12 , NULL, 1),
+(89, 13 , NULL, 1),
+(90, 14 , NULL, 1),
+(91, 15 , NULL, 1),
+(92, 16 , NULL, 1),
+(93, 17, NULL, 1),
+(94, 25 , NULL, 1),
+(95, 25 , NULL, 1);
 
 
 INSERT INTO Itens (IdMissao, IdItem) VALUES
@@ -216,7 +227,7 @@ INSERT INTO NPC (IdPersonagem, xp, vidaMax, vidaAtual, nomePersonagem, IdInventa
 (9, 10, 80, 80, 'Sam', 8, true, 'F'),
 (10, 10, 100, 100, 'Bill', NULL, true, 'F'),
 (11, 10, 100, 100, 'David', 9, false, 'F'),
-(12, 10, 100, 100, 'Sobrevivente Viajante', NULL, false, 'F'),
+(12, 10, 45, 45, 'Sobrevivente Viajante', 12, false, 'F'),
 (13, 10, 100, 100, 'Médico dos Vagalumes', NULL, false, 'F'),
 (14, 10, 30, 30, 'Corredor', NULL, false, 'I'),
 (15, 10, 45, 45, 'Estalador', NULL, false, 'I'),
@@ -247,10 +258,10 @@ INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, eAtaque, defesa) VALUES
 
 INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, eAtaque, descricaoItem, danoConsumivel) VALUES
 (12, 'Barra de Cereal', 'Energético', 10,  false, 'Fornece um aumento leve de energia e vitalidade.', NULL),
-(13, 'Pacote de Biscoitos', 'Carboidrato', 1, false, 'Aumenta a energia com um bom nível de carboidratos.', NULL),
+(13, 'Pacote de Biscoitos', 'Carboidrato', 7, false, 'Aumenta a energia com um bom nível de carboidratos.', NULL),
 (14, 'Garrafa de Água', 'Hidratante', 25,  false, 'Restaura a hidratação e aumenta a resistência.', NULL),
-(15, 'Pacote de Salgadinhos', 'Salgado', 1, false, 'Aumenta a vitalidade com um toque salgado.', NULL),
-(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', NULL),
+(15, 'Pacote de Salgadinhos', 'Salgado', 6, false, 'Aumenta a vitalidade com um toque salgado.', NULL),
+(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 40, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', NULL),
 (17, 'Kit de Primeiros Socorros', 'Kit básico para curativos', 50, false, 'Combinação de álcool e trapos para aumentar vida', NULL),
 (18, 'Munição', 'Projétil', NULL, true, 'Munição para uso em armas de fogo.', NULL),
 (19, 'Álcool', 'Reagente', NULL, false, 'Reagente útil para criação e improvisação.', NULL),
@@ -309,7 +320,7 @@ INSERT INTO Evolucao(idEvolucao, requisitoNivel, xpEvol) VALUES
 (10, 14, 550);
 
 INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario) VALUES
-(1, 1, 50, 2000, 10, 'Joel', 'saudável', 5, 1);
+(1, 1, 50, 1000, 200, 'Joel', 'saudável', 5, 1);
 
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
 (1, 'Primeiro contato com Ellie', 'Ellie é encontrada pela primeira vez, trazida por Marlene na Zona de Quarentena.', 2, 1),
@@ -506,7 +517,11 @@ INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
 (47, 17, 'I', 12),
 (48, 17, 'I', 12),
 (49, 15, 'I', 12),
-(50, 15, 'I', 12);
+(50, 15, 'I', 12),
+(51, 20, 'A', 5),
+(52, 21, 'A', 5),
+(53, 22, 'A', 12),
+(54, 23, 'A', 12);
 
 
 INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade, danoInfectado) VALUES

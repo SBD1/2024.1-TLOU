@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS PC (
     Evolucao INT NOT NULL,
     IdInventario INT NOT NULL, 
 
-    CHECK (vidaAtual > 0),
+    
     CHECK (vidaAtual <= vidaMax),
 
     CONSTRAINT pc_pk PRIMARY KEY (IdPersonagem),
