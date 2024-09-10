@@ -65,4 +65,4 @@ BEFORE INSERT ON PC
 FOR EACH ROW EXECUTE FUNCTION check_PC();
 ```
 
-Dessa forma, muitos outros Triggers e SP foram por nós implementados para garantir o completo funcionamento da base de dados de forma sólida. Todos podem ser encontrados no arquivo [**triggers.sql**](../../../Modulo3/triggers).
+Dessa forma, muitos outros Triggers e SP foram por nós implementados para garantir o completo funcionamento da base de dados de forma sólida. Todos podem ser encontrados no arquivo [**triggers.sql**](../../../Modulo3/triggers.sql).

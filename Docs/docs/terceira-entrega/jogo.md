@@ -9,4 +9,4 @@ Por fim, nosso produto final da disciplina está finalizado, funcionando de acor
 
 ## Como faço para jogar?
 
-Simples, apenas siga os passos indicados no [**README**](../../../README.md) do projeto e se divirta! :)
+Simples, apenas siga os passos indicados no [**README**](https://github.com/SBD1/2024.1-TLOU/blob/main/README.md) do projeto e se divirta! :)
