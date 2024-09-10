@@ -58,6 +58,7 @@ npm ci # ci = clean install
 cd src 
 node main.js
 ```
+- E agora, é só de divertir! :)
 
 ## Apresentações
 
@@ -65,6 +66,7 @@ node main.js
 | ------ | ----------------------------------------------------------------------- | ---------- |
 | 1      | [Apresentação do Módulo 1](https://www.youtube.com/watch?v=qEP-Pjk8k78) | 22/07/2024 |
 | 2      | [Apresentação do Módulo 2](https://youtu.be/pTEGCB_m3H0)                | 19/08/2024 |
+| 3      | [Apresentação do Módulo 3](https://youtu.be/2-ejQafiBTo)                | 09/09/2024 |
 
 ## Entregas
 
@@ -80,6 +82,10 @@ node main.js
   - [DQL](./Docs/docs/segunda-entrega/DQL.md)
   - [Álgebra Relacional](./Docs/docs/segunda-entrega/AR.md)
 
+- **Módulo 3**
+  - [Views](./Docs/docs/segunda-entrega/DDL.md)
+  - [Triggers e Storage Procedures](./Docs/docs/segunda-entrega/DML.md)
+
 ## Histórico de versões
 
 | Versão |    Data    | Descrição                                                                     | Autor                | Revisão              |
@@ -88,6 +94,7 @@ node main.js
 | `1.1`  | 22/07/2024 | Estruturação do README do projeto                                             | Arthur e Maria Clara | Ana Júlia e Júlia    |
 | `2.0`  | 09/08/2024 | Correção da primeira entrega do projeto de acordo com *feedback* do professor | Todos                | Todos                |
 | `2.1`  | 19/08/2024 | Atualização da documentação para o Módulo 2 e entrega.                        | Todos                | Todos                |
+| `3.0`  | 09/09/2024 | Atualização da documentação para o Módulo 3 e entrega do MUD rodando.                        | Todos                | Todos                |
 
 ## Autores
 

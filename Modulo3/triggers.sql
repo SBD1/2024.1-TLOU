@@ -56,37 +56,6 @@
  DROP TRIGGER IF EXISTS check_Regiao ON Regiao;
  DROP FUNCTION IF EXISTS check_Regiao();
 
---Verifica se há espaço no inventário antes de inserir um item
-CREATE FUNCTION verificarCapacidadeInventario() 
-RETURNS trigger AS $$
-DECLARE
-    capacidadeAtual INTEGER;
-BEGIN
-    -- Verifica a capacidade atual do inventário
-    SELECT capacidade INTO capacidadeAtual 
-    FROM Inventario WHERE idInventario = NEW.IdInventario;
-
-    -- Se a capacidade for maior que 0, permite adicionar o item
-    IF capacidadeAtual > 0 THEN
-        -- Adiciona o item ao inventário
-        UPDATE Inventario 
-        SET capacidade = capacidade - 1 
-        WHERE idInventario = NEW.IdInventario;
-        RETURN NEW;
-    ELSE 
-        -- caso contrário impede a inserção do item
-        RAISE EXCEPTION 'Seu inventário está cheio!';
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger para adicionar itens ao inventário só se estiver espaço
--- Sp = verificarCapacidadeInventario()
-CREATE TRIGGER t_verificarCapacidadeInventario
-BEFORE UPDATE ON Inventario
-FOR EACH ROW
-EXECUTE FUNCTION verificarCapacidadeInventario();
-
 -- Atualiza a capacidade ao remover um item
 CREATE FUNCTION atualizarCapacidadeInventario()
 RETURNS trigger AS $$
@@ -349,32 +318,6 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER check_Infectado
 BEFORE INSERT ON Infectado
 FOR EACH ROW EXECUTE FUNCTION check_Infectado();
-
-------------------------------
-DROP TRIGGER IF EXISTS check_Item ON Item;
-DROP FUNCTION IF EXISTS check_Item();
-
--- garante integridade na inserção da tabela item, tipo só podendo ser A, V ou C
-
-CREATE OR REPLACE FUNCTION check_Item() RETURNS TRIGGER AS $$
-BEGIN
-  
-    IF EXISTS (SELECT 1 FROM Item WHERE idItem = NEW.idItem) THEN
-        RAISE EXCEPTION 'Esse Item já existe na base de dados!';
-    END IF;
-
-    IF (NEW.idItem IS NOT NULL AND NEW.tipoItem = 'A' OR  NEW.tipoItem = 'V' OR  NEW.tipoItem = 'C') THEN       
-        RETURN NEW;
-    ELSE
-        RAISE EXCEPTION 'Atributos obrigatórios devem ser preenchidos e tipo do 
-        Item deve ser A (Arma) ou V (Vestimenta) ou C (Consumível)!';
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_Item
-BEFORE INSERT ON Item
-FOR EACH ROW EXECUTE FUNCTION check_Item();
 
 -------------------------------------------------
 DROP TRIGGER IF EXISTS check_Missao ON Missao;

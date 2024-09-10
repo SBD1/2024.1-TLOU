@@ -150,7 +150,7 @@ class Api {
     `);
       const item = result.rows[0].capacidadedisponivel;
       if (item > 0) {
-        console.log(`capacidade é ${item}`);
+        // console.log(`capacidade é ${item}`);
         return item;
       } else {
         console.log('Capacidade inválida.');
@@ -187,30 +187,30 @@ class Api {
   };
 
   //Atualizar capacidade do inventário
-  updateCapacidadeInventario = async () => {
-    try {
-      await this.client.query(`
-        UPDATE Inventario
-        SET capacidade = capacidade - 
-          (SELECT COUNT(*) 
-           FROM InstItem 
-           WHERE IdInventario = 1)
-        WHERE idinventario = 1
-      `);
-      const capacidadeDepoisUpdate = await this.client.query(`
-        SELECT capacidade FROM Inventario WHERE idinventario = 1;
-      `);
-      // Verifica se a consulta retornou algum resultado
-      if (capacidadeDepoisUpdate.rows.length > 0) {
-        // Exibe o valor da capacidade
-        console.log("Capacidade depois do update:", capacidadeDepoisUpdate.rows[0].capacidade);
-      } else {
-        console.log("Nenhum dado retornado para o inventário com id 1.");
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar a capacidade:", error.message || error);
-    }
-  };
+  // updateCapacidadeInventario = async () => {
+  //   try {
+  //     await this.client.query(`
+  //       UPDATE Inventario
+  //       SET capacidade = capacidade - 
+  //         (SELECT COUNT(*) 
+  //          FROM InstItem 
+  //          WHERE IdInventario = 1)
+  //       WHERE idinventario = 1
+  //     `);
+  //     const capacidadeDepoisUpdate = await this.client.query(`
+  //       SELECT capacidade FROM Inventario WHERE idinventario = 1;
+  //     `);
+  //     // Verifica se a consulta retornou algum resultado
+  //     if (capacidadeDepoisUpdate.rows.length > 0) {
+  //       // Exibe o valor da capacidade
+  //       console.log("Capacidade depois do update:", capacidadeDepoisUpdate.rows[0].capacidade);
+  //     } else {
+  //       console.log("Nenhum dado retornado para o inventário com id 1.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Erro ao atualizar a capacidade:", error.message || error);
+  //   }
+  // };
 
   mostrarArmas = async () => {
     try {
@@ -422,8 +422,7 @@ class Api {
           WHERE IdPersonagem = ${idpc};
           `);
       console.log(`\nVida do PC atualizada para: ${vidaAtualPC}`);
-
-
+      await this.sleep(0.5);
 
     } catch (error) {
       console.error("Erro ao atacar PC por Infectado:", error.message || error);
@@ -515,11 +514,12 @@ class Api {
 
         while (municaoAtualPC > 0) {
           // Determinar se o ataque acerta ou erra
-          const acerto = Math.random() < 0.90 ? 'acertou' : 'errou';
+          const acerto = Math.random() < 0.80 ? 'acertou' : 'errou';
           console.log(`Resultado do ataque: ${acerto}`);
 
           if (acerto === 'errou') {
             console.log("O ataque falhou e o inimigo te acertou.");
+            
             await this.atacarPCPorInfectado(1, idnpc, sala);
           }
 
@@ -548,6 +548,7 @@ class Api {
                         WHERE IdPersonagem = $2;
                     `, [vidaAtualNpc, idnpc]);
             console.log(`\nVida do NPC atualizada para: ${vidaAtualNpc}`);
+            await this.sleep(0.5);
           }
 
           // Atualizar munição
@@ -847,7 +848,7 @@ class Api {
               if (itemEncontrado) {
                 // Adicionar item ao inventário
                 await this.adicionarItemAoInventario(itemEncontrado.idinstitem, itemEncontrado.idItem);
-                await this.updateCapacidadeInventario(1);
+                
                 // Atualizar a tabela InstItem para remover o item da sala e adicionar ao inventário
                 await this.client.query(`
                   UPDATE InstItem
@@ -887,7 +888,7 @@ class Api {
         while (removerItem) {
           // Mostrar o inventário
           console.log("Seu inventário atual é:");
-          const inventario = await this.mostrarInventario();
+          await this.mostrarInventario();
 
           // Perguntar se deseja remover um item
           const respostaRemover = await this.askAndReturn("\nVocê deseja remover um item? S/N\n");
@@ -1005,8 +1006,10 @@ class Api {
         FROM Consumivel c
         join institem i on i.iditem = c.iditem
         join inventario inv on inv.idinventario = i.idinventario
-        WHERE i.IdItem = $1 and inv.idinventario = 1)
+        WHERE i.IdItem = $1 AND inv.idinventario = 1
+        limit 1)
         WHERE IdPersonagem = 1;`, [id]);
+        console.log("Cura realizada");
     } catch (error) {
       console.error("Erro ao consumir item:", error.message || error);
     }
@@ -1053,11 +1056,10 @@ class Api {
   mostrarConsumivelVida = async () => {
     try {
       const consumiveis = await this.client.query(`
-        select c.nomeitem AS nome, c.iditem
-        from consumivel c 
-        join institem i on i.iditem = c.iditem
-        join inventario ii on ii.idinventario = i.idinventario
-        where ii.idinventario = 1 and aumentoVida IS NOT NULL`);
+        select c.nomeitem AS nome, i.iditem, i.idinstitem
+        from institem i
+        join consumivel c on i.iditem = c.iditem
+        where i.idinventario = 1 and aumentoVida IS NOT NULL `);
       if (consumiveis.rows.length === 0) {
         console.log("Você não possui consumiveis.");
       } else {
@@ -1135,7 +1137,7 @@ class Api {
         }
 
         // Determinar se o ataque com o consumível acerta ou erra
-        const acerto = Math.random() < 0.90 ? 'acertou' : 'errou';
+        const acerto = Math.random() < 0.80 ? 'acertou' : 'errou';
         console.log(`Resultado do ataque com consumível: ${acerto}`);
 
         if (acerto === 'errou') {

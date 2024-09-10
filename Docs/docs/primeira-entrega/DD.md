@@ -244,12 +244,14 @@ Observação: essa tabela possui chave estrangeira para a tabela `PC`.
 
 A tabela a seguir descreve a entidade `InstItem`, que representa os itens no inventário, incluindo identificadores e tipos de item.
 
-Observação: essa tabela possui chave estrangeira para a tabela `Item`.
+Observação: essa tabela possui chave estrangeira para a tabela `Item`, `Sala` e `Inventario`.
 
 | Variável   | Tipo      | Descrição                                           | Valores permitidos | Permite valores nulos? | É chave? | Outras restrições |
 |------------|-----------|-----------------------------------------------------|--------------------|------------------------|----------|--------------------|
 | idInstItem     | int       | Identificador único para a instância do item do inventário      | 1 - 5000           | Não                    | Sim. Chave primária | -                  |
 | IdItem     | int       | Identificador único para o item do inventário      | 1 - 5000           | Não                    | Sim. Chave estrangeira | -                  |
+| Sala     | int       | Identificador único para a sala em que a instância de item está      | 1 - 5000           | Sim                   | Sim. Chave estrangeira | -                  |
+| Inventario     | int       | Identificador único para o inventário que o item está     | 1 - 5000           | Sim                    | Sim. Chave estrangeira | -                  |
 
 
 

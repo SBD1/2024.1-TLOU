@@ -11,6 +11,9 @@ O diagrama fornece uma visão lógica do banco de dados, fornecendo um conceito 
 
 ### Versão atualizada
 
+![Diagrama Entidade Relacional](../../static/img/TLOU-DER3.drawio.png)
+Figura 2: DER 3.0 TLOU
+
 <details>
   <summary>Versão 2</summary>
 

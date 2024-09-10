@@ -43,7 +43,7 @@ async function primeiraTela() {
         let table = await api.createTables();
         let popu = await api.populateTables();
         let trg = await api.createTriggers();
-        await sleep(1);
+        await sleep(2);
         console.clear();
         if (table && popu) {
           console.log("\n\nTabelas criadas e populadas com sucesso");
@@ -146,7 +146,7 @@ async function primeiraTela() {
           console.log("nao recebeu item");
         } else {
           itemRecebido.rows.forEach(item => {
-            console.log(`id correto do item: ${item.iditem}`);
+            // console.log(`id correto do item: ${item.iditem}`);
           });
         }
         const itemRecebidoCount = parseInt(itemRecebido.rows[0].iditem, 10);
@@ -199,13 +199,13 @@ async function primeiraTela() {
             FROM InstItem
           `);
 
-        const itemnovo1 = parseInt(instanciaItem.rows[0].total, 10);
+        const itemnovo1 = instanciaItem.rows[0].total;
         const idItemMaisNovo = itemnovo1 + 1;
 
-        //adicionando o item da receita
-        await api.client.query(`
+          //adicionando o item da receita
+         await api.client.query(`
              INSERT INTO InstItem (idInstItem, IdItem, Sala, IdInventario)
-             VALUES ($1, $2, null, 1);`, [idItemMaisNovo, itemRecebidoCount]);
+             VALUES ($1, $2, NULL, 1);`, [idItemMaisNovo, itemRecebidoCount]);
 
         await api.client.query(`
             UPDATE Inventario
@@ -379,7 +379,6 @@ async function primeiraTela() {
                 await api.mostrarConsumivelVida();//consulta funciona
                 let escolhaCura = askAndReturn("Qual item você quer usar?\n");
                 await api.consumivelDaVida(escolhaCura);
-                console.log("Cura realizada");
               }
 
           await api.mudarParaProximaSala(3, processarSala3);

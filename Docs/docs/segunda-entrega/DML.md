@@ -17,175 +17,155 @@ Este documento descreve as tabelas e os dados inseridos no banco de dados para u
 ### Regiao
 ```sql
 -- Inserção de dados na tabela Regiao
-INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao) VALUES
-(1, 'Zona de quarentena fortemente vigiada, com muros altos e guardas armados.', 'Zona de Quarentena de Boston', 20, 2),
-(2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 4),
-(3, 'Território dominado por um grupo de mercenários.', 'Território Mercenário', 10, 3),
-(4, 'Esgoto infestado de criaturas perigosas.', 'Esgoto Abandonado', 15, 4),
-(5, 'Vila liderada por David, situada no inverno', 'Silver Lake', 10, 3),
-(6, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 3),
-(7, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 1);
-```
+INSERT INTO Regiao (idRegiao, descricaoRegiao, nomeRegiao, capacidade, tipoRegiao,z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade) VALUES
+(1, 'Zona de quarentena fortemente vigiada, com muros altos e guardas armados.', 'Zona de Quarentena de Boston', 20, 'Z',5 , 10, NULL, NULL, NULL),
+(2, 'Área devastada e infestada de infectados.', 'Cidade Abandonada', 15, 'L', NULL, NULL, NULL, 'Cidade Abandonada', 8),
+(3, 'Cidade onde o Bill se encontra', 'Cidade do Bill', 10, 'Z',5 , 10, NULL, NULL, NULL),
+(4, 'Esgoto infestado de criaturas perigosas.','Esgoto Abandonado', 15, 'L', NULL, NULL, NULL, 'Esgoto', 5),
+(5, 'Jackson: Vilarejo reconstruído, onde os habitantes tentam viver em paz.', 'Vilarejo Pacífico', 35, 'A', NULL,NULL,12,NULL,NULL),
+(6, 'Hospital Saint Mary', 'Hospital Saint Mary', 15, 'R', NULL, NULL, NULL, NULL, NULL);
 
 ### Sala
-```sql
+````sql
 -- Inserção de dados na tabela Sala
 INSERT INTO Sala (idSala, IdRegiao) VALUES
 (1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7);
-```
-
-### ZonaQuarentena
-```sql
--- Inserção de dados na tabela ZonaQuarentena
-INSERT INTO ZonaQuarentena (IdRegiao, seguranca, populacaoAtual) VALUES 
-(1, 5, 10),
-(3, 5, 10);
-```
-
-### Acampamento
-```sql
--- Inserção de dados na tabela Acampamento
-INSERT INTO Acampamento (IdRegiao, defesa) VALUES 
-(5, 12),
-(6, 14);
-```
-
-### LocalAbandonado
-```sql
--- Inserção de dados na tabela LocalAbandonado
-INSERT INTO LocalAbandonado (IdRegiao, tipo, periculosidade) VALUES
-(2, 'Cidade Abandonada', 8),
-(4, 'Esgoto', 5),
-(7, 'Hospital', 10);
+(2, 1),
+(3, 2),
+(4, 2),
+(5, 3),
+(6, 3),
+(7, 4),
+(8, 4),
+(9, 5),
+(10, 5),
+(11, 6),
+(12, 5),
+(13, 5);
 ```
 
 ### Personagem
 ```sql
 -- Inserção de dados na tabela Personagem
 INSERT INTO Personagem (idPersonagem, tipoPersonagem) VALUES 
-(1, 1),
-(2, 2),
-(3, 2),
-(4, 2),
-(5, 2),
-(6, 2),
-(7, 2),
-(8, 2),
-(9, 2),
-(10, 2),
-(11, 2),
-(12, 2),
-(13, 2),
-(14, 2),
-(15, 2),
-(16, 2),
-(17, 2),
-(18, 2),
-(19, 2),
-(20, 2),
-(21, 2),
-(22, 2),
-(23, 2);
+(1, 'P'),
+(2, 'N'),
+(3,  'N'),
+(4,  'N'),
+(5,  'N'),
+(6,  'N'),
+(7,  'N'),
+(8,  'N'),
+(9,  'N'),
+(10,  'N'),
+(11,  'N'),
+(12,  'N'),
+(13,  'N'),
+(14,  'N'),
+(15,  'N'),
+(16,  'N'),
+(17,  'N'),
+(18,  'N'),
+(19,  'N'),
+(20,  'N'),
+(21,  'N'),
+(22,  'N'),
+(23,  'N');
 ```
 
 ### Inventario
 ```sql
 -- Inserção de dados na tabela Inventario
 INSERT INTO Inventario (idInventario, capacidade, descricao) VALUES
-(1, 30, 'Inventário do Joel.'),
-(2, 30, 'Inventário do Ellie.'),
+(1, 250, 'Inventário do Joel.'),
+(2, 50, 'Inventário do Ellie.'),
 (3, 15, 'Inventário do Tommy.'),
 (4, 15, 'Inventário do Tess.'),
-(5, 15, 'Inventário do Henry.');
+(5, 15, 'Inventário do Henry.'),
+(6, 50, 'Inventário do Líder dos Serafitas'),
+(7, 50, 'Inventário do Baiacu'),
+(8, 50, 'Inventário do Sam'),
+(9, 50, 'Inventário do David'),
+(10, 50, 'Inventário do Líder dos Vagalumes'),
+(11, 50, 'Inventário da Marlene'),
+(12, 50, 'Inventário do Sobrevivente');
 ```
 
 ### Missao
 ```sql
 -- Inserção de dados na tabela Missao
-INSERT INTO Missao(idMissao, tipoMis) VALUES
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
-(7, 1),
-(8, 1),
-(9, 1),
-(10, 1),
-(11, 2),
-(12, 2),
-(13, 2),
-(14, 2),
-(15, 2),
-(16,2);
+(1, 'E'),
+(2, 'P'),
+(3, 'E'),
+(4, 'P'),
+(5, 'E'),
+(6, 'P'),
+(7, 'E'),
+(8, 'P'),
+(9, 'E'),
+(10, 'P'),
+(11, 'P'),
+(12, 'E');
 ```
 
 ### Item
 ```sql
 -- Inserção de dados na tabela Item
 INSERT INTO Item(idItem, tipoItem) VALUES
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
-(7, 2),
-(8, 2),
-(9, 2),
-(10, 2),
-(11, 2),
-(12, 3),
-(13, 3),
-(14, 3),
-(15, 3),
-(16, 3),
-(17, 3),
-(18, 3),
-(19, 3),
-(20, 3),
-(21, 3),
-(22, 3),
-(23, 3),
-(24, 3);
+(1, 'A'),
+(2, 'A'),
+(3, 'A'),
+(4, 'A'),
+(5, 'A'),
+(6, 'A'),
+(7, 'V'),
+(8, 'V'),
+(9, 'V'),
+(10, 'V'),
+(11, 'V'),
+(12, 'C'),
+(13, 'C'),
+(14, 'C'),
+(15, 'C'),
+(16, 'C'),
+(17, 'C'),
+(18, 'C'),
+(19, 'C'),
+(20, 'C'),
+(21, 'C'),
+(22, 'C'),
+(23, 'C'),
+(24, 'C'),
+(25, 'C'),
+(26, 'C'),
+(27, 'C'),
+(28, 'C'),
+(29, 'C'),
+(30, 'C'),
+(31, 'C'),
+(32, 'C'),
+(33, 'C');
 ```
 
 ### InstItem
 ```sql
 -- Inserção de dados na tabela InstItem
 INSERT INTO InstItem(idInstItem, IdItem) VALUES
-(1, 3),
-(2, 3),
-(3, 3),
-(4, 1),
-(5, 3),
-(6, 3),
-(7, 3),
-(8, 3),
-(9, 3),
-(10, 3),
-(11, 3),
-(12, 3),
-(13, 3),
-(14, 3),
-(15, 3),
-(16, 1),
-(17, 1),
-(18, 1),
-(19, 1),
-(20, 1),
-(21, 2),
-(22, 2),
-(23, 2),
-(24, 2),
-(25, 2);
+INSERT INTO InstItem(idInstItem, IdItem, Sala, IdInventario) VALUES
+(1, 31, NULL, 1),
+(2, 6, NULL, 1),
+(3, 2, NULL, 1),
+(4, 18, NULL, 1),
+(5, 18, NULL, 1),
+(6, 18, NULL, 1),
+(7, 18, NULL, NULL),
+(8, 18, NULL, NULL),
+(9, 18, 1, NULL),
+(10, 18, 1, NULL),
+(11, 18, 1, NULL),
+(12, 18, 1, NULL),
+(13, 18, 1, NULL),
+(14, 12, 1, NULL);
 ```
 
 ### Itens
@@ -202,107 +182,112 @@ INSERT INTO Itens (IdMissao, IdItem) VALUES
 ### NPC
 ```sql
 -- Inserção de dados na tabela NPC
-INSERT INTO NPC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, tipoNPC) VALUES
-(2, 1, 30, 100, 95, 'Ellie',2, 2),
-(3, 3, 10,90, 50, 'Sobrevivente Selvagem', NULL, 2),
-(4, 2, 10, 85, 80, 'Líder de Facção', NULL, 2),
-(5, 1, 10, 80, 105, 'Tess', 4, 2),
-(6, 3,10, 120, 115, 'Tommy',3, 2),
-(7, 1,10, 130, 125, 'Marlene', NULL, 2),
-(8, 3, 10, 140, 135, 'Henry', 5, 2),
-(9, 4, 10, 150, 145, 'Sam', NULL, 2),
-(10, 5, 10, 160, 155, 'Bill', NULL, 2),
-(11, 6, 10, 170, 165, 'David', NULL, 2),
-(12, 5, 10, 100, 95, 'Sobrevivente Viajante', NULL, 2),
-(13, 5, 10, 110, 105, 'Médica da Zona Segura', NULL, 2),
-(14, 2, 10, 30, 30, 'Corredor', NULL, 3),
-(15, 2, 10, 45, 45, 'Estalador', NULL, 3),
-(16, 2, 10, 60, 60, 'Baiacu', NULL, 3),
-(17, 2, 10, 45, 45, 'Espreitador', NULL, 3),
-(18, 2, 10, 30, 30, 'Vagalumes', NULL, 3),
-(19, 2, 10, 30, 30, 'Serafitas', NULL, 3),
-(20, 2, 10, 30, 30, 'Lobo Selvagem', NULL, 3),
-(21, 2, 10, 30, 30, 'Urso Pardo', NULL, 3),
-(22, 2, 10, 30, 30, 'Peixe', NULL, 3),
-(23, 2, 10, 30, 30, 'Insetor', NULL, 3);
+INSERT INTO NPC (IdPersonagem, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, eAliado, tipoNPC) VALUES
+(2, 30, 100, 100, 'Ellie', 2, true, 'F'),
+(3, 10, 90, 90, 'Serafita Selvagem', NULL, false, 'F'),
+(4, 10, 100, 100, 'Líder dos Serafitas', 6, false, 'F'),
+(5, 10, 100, 100, 'Tess', 4, true, 'F'),
+(6, 10, 100, 100, 'Tommy',3, true, 'F'),
+(7, 10, 100, 100, 'Marlene', 11, false, 'F'),
+(8, 10, 100, 100, 'Henry', 5, true, 'F'),
+(9, 10, 80, 80, 'Sam', 8, true, 'F'),
+(10, 10, 100, 100, 'Bill', NULL, true, 'F'),
+(11, 10, 100, 100, 'David', 9, false, 'F'),
+(12, 10, 45, 45, 'Sobrevivente Viajante', 12, false, 'F'),
+(13, 10, 100, 100, 'Médico dos Vagalumes', NULL, false, 'F'),
+(14, 10, 30, 30, 'Corredor', NULL, false, 'I'),
+(15, 10, 45, 45, 'Estalador', NULL, false, 'I'),
+(16, 10, 120, 120, 'Baiacu', 7, false,'I'),
+(17, 10, 45, 45, 'Espreitador', NULL, false, 'I'),
+(18, 10, 100, 100, 'Vagalumes', NULL, false, 'F'),
+(19, 10, 100, 100, 'Serafitas', NULL, false, 'F'),
+(20, 10, 30, 30, 'Lobo Selvagem', NULL, false, 'A'),
+(21, 10, 45, 45, 'Urso Pardo', NULL, false, 'A'),
+(22, 10, 20, 20, 'Cobra', NULL, false, 'A'),
+(23, 10, 15, 15, 'Cervo', NULL, false, 'A');
 ```
 
 ### Arma
 ```sql
 -- Inserção de dados na tabela Arma
-INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, IdInventario, eAtaque, descricaoItem) VALUES
-(1, 'Revólver', 40, 6, 6, 1, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
-(2, 'Pistola', 35, 8, 8, 5, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
-(3, 'Rifle', 60, 4, 4, 3, true, 'Alto impacto para disparos de longa distância.'),
-(4, 'Escopeta', 30, 2, 2, 4, true, 'Poder de fogo considerável a curta distância.'),
-(5, 'Arco', 35, 10, 10, 2, true, 'Silencioso e eficaz para ataques de longo alcance.'),
-(6, 'Faca', 20, NULL, 10, 1, true, 'Afiada e versátil para combate corpo a corpo.');
+INSERT INTO Arma(IdItem, nomeItem, dano, municaoAtual, municaoMax, eAtaque, descricaoItem) VALUES
+(1, 'Revólver', 20, 6, 6, true, 'Uma arma compacta e confiável, eficaz a curta distância.'),
+(2, 'Pistola', 10, 14, 14, true, 'Versátil, com bom equilíbrio entre potência e capacidade de munição.'),
+(3, 'Rifle', 30, 7, 7, true, 'Alto impacto para disparos de longa distância.'),
+(4, 'Escopeta', 25, 4, 4, true, 'Poder de fogo considerável a curta distância.'),
+(5, 'Arco', 15, 20, 20, true, 'Silencioso e eficaz para ataques de longo alcance.'),
+(6, 'Faca', 8, 200, 200, true, 'Afiada e versátil para combate corpo a corpo.'),
+(31, 'Socão', 5, 200, 200, true, 'Joel usa força bruta ');
 ```
 
 ### Vestimenta
 ```sql
 -- Inserção de dados na tabela Vestimenta
-INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, IdInventario, eAtaque) VALUES
-(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', 1, false),
-(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.', 2, false),
-(9, 'Calça de Carga', 'Calça com bolsos para carregar suprimentos.', 3, false),
-(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', 4, false),
-(11, 'Escudo de Madeira', 'Escudo improvisado para defesa contra ataques.', 5, false);
+INSERT INTO Vestimenta(IdItem, nomeItem, descricaoItem, eAtaque, defesa) VALUES
+(7, 'Jaqueta de Couro', 'Jaqueta resistente a cortes e arranhões.', false, 7),
+(8, 'Colete Tático', 'Colete à prova de balas para proteção extra.',false, 20),
+(9, 'Calça Canvas', 'Calça muita resistente.', false, 10),
+(10, 'Camisa de Combate', 'Camisa resistente para proteção do torso.', false, 9),
+(11, 'Escudo de Madeira', 'Escudo robusto para defesa contra inimigos.', false, 17);
 ```
 
 ### Consumível
 ```sql
 -- Inserção de dados na tabela Consumivel
-INSERT INTO Consumivel(IdItem, nomeItem, tipoConsumivel, aumentoVida, IdInventario, eAtaque, descricaoItem) VALUES
-(12, 'Barra de Cereal', 'Energético', 10, 1, false, 'Fornece um aumento leve de energia e vitalidade.'),
-(13, 'Pacote de Biscoitos', 'Carboidrato', 1, 1, false, 'Aumenta a energia com um bom nível de carboidratos.'),
-(14, 'Garrafa de Água', 'Hidratante', 25, 2, false, 'Restaura a hidratação e aumenta a resistência.'),
-(15, 'Pacote de Salgadinhos', 'Salgado', 1, 1, false, 'Aumenta a vitalidade com um toque salgado.'),
-(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 55, 2, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.'),
-(17, 'Kit de Primeiros Socorros', 'Cura', 20, 1, false, 'Kit essencial para tratar ferimentos e restaurar saúde.'),
-(18, 'Munição', 'Projétil', NULL, 1, true, 'Munição para uso em armas de fogo.'),
-(19, 'Álcool', 'Reagente', NULL, 2, false, 'Reagente útil para criação e improvisação.'),
-(20, 'Trapos', 'Material', NULL, 1, false, 'Material básico para reparos e construção.'),
-(21, 'Recipiente', 'Contêiner', NULL, 2, false, 'Contêiner versátil para armazenar itens e líquidos.'),
-(22, 'Explosivo', 'Reagente', NULL, 1, true, 'Reagente perigoso para criar explosivos e destruição.'),
-(23, 'Fita', 'Material', NULL, 2, false, 'Material adesivo útil para reparos rápidos.'),
-(24, 'Lâmina', 'Material', NULL, 1, true, 'Lâmina cortante para combate ou uso em ferramentas.');
+(12, 'Barra de Cereal', 'Energético', 10,  false, 'Fornece um aumento leve de energia e vitalidade.', NULL),
+(13, 'Pacote de Biscoitos', 'Carboidrato', 7, false, 'Aumenta a energia com um bom nível de carboidratos.', NULL),
+(14, 'Garrafa de Água', 'Hidratante', 25,  false, 'Restaura a hidratação e aumenta a resistência.', NULL),
+(15, 'Pacote de Salgadinhos', 'Salgado', 6, false, 'Aumenta a vitalidade com um toque salgado.', NULL),
+(16, 'Vitaminas de evolução', 'Vitaminas, enzimas', 40, false, 'Potente suplemento de vitaminas e enzimas para grandes melhorias.', NULL),
+(17, 'Kit de Primeiros Socorros', 'Kit básico para curativos', 50, false, 'Combinação de álcool e trapos para aumentar vida', NULL),
+(18, 'Munição', 'Projétil', NULL, true, 'Munição para uso em armas de fogo.', NULL),
+(19, 'Álcool', 'Reagente', NULL, false, 'Reagente útil para criação e improvisação.', NULL),
+(20, 'Trapos', 'Material', NULL,false, 'Material básico para reparos e construção.', NULL),
+(21, 'Recipiente', 'Contêiner', NULL, false, 'Contêiner versátil para armazenar itens e líquidos.', NULL ),
+(22, 'Explosivo', 'Reagente', NULL, true, 'Reagente perigoso para criar explosivos e destruição.', NULL),
+(23, 'Fita', 'Material', NULL,false, 'Material adesivo útil para reparos rápidos.', NULL),
+(24, 'Lâmina', 'Material', NULL, true, 'Lâmina cortante para combate ou uso em ferramentas.', NULL),
+(25, 'Bomba de Fumaça', 'Bomba', NULL, true, 'Bomba que cria uma cortina de fumaça para cobertura.', 25),
+(26, 'Mina de Proximidade', 'Granada fixa', NULL, true, 'Mina explosiva que explode ao primeiro contato', 25 ),
+(27, 'Coquetel Molotov', 'Projétil explosivo.', NULL, true, 'Garrafa incendiária utilizada para causar danos de fogo em área.', 15),
+(28, 'Bomba de Pregos', 'Projétil explosivo', NULL, true, 'Bomba que detona ao contato, causando dano em área com fragmentos de pregos.', 30),
+(29, 'Bomba Incendiária', 'Projétil explosivo', NULL, true, 'Bomba que causa uma explosão de fogo ao ser lançada.', 25),
+(30, 'Flechas', 'Munição', NULL, true, 'Munição para arco.', NULL);
 ```
 
 ### Receita
 ```sql
 -- Inserção de dados na tabela Receita
-INSERT INTO Receita(idReceita, nomeReceita, descricaoReceita, tempoCraft, IdItem) VALUES
-(1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 3),
-(2, 'Bomba de Fumaça', 'Bomba que cria uma cortina de fumaça para cobertura.', 4, 3),
-(3, 'Mina de Proximidade', 'Granada explosiva que causa dano em área.', 5, 3),
-(4, 'Coquetel Molotov', 'Garrafa incendiária utilizada para causar danos de fogo em área.', 7, 3),
-(5, 'Faca', 'Ferramenta improvisada que pode ser usada para ataques furtivos e abrir portas trancadas.', 2, 3),
-(6, 'Bomba de Pregos', 'Explosivo improvisado que detona ao contato, causando dano em área com fragmentos de pregos.', 5, 3),
-(7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 3),
-(8, 'Flechas', 'Munição para arco, pode ser craftada utilizando materiais encontrados.', 2, 3);
+(1, 'Kit de Primeiros Socorros', 'Kit básico para curativos e tratamento de ferimentos.', 1, 17, 'Álcool + Trapos'),
+(2, 'Bomba de Fumaça', 'Bomba que cria uma cortina de fumaça para cobertura.', 4, 25, 'Recipiente + Explosivo'),
+(3, 'Mina de Proximidade', 'Granada explosiva que causa dano em área.', 5, 26, 'Recipiente + Explosivo'),
+(4, 'Coquetel Molotov', 'Garrafa incendiária utilizada para causar danos de fogo em área.', 7, 27, 'Álcool + Trapos'), 
+(5, 'Faca', 'Ferramenta improvisada que pode ser usada para ataques furtivos e abrir portas trancadas.', 2, 6, 'Lâmina + Trapos'),
+(6, 'Bomba de Pregos', 'Explosivo improvisado que detona ao contato, causando dano em área com fragmentos de pregos.', 5, 28, 'Explosivo + Lâmina'),
+(7, 'Bomba Incendiária', 'Dispositivo explosivo que causa uma explosão de fogo ao ser lançado.', 4, 29, 'Álcool + Explosivo'),
+(8, 'Flechas', 'Munição para arco, pode ser craftada utilizando materiais encontrados.', 2, 30, 'Fita + Lâmina');
 ```
 
 ### Ingrediente
 ```sql
 -- Inserção de dados na tabela Ingrediente
 INSERT INTO Ingrediente(idIngrediente, IdReceita, IdItem, quantidadeIngre) VALUES
-(1, 1, 3, 1),
-(2, 1, 3, 1),
-(3, 2, 3, 1),
-(4, 2, 3, 1),
-(5, 3, 3, 1),
-(6, 3, 3, 1),
-(7, 4, 3, 1),
-(8, 4, 3, 1),
-(9, 5, 3, 1),
-(10, 5, 3, 1),
-(11, 6, 3, 1),
-(12, 6, 3, 1),
-(13, 7, 3, 1),
-(14, 7, 3, 1),
-(15, 8, 3, 1),
-(16, 8, 3, 1);
+(1, 1, 19, 1),
+(2, 1, 20, 1),
+(3, 2, 21, 1),
+(4, 2, 22, 1),
+(5, 3, 21, 1),
+(6, 3, 22, 1),
+(7, 4, 19, 1),
+(8, 4, 20, 1),
+(9, 5, 24, 1),
+(10, 5, 20, 1),
+(11, 6, 22, 1),
+(12, 6, 24, 1),
+(13, 7, 19, 1),
+(14, 7, 22, 1),
+(15, 8, 23, 1),
+(16, 8, 24, 1);
 ```
 
 ### Evolucao
@@ -332,16 +317,16 @@ INSERT INTO PC (IdPersonagem, Sala, xp, vidaMax, vidaAtual, nomePersonagem, esta
 ```sql
 -- Inserção de dados na tabela Evento
 INSERT INTO Evento (idEvento, nomeEvento, descricao, Sala, IdPersonagem) VALUES
-(1, 'Primeiros Sinais de Perigo', 'Os primeiros infectados começam a aparecer na cidade, causando pânico entre os moradores.', 1, 1),
-(2, 'Contrabandista Localizado', 'O contrabandista Mark foi encontrado nas docas, mas não está sozinho. Você precisará neutralizar sua guarda.', 1, 1),
-(3, 'A Fuga de Ellie', 'Marlene pediu para Ellie ser levada para fora da cidade. Você precisará enfrentar facções e infectados pelo caminho.', 1, 1),
-(4, 'Encontro com Bill', 'Durante a busca por suprimentos, você encontra Bill, que ajuda a montar um veículo para continuar a viagem.', 1, 1),
-(5, 'Cidade de Bill Inundada', 'Chuvas torrenciais inundam parte da cidade de Bill, dificultando a busca por suprimentos.', 1, 1),
-(6, 'Emboscada dos Caçadores', 'Caçadores emboscaram Joel e Ellie. Eles precisam encontrar um caminho para sair da cidade.', 1, 1),
-(7, 'Henry e Sam Resgatados', 'Joel e Ellie resgatam Henry e Sam em meio a um ataque de infectados.', 1, 1),
-(8, 'Comunidade Segura', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie.', 1, 1),
-(9, 'Captura de Ellie', 'Ellie é capturada por David enquanto cuida de Joel em recuperação.', 1, 1),
-(10, 'Fuga do Hospital', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 1, 1);
+(1, 'Primeiro contato com Ellie', 'Ellie é encontrada pela primeira vez, trazida por Marlene na Zona de Quarentena.', 2, 1),
+(2, 'Morte de Tess', 'Tess sacrifica sua vida para garantir a segurança do grupo, enfrentando os infectados com coragem e determinação.', 3, 1),
+(3, 'Joel descobre que Ellie é imune', 'Joel descobre que Ellie é imune ao vírus após uma conversa com Marlene.', 4, 1),
+(4, 'Encontro com Bill', 'Durante a busca por suprimentos, Joel e Ellie encontram Bill, que os ajuda a montar um veículo para continuar a viagem.', 6, 1),
+(5, 'Sam se infecta e Henry tira sua própria vida', 'Sam é infectado, e, incapaz de lidar com a perda, Henry tira sua própria vida.', 7, 1),
+(6, 'Pai e Filha', 'Joel e Ellie finalmente chegam à comunidade de Tommy, onde Joel considera deixar Ellie sob os cuidados de seu irmão.', 9, 1),
+(7, 'Captura de Ellie', 'Ellie é capturada por David enquanto foge de Jackson após uma discussão com Joel.', 10, 1),
+(8, 'Ellie mata David', 'Ellie mata David em legítima defesa após ser capturada e quase abusada por ele.', 11, 1),
+(9, 'Joel salva Ellie', 'Joel descobre que Ellie será sacrificada no hospital e decide resgatá-la, enfrentando os Vagalumes.', 12, 1);
+
 ```
 
 ### Itinenário
@@ -378,25 +363,24 @@ INSERT INTO Habilidade(idHabilidade, nomeHabilidade, tipoHabilidade, efeito, dur
 ### MissaoPatrulha
 ```sql
 -- Inserção de dados na tabela MissaoPatrulha
-INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao) VALUES
-(8, 7, 'Patrulhar a zona de quarentena em busca de ameaças.', 'Ronda Diária', 5, 1, 150, false),
-(9, 8, 'Neutralizar os infectados próximos ao acampamento.', 'Segurança do Acampamento', 8, 1, 250, false),
-(10, 9, 'Realizar uma operação de reconhecimento em território inimigo.', 'Operação de Reconhecimento', 9, 1, 400, false),
-(11, 10, 'Proteger o assentamento contra ataques de facções rivais.', 'Defesa do Assentamento', 8, 1, 450, false),
-(12, 11, 'Patrulhar as fronteiras da cidade fortificada.', 'Proteção das Fronteiras', 5, 1, 350, false);
+INSERT INTO MissaoPatrulha (IdMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, IdPersonagem, xpMis, statusMissao, Sala) VALUES
+(2, 1, 'Patrulhar a àrea devastada em busca de ameaças.', 'Segurança', 5, 1, 150, false, 4),
+(6, 5, 'Neutralizar os infectados próximos ao esgoto.', 'Segurança do Acampamento', 8, 1, 250, false, 8),
+(8, 7, 'Resgatar Ellie de David.', 'Operação de Reconhecimento', 9, 1, 400, false, 10),
+(10, 9, 'Mate todos os infectados em volta de Jackson para entrar na cidade', 'Defesa do Assentamento', 8, 1, 450, false, 12);
 ```
 
 ### MissaoExploracaoObterItem
 ```sql
 -- Inserção de dados na tabela MissaoExploracaoObterItem
-INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao) VALUES
-(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false),
-(2, 1, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 250, false),
-(3, 2, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 350, false),
-(4, 3, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 550, false),
-(5, 4, 'Joel e Ellie finalmente chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 600, false),
-(6, 5, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 300, false),
-(7, 6, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 300, false);
+INSERT INTO MissaoExploracaoObterItem (IdMissao, idMissaoPre, objetivo, nomeMis, IdPersonagem, xpMis, statusMissao, Sala) VALUES
+(1, NULL, 'Com o pedido de Marlene, leve uma jovem chamada Ellie para fora da cidade', 'Ellie', 1, 15, false, 2),
+(3, 2, 'Após a morte de Tess, Joel e Ellie partem em uma missão atrás de Bill, um antigo amigo de Joel', 'Os Arredores', 1, 25, false, 4),
+(4, 3, 'Joel e Ellie chegam à cidade de Bill. Esta missão inclui a busca por suprimentos e a montagem de veículo', 'Cidade de Bill', 1, 35, false, 6),
+(5, 4, 'Joel e Ellie encontram Henry e Sam em Pittsburgh, dois irmãos sobreviventes. Juntos, eles enfrentam hordas de infectados e tentam encontrar um caminho seguro', 'Henry e Sam', 1, 55, false, 7),
+(7, 6, 'Joel e Ellie finalmentre chegam ao local onde Tommy está vivendo em uma comunidade segura. Joel considera deixar Ellie com Tommy', 'Represa', 1, 60, false, 9),
+(9, 8, 'Joel e Ellie chegam ao hospital. Joel descobre que Ellie precisa ser sacrificada e a salva', 'Laboratório dos Vagalumes', 1, 30, false, 11),
+(11, 10, 'Joel e Ellie voltam a Jackson. Ellie confronta Joel', 'Final', 1, 30, false, 13);
 ```
 
 ### Concede
@@ -417,40 +401,53 @@ INSERT INTO Concede(IdEvolucao, IdConsumivel) VALUES
 ### Dialoga
 ```sql
 -- Inserção de dados na tabela Dialoga
-INSERT INTO Dialoga(idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
-(1, 1, 1, 'Joel: Tess, qual é a missão de hoje?', 5),
-(2, 1, 1, 'Tess: Joel, precisamos resolver a questão com o Mark, ele está causando problemas de novo.', 10),
-(3, 1, 2, 'Joel: Não temos tempo a perder. Vamos.', 5),
-(4, 1, 2, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
+INSERT INTO Dialoga (idDialogo, IdFalante, IdOuvinte, conteudo, duracaoDialogo) VALUES
+(1, 1, 5, 'Joel: Tess, qual é a missão de hoje?', 5),
+(2, 5, 1, 'Tess: Joel, precisamos resolver a questão com o Mark, ele está causando problemas de novo.', 10),
+(3, 1, 5, 'Joel: Não temos tempo a perder. Vamos.', 5),
+(4, 7, 1, 'Marlene: Esqueçam o Mark, tenho um trabalho maior. Levem essa garota até o Capitólio, e 100 tickets de comida serão de vocês.', 10),
 (5, 1, 2, 'Joel: Como você chegou aqui, garota?', 5),
-(6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8);
+(6, 2, 1, 'Ellie: Eu não sei! Só estou tentando sobreviver... Será que vamos conseguir?', 8),
+
+(7, 1, 2, 'Joel: "Ellie, mantenha-se atrás de mim e faça o que eu mandar. Não quero problemas."', 10),
+(8, 2, 1, 'Ellie: "Eu... Eu ainda não entendo por que vocês estão me ajudando."', 8),
+
+(9, 1, 2, 'Joel: "Ellie, pegue o que puder. Cada bala, cada pedaço de comida... tudo conta."', 10),
+(10, 2, 1, 'Ellie: "Joel, por que você continua me protegendo? Eu sou só um fardo para você?"', 10),
+(11, 1, 2, 'Joel: "Não é nada disso, Ellie. Apenas faça o que eu digo."', 8),
+
+(12, 1, 2, 'Joel: "Por que não me disse antes? Por que escondemos isso?"', 8),
+(13, 2, 1, 'Ellie: "Eu achei que você ia me abandonar, como todos os outros..."', 8);
 ```
 
 ### InstNPC
 ```sql
 -- Inserção de dados na tabela InstNPC
 INSERT INTO InstNPC(IdInstNPC, tipoNPC) VALUES
-(1, 2),
-(2, 3),
-(3, 4),
-(4, 5),
-(5, 6),
-(6, 7),
-(7, 8),
-(8, 9),
-(9, 10),
-(10, 11),
-(11, 12);
+INSERT INTO InstNPC(IdInstNPC, IdNPC, tipoNPC, Sala) VALUES
+(2, 2, 'F', 1),
+(3, 3, 'F', 1), 
+(4, 4, 'F', 1),
+(5, 5, 'F', 1),
+(7, 7, 'F', 1),
+(8, 14, 'I', 2),
+(9, 14, 'I', 2),
+(10, 10, 'I', 3),
+(11, 11, 'I', 1),
+(12, 12, 'F', 2),
+(13, 13, 'A', 1),
+(14, 14, 'I', 1),
+(15, 2, 'F', 2);
 ```
 
 ### Infectado
 ```sql
 -- Inserção de dados na tabela Infectado
-INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade) VALUES
-(14, 'Corredor', 2),
-(15, 'Estalador', 6),
-(16, 'Baiacu', 8),
-(17, 'Espreitador', 6);
+INSERT INTO Infectado(IdNPC, comportamentoInfec, velocidade, danoInfectado) VALUES
+(14, 'Corredor', 2, 7),
+(15, 'Estalador', 6, 13),
+(16, 'Baiacu', 8, 23),
+(17, 'Espreitador', 6, 12);
 ```
 
 ### FaccaoHumana
@@ -464,11 +461,11 @@ INSERT INTO FaccaoHumana(IdNPC, nomeFaccao) VALUES
 ### Animal
 ```sql
 -- Inserção de dados na tabela Animal
-INSERT INTO Animal(IdNPC, nomeAnimal, ameaca) VALUES
-(20, 'Lobo Selvagem', 'Alta'),
-(21, 'Urso Pardo', 'Alta'),
-(22, 'Peixes', 'Alta'),
-(23, 'Insetos', 'Baixa');
+INSERT INTO Animal(IdNPC, nomeAnimal, ameaca, danoAnimal) VALUES
+(20, 'Lobo Selvagem', 'Alta', 7),
+(21, 'Urso Pardo', 'Alta', 10),
+(22, 'Cobra', 'Média', 5),
+(23, 'Cervo', 'Baixa', 4);
 ```
 
 ### Participacao

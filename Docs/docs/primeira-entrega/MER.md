@@ -11,23 +11,22 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 
 - **Sala**
 - **Região**
-  - **Zona de Quarentena** 
-  - **Acampamento**
-  - **Locais Abandonados**
 - **Personagem**
-- **PC (Playable Character)**
+    - **NPC**
+    - **PC (Playable Character)**
 - **NPC**
   - **Infectados**
   - **Facções Humanas**
   - **Animais**
-- **InstNPC**
+  - **InstNPC**
 - **Habilidade**
 - **Inventário**
 - **Item**
-  - **Armas**
-  - **Vestimenta**
-  - **Consumível**
-- **InstItem**
+    -**InstItem**
+    -**Armas**
+    -**Vestimenta**
+    -**Consumível**
+- **Itens**
 - **Receita**
 - **Ingrediente**
 - **Missão**
@@ -37,7 +36,6 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - **Itinerário**
 - **Evolução**
 
-
 ## 2. Relacionamentos que possuem atributos
 
 - **Concede**
@@ -46,36 +44,34 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 
 ## 3. Atributos
 
-- **Sala**: <ins>idSala</ins>
-- **Região**: <ins>idRegiao</ins>, descricaoRegiao, nomeRegiao, tipoRegiao, capacidade, idSala
-- **Zona de Quarentena**: <ins>idZona</ins>, idRegiao, seguranca, populacaoAtual
-- **Acampamento**: <ins>idAcampamento</ins>, idRegiao, defesa
-- **Locais Abandonados**: <ins>idLocal</ins>, idRegiao, periculosidade, nivelInfestacao
+- **Sala**: <ins>idSala</ins>, IdRegiao
+- **Região**: <ins>idRegiao</ins>, descricaoRegiao, nomeRegiao, tipoRegiao, capacidade, z_seguranca, z_populacaoAtual, a_defesa, l_tipo, l_periculosidade
 - **Personagem**: <ins>idPersonagem</ins>, tipoPersonagem
-- **PC (Playable Character)**: <ins>idPC</ins>, idPersonagem, xp, saude, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, Mundo, id_Inventario
-- **NPC (Non-Playable Character)**: <ins>idNPC</ins>, idPersonagem, xp, saude, vidaMax, vidaAtual, nomePersonagem, Loot, eAliado, id_Inventario, tipoNPC
-  - **Infectados**: <ins>idInfectado</ins>, comportamentoInfec, idInfectado, velocidade
-  - **Facção Humanas**: <ins>idFacção</ins>, idNPC, nomeFacção
-  - **Animais**: <ins>idAnimal</ins>, idNPC, nomeAnimal, nomeAnimal, ameaca
-- **InstNPC**: <ins>idInstNPC</ins>
-- **Habilidade**: <ins>idHabilidade</ins>, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, idPC
+- **PC (Playable Character)**: <ins>idPersonagem</ins>, xp, vidaMax, vidaAtual, nomePersonagem, estado, Evolucao, IdInventario, Sala
+- **NPC (Non-Playable Character)**: <ins>idPersonagem</ins>, xp, vidaMax, vidaAtual, nomePersonagem, IdInventario, tipoNPC, eAliado
+  - **Infectados**: <ins>idNPC</ins>, comportamentoInfec, danoInfectado, velocidade
+  - **Facção Humanas**: <ins>idNPC</ins>, nomeFacção
+  - **Animais**: <ins>idNPC</ins>, nomeAnimal, danoAnimal, ameaca
+- **InstNPC**: <ins>idInstNPC</ins>, tipoNPC, Sala, idNPC
+- **Habilidade**: <ins>idHabilidade</ins>, nomeHabilidade, tipoHabilidade, efeito, duracaoHabilidade, idPersonagem
 - **Inventário**: <ins>idInventario</ins>, descricao, capacidadeInvent
 - **Item**: <ins>idItem</ins>, tipoItem
-  - **Armas**: <ins>idArma</ins>, idItem, nomeArma, dano, municaoAtual, municaoMax, idInvetario, eAtaque
-  - **Vestimenta**: <ins>idVestimenta</ins>, idItem, nomeVestimenta, descricaoVestimenta, idInventario, eAtaque
-  - **Consumível**: <ins>idConsumível</ins>, idItem, nomeAlimento, tipoAlimento, aumentoVida, idIventario, eAtaque
-- **Receita**: <ins>idReceita</ins>, nomeReceita, descricaoReceita, tempoCraft, idItem
-- **Ingredientes**: <ins>idIngrediente</ins>, idReceita, idItem, quantidadeIngre, idItem
-- **InstItem**: <ins>idInstItem</ins>
+  - **Armas**: <ins>idItem</ins>, nomeItem, dano, municaoAtual, municaoMax, descricaoItem, eAtaque
+  - **Vestimenta**: <ins>idItem</ins>, nomeItem, descricaoVestimenta, defesa, eAtaque
+  - **Consumível**: <ins>idItem</ins>, nomeItem, tipoConsumivel, aumentoVida, descricaoItem, eAtaque, danoConsumivel
+- **Receita**: <ins>idReceita</ins>, nomeReceita, descricaoReceita, tempoCraft, idItem, juncao
+- **Ingredientes**: <ins>idIngrediente</ins>, idReceita, idItem, quantidadeIngre
+- **InstItem**: <ins>idInstItem</ins>, Iditem, Sala, IdInventario
+- **Itens** <ins>IdItem</ins>, IdMissao
 - **Missão**: <ins>idMissao</ins>, tipoMis
-  - **Missão de Patrulha**:<ins>idPatrulha</ins>, idMissao, idMissaoPre, objetivo, nomeMis, qtdNPCs, idPC, xpMis 
-  - **Missão de Expedição/Encontrar Item**:<ins>idExploracao</ins>, idMissao, idMissaoPre, objetivo, nomeMis, ItensAdquiridos, idPc, xpMis
-- **Evento**: <ins>idEvento</ins>, nomeEvento, descricao, locEmX, locEmY, idPC
+  - **Missão de Patrulha**:<ins>idMissao</ins>, idMissaoPre, objetivo, nomeMis, qtdNPCs, idPersonagem, xpMis, statusMissao, Sala 
+  - **Missão de Expedição/Encontrar Item**:<ins>idMissao</ins>, idMissaoPre, objetivo, nomeMis, idPersonagem, xpMis, Sala, statusMissao
+- **Evento**: <ins>idEvento</ins>, nomeEvento, descricao, Sala, IdPersonagem
 - **Itinerário**: <ins>idItinerario</ins>, horario, dia, idEvento
 - **Evolução**: <ins>idEvolucao</ins>, requisitosNivel, xpEvol
 
 #### Atributos de relacionamentos
-- **concede**: <ins>idEvolucao, idAlimento</ins>,
+- **concede**: <ins>idEvolucao, IdConsumivel</ins>,
 - **dialoga**: <ins>idDialogo</ins>, idFalante, idOuvinte, conteudo,  duracaoDialogo,
 - **participação**: <ins>idNPC, Evento, Missao</ins>
 
@@ -85,26 +81,6 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 
 - O mundo possui uma ou várias regiões (1,N)
 - A região pertence a um único mundo (1,1)
-
-**Região _classificado como_ Zona de Quarentena**
-
-- Uma região pode ser classificado como uma Zona de Quarentena (0,1)
-- A Zona de Quarentena pertence a uma única região (1,1)
-
-**Região _classificado como_ Acampamento**
-
-- Uma região pode ser classificado como um Acampamento (0,1)
-- O Acampamento pertence a uma única região (1,1)
-
-**Região _classificado como_ Locais Abandonados**
-
-- Uma região pode ser classificado como um local abandonado (0,1)
-- O local abandonado pertence a uma única região (1,1)
-
-**Personagem _se situa_ no Mundo**
-
-- O personagem está em um único mundo (1,1)
-- O mundo pode conter nenhum ou vários personagens (0,N)
 
 **PC _possui_ Habilidade**
 
@@ -136,7 +112,7 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - Um item pode ser classificado como uma vestimenta (1,1)
 - A vestimenta pertence a uma instância de item (1,1)
 
-**Item _classificado como_ Alimento**
+**Item _classificado como_ Consumivel**
 
 - Um item pode ser classificado como um alimento (1,1)
 - O alimento pertence a uma instância de item (1,1)
@@ -156,9 +132,9 @@ O Modelo Entidade Relacionamento de um banco de dados é um modelo conceitual qu
 - Cada Receita de item possui vários ingredientes (1,N)
 - Cada Ingrediente pertence a uma receita (1,1)
 
-**PC e NPC _realiza_ Missão**
+**PC _realiza_ Missão**
 
-- Um PC e NPC realiza várias missões (1,N)
+- Um PC realiza várias missões (1,N)
 - Cada missão é realizada por um PCs (1,1)
 - Cada missão é realizada por vários NPCs (1,N)
 

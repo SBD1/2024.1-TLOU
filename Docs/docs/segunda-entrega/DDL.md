@@ -13,12 +13,17 @@ O DDL (Data Definition Language) é um subconjunto da linguagem SQL (Structured 
 ## Regiao
 A tabela `Regiao` representa uma região geográfica ou administrativa no sistema.
 ```sql
-CREATE TABLE Regiao (
+CREATE TABLE IF NOT EXISTS Regiao (
     idRegiao SERIAL NOT NULL,
     descricaoRegiao VARCHAR (400) NOT NULL,
     nomeRegiao VARCHAR (50) NOT NULL,
     capacidade INT,
-    tipoRegiao INT,
+    tipoRegiao VARCHAR(1) NOT NULL,
+    z_seguranca INT, 
+    z_populacaoAtual INT,
+    a_defesa INT, 
+    l_tipo VARCHAR(50),
+    l_periculosidade INT,
 
     CONSTRAINT regiao_pk PRIMARY KEY (idRegiao),
     UNIQUE (nomeRegiao)
@@ -30,6 +35,12 @@ CREATE TABLE Regiao (
   - `nomeRegiao`: Nome da região (deve ser único).
   - `capacidade`: Capacidade da região.
   - `tipoRegiao`: Tipo da região.
+  - `z_seguranca`: Segurança de uma Zona de Quarentena.
+  - `z_populacaoAtual`: População de uma Zona de Quarentena.
+  - `a_defesa`: Defesa de um Acampamento.
+  - `l_tipo`: Tipo de um Local Abandonado.
+  - `l_periculosidade`: Periculosidade de um Local Abandonado.
+
 
 ## Sala
 A tabela `Sala` representa uma sala ou compartimento dentro de uma região.
@@ -46,61 +57,12 @@ CREATE TABLE Sala (
   - `idSala`: Identificador único da sala (chave primária).
   - `IdRegiao`: Identificador da região à qual a sala pertence (chave estrangeira referenciando `Regiao`).
 
-## ZonaQuarentena
-A tabela `ZonaQuarentena` representa uma zona de quarentena dentro de uma região.
-```sql
-CREATE TABLE ZonaQuarentena (
-    IdRegiao INT NOT NULL,
-    seguranca INT NOT NULL, 
-    populacaoAtual INT,
-
-    CONSTRAINT zonaQuarentena_pk PRIMARY KEY (IdRegiao),
-    CONSTRAINT regiao_zona_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
-);
-```
-- **Colunas**:
-  - `IdRegiao`: Identificador da região (chave primária e estrangeira).
-  - `seguranca`: Nível de segurança da zona de quarentena.
-  - `populacaoAtual`: População atual na zona de quarentena.
-
-## Acampamento
-A tabela `Acampamento` representa um acampamento dentro de uma região.
-```sql
-CREATE TABLE Acampamento (
-    IdRegiao INT NOT NULL,
-    defesa INT NOT NULL, 
-
-    CONSTRAINT acampamento_pk PRIMARY KEY (IdRegiao),
-    CONSTRAINT regiao_acamp_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
-);
-```
-- **Colunas**:
-  - `IdRegiao`: Identificador da região (chave primária e estrangeira).
-  - `defesa`: Nível de defesa do acampamento.
-
-## LocalAbandonado
-A tabela `LocalAbandonado` representa um local abandonado dentro de uma região.
-```sql
-CREATE TABLE LocalAbandonado (
-    IdRegiao INT NOT NULL,
-    tipo VARCHAR(50) NOT NULL,
-    periculosidade INT NOT NULL,
-
-    CONSTRAINT local_pk PRIMARY KEY (IdRegiao),
-    CONSTRAINT regiao_local_fk FOREIGN KEY (IdRegiao) REFERENCES Regiao (idRegiao)
-);
-```
-- **Colunas**:
-  - `IdRegiao`: Identificador da região (chave primária e estrangeira).
-  - `tipo`: Tipo de local abandonado.
-  - `periculosidade`: Nível de periculosidade do local.
-
 ## Personagem
 A tabela `Personagem` representa um personagem no sistema.
 ```sql
 CREATE TABLE Personagem (
     idPersonagem SERIAL NOT NULL,
-    tipoPersonagem INT NOT NULL,
+    tipoPersonagem VARCHAR(1) NOT NULL,
 
     CONSTRAINT personagem_pk PRIMARY KEY (idPersonagem)
 );
@@ -132,7 +94,7 @@ A tabela `Missao` representa uma missão no sistema.
 ```sql
 CREATE TABLE Missao (
     idMissao SERIAL NOT NULL,
-    tipoMis INT NOT NULL,
+    tipoMis VARCHAR(1) NOT NULL,
 
     CONSTRAINT missao_pk PRIMARY KEY (idMissao)
 );
@@ -146,7 +108,7 @@ A tabela `Item` representa um item genérico.
 ```sql
 CREATE TABLE Item (
     idItem SERIAL NOT NULL,
-    tipoItem INT NOT NULL,
+    tipoItem VARCHAR(1) NOT NULL,
 
     CONSTRAINT item_pk PRIMARY KEY (idItem)
 );
@@ -161,6 +123,8 @@ A tabela `InstItem` representa uma instância específica de um item.
 CREATE TABLE InstItem ( 
     idInstItem SERIAL NOT NULL,
     IdItem INT NOT NULL,
+    Sala INT, 
+    IdInventario INT,
 
     CONSTRAINT instItem_pk PRIMARY KEY (idInstItem),
     CONSTRAINT item_inst_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
@@ -169,6 +133,8 @@ CREATE TABLE InstItem (
 - **Colunas**:
   - `idInstItem`: Identificador único da instância do item (chave primária).
   - `IdItem`: Identificador do item genérico (chave estrangeira referenciando `Item`).
+  - `Sala`: Identificador da sala que o item pode se encontrar (chave estrangeira referenciando `Sala`).
+  - `IdInventario`: Identificador do Inventario que o item pode se encontrar (chave estrangeira referenciando `Inventario`).
 
 ## Itens
 A tabela `Itens` representa a associação entre missões e itens.
@@ -197,6 +163,7 @@ CREATE TABLE NPC (
     vidaAtual INT,
     nomePersonagem VARCHAR(50) NOT NULL,
     IdInventario INT, 
+    eAliado BOOLEAN NOT NULL,
     tipoNPC INT NOT NULL, 
 
     CHECK (vidaAtual > 0),
@@ -215,6 +182,7 @@ CREATE TABLE NPC (
   - `vidaAtual`: Vida atual do NPC (deve ser maior que 0).
   - `nomePersonagem`: Nome do NPC.
   - `IdInventario`: Identificador do inventário do NPC (chave estrangeira).
+  - `eAliado`: Indica se o NPC é aliado ou não.
   - `tipoNPC`: Tipo de NPC.
 
 ## Arma
@@ -225,14 +193,12 @@ CREATE TABLE Arma (
     nomeItem VARCHAR (50) NOT NULL,
     dano INT NOT NULL,
     municaoAtual INT,
-    municaoMax INT NOT NULL,
-    IdInventario INT,    
+    municaoMax INT NOT NULL,   
     eAtaque BOOLEAN NOT NULL,
     descricaoItem VARCHAR (400) NOT NULL,
 
     CONSTRAINT arma_pk PRIMARY KEY (IdItem),
-    CONSTRAINT item_arma_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_arma_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT item_arma_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 ```
 - **Colunas**:
@@ -241,7 +207,6 @@ CREATE TABLE Arma (
   - `dano`: Dano causado pela arma.
   - `municaoAtual`: Munição atual disponível na arma.
   - `municaoMax`: Capacidade máxima de munição da arma.
-  - `IdInventario`: Identificador do inventário que contém a arma (chave estrangeira).
   - `eAtaque`: Indica se a arma é usada para ataque.
   - `descricaoItem`: Descrição detalhada da arma.
 
@@ -251,25 +216,21 @@ A tabela `Vestimenta` representa um item de vestimenta no sistema.
 CREATE TABLE Vestimenta (
     IdItem INT NOT NULL,
     nomeItem VARCHAR (50) NOT NULL,
-    descricaoItem VARCHAR (400) NOT NULL
-
-,
-    protecao INT NOT NULL,    
-    IdInventario INT,
-    tipoVestimenta INT NOT NULL,
+    descricaoItem VARCHAR (400) NOT NULL,
+    eAtaque BOOLEAN NOT NULL,    
+    defesa INT NOT NULL,
 
     CONSTRAINT vestimenta_pk PRIMARY KEY (IdItem),
     CONSTRAINT item_vestimenta_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_vestimenta_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
 );
 ```
 - **Colunas**:
   - `IdItem`: Identificador do item (chave primária e estrangeira).
   - `nomeItem`: Nome da vestimenta.
   - `descricaoItem`: Descrição detalhada da vestimenta.
-  - `protecao`: Nível de proteção oferecido pela vestimenta.
-  - `IdInventario`: Identificador do inventário que contém a vestimenta (chave estrangeira).
-  - `tipoVestimenta`: Tipo de vestimenta.
+  - `eAtaque`: Indica se a vestimenta é usada para ataque.
+  - `defesa`: Nível de proteção oferecido pela vestimenta.
+
 
 ## Consumivel
 A tabela `Consumivel` representa um item consumível no sistema.
@@ -277,23 +238,23 @@ A tabela `Consumivel` representa um item consumível no sistema.
 CREATE TABLE Consumivel (
     IdItem INT NOT NULL,
     nomeItem VARCHAR (50) NOT NULL,
-    descricaoItem VARCHAR (400) NOT NULL,
-    duracao INT NOT NULL,    
-    IdInventario INT,
-    tipoConsumivel INT NOT NULL,
+    descricaoItem VARCHAR (400) NOT NULL,tipoConsumivel VARCHAR (40) NOT NULL,
+    aumentoVida INT,  
+    eAtaque BOOLEAN NOT NULL,
+    danoConsumivel INT,
 
     CONSTRAINT consumivel_pk PRIMARY KEY (IdItem),
-    CONSTRAINT item_consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem),
-    CONSTRAINT inventario_consumivel_fk FOREIGN KEY (IdInventario) REFERENCES Inventario (idInventario)
+    CONSTRAINT item_Consumivel_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
 );
 ```
 - **Colunas**:
   - `IdItem`: Identificador do item (chave primária e estrangeira).
   - `nomeItem`: Nome do consumível.
   - `descricaoItem`: Descrição detalhada do consumível.
-  - `duracao`: Duração do efeito do consumível.
-  - `IdInventario`: Identificador do inventário que contém o consumível (chave estrangeira).
   - `tipoConsumivel`: Tipo de consumível.
+  - `aumentoVida`: Aumento de vida dado pelo consumível.
+  - `eAtaque`: Indica se o consumível é usado para ataque.
+  - `danoConsumivel`: Dano dado pelo consumível.
 
 
 ## **Receita**
@@ -305,6 +266,7 @@ CREATE TABLE Receita (
     descricaoReceita VARCHAR (400) NOT NULL,
     tempoCraft INT NOT NULL,
     IdItem INT NOT NULL,
+    juncao VARCHAR (100) NOT NULL,
 
     CONSTRAINT receita_pk PRIMARY KEY (idReceita),
     CONSTRAINT item_receita_fk FOREIGN KEY (IdItem) REFERENCES Item (idItem)
@@ -316,6 +278,7 @@ CREATE TABLE Receita (
   - `descricaoReceita`: Descrição detalhada da receita.
   - `tempoCraft`: Tempo necessário para criar o item.
   - `IdItem`: Identificador do item resultante da receita (chave estrangeira).
+  - `juncao`: Junção necessária para realizar a receita.
 
 ## **Ingrediente**
 A tabela `Ingrediente` representa os ingredientes necessários para criar um item através de uma receita.
@@ -463,10 +426,12 @@ CREATE TABLE MissaoPatrulha (
     IdPersonagem INT NOT NULL,
     xpMis INT NOT NULL,
     statusMissao BOOLEAN NOT NULL,
+    Sala INT NOT NULL,
 
     CONSTRAINT missaoPatrulha_pk PRIMARY KEY (IdMissao),
     CONSTRAINT missaoPatrulha_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
-    CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem)
+    CONSTRAINT pc_missaoPatrulha_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem),
+    CONSTRAINT sala_missaopatrulha_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 ```
 - **Colunas**:
@@ -478,6 +443,7 @@ CREATE TABLE MissaoPatrulha (
   - `IdPersonagem`: Identificador do personagem responsável pela missão (chave estrangeira).
   - `xpMis`: Experiência concedida pela missão.
   - `statusMissao`: Status da missão (completa ou não).
+  - `Sala`: Sala em que a missão acontece.
 
 ## **MissaoExploracaoObterItem**
 A tabela `MissaoExploracaoObterItem` armazena missões de exploração para obter itens.
@@ -490,10 +456,13 @@ CREATE TABLE MissaoExploracaoObterItem(
     IdPersonagem INT NOT NULL,
     xpMis INT NOT NULL,
     statusMissao BOOLEAN NOT NULL,
+    Sala INT NOT NULL,
+    
 
     CONSTRAINT missaoExploracao_pk PRIMARY KEY (IdMissao),
     CONSTRAINT missaoObter_fk FOREIGN KEY (IdMissao) REFERENCES Missao (idMissao),
     CONSTRAINT pc_missaoObter_fk FOREIGN KEY (IdPersonagem) REFERENCES Personagem (idPersonagem)
+    CONSTRAINT sala_exploracao_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala)
 );
 ```
 - **Colunas**:
@@ -504,6 +473,7 @@ CREATE TABLE MissaoExploracaoObterItem(
   - `IdPersonagem`: Identificador do personagem responsável pela missão (chave estrangeira).
   - `xpMis`: Experiência concedida pela missão.
   - `statusMissao`: Status da missão (completa ou não).
+  - `Sala`: Sala em que a missão acontece.
 
 ## **Concede**
 A tabela `Concede` relaciona evoluções com consumíveis que podem ser concedidos durante a evolução.
@@ -547,16 +517,21 @@ CREATE TABLE Dialoga (
 A tabela `InstNPC` representa instâncias de NPCs com tipos específicos.
 ```sql
 CREATE TABLE InstNPC (
-    IdInstNPC SERIAL NOT NULL,
-    tipoNPC INT NOT NULL,
+    idInstNPC SERIAL NOT NULL,
+    tipoNPC VARCHAR(1) NOT NULL,
+    IdNPC INT NOT NULL,
+    Sala INT,
 
-    CONSTRAINT instNPC_pk PRIMARY KEY (IdInstNPC),
-    CONSTRAINT npc_inst_fk FOREIGN KEY (tipoNPC) REFERENCES NPC (IdPersonagem)
+    CONSTRAINT idNPC_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem),
+    CONSTRAINT sala_fk FOREIGN KEY (Sala) REFERENCES Sala (idSala),
+    CONSTRAINT instNPC_pk PRIMARY KEY (idInstNPC)
 );
 ```
 - **Colunas**:
-  - `IdInstNPC`: Identificador da instância do NPC (chave primária).
+  - `idInstNPC`: Identificador da instância do NPC (chave primária).
   - `tipoNPC`: Tipo de NPC (chave estrangeira).
+  - `IdNPC`: Identificador do NPC a ser instanciado (chave estrangeira).
+  - `Sala`: Sala em que a instância de NPC está.
 
 ## **Infectado**
 A tabela `Infectado` armazena informações sobre NPCs infectados.
@@ -565,6 +540,7 @@ CREATE TABLE Infectado (
     IdNPC INT NOT NULL,
     comportamentoInfec VARCHAR (400) NOT NULL,
     velocidade INT NOT NULL,
+    danoInfectado INT NOT NULL,
 
     CONSTRAINT infectado_pk PRIMARY KEY (IdNPC),
     CONSTRAINT npc_infec_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
@@ -574,6 +550,7 @@ CREATE TABLE Infectado (
   - `IdNPC`: Identificador do NPC infectado (chave primária e chave estrangeira).
   - `comportamentoInfec`: Comportamento do NPC infectado.
   - `velocidade`: Velocidade do NPC infectado.
+  - `danoInfectado`: Dano causado pelo NPC infectado.
 
 ## **FaccaoHumana**
 A tabela `FaccaoHumana` armazena informações sobre facções humanas associadas a NPCs.
@@ -597,6 +574,7 @@ CREATE TABLE Animal (
     IdNPC INT NOT NULL,
     nomeAnimal VARCHAR (50) NOT NULL,
     ameaca VARCHAR (100) NOT NULL,
+    danoAnimal INT,
 
     CONSTRAINT animal_pk PRIMARY KEY (IdNPC),
     CONSTRAINT npc_animal_fk FOREIGN KEY (IdNPC) REFERENCES NPC (IdPersonagem)
@@ -606,6 +584,7 @@ CREATE TABLE Animal (
   - `IdNPC`: Identificador do NPC animal (chave primária e chave estrangeira).
   - `nomeAnimal`: Nome do animal.
   - `ameaca`: Nível de ameaça representado pelo animal.
+  - `danoAnimal`: Dano causado pelo NPC animal.
 
 ## **Participacao**
 A tabela `Participacao` registra a participação de NPCs em eventos e missões.
